@@ -1,43 +1,30 @@
 <template>
-	<form class="card auth-card">
-		<div class="card-content">
-			<span class="card-title">Домашняя бухгалтерия</span>
-			<div class="input-field">
-				<input id="email" type="text">
-				<label for="email">Email</label>
-				<small class="helper-text invalid">Email</small>
-			</div>
-			<div class="input-field">
-				<input id="password" type="password" class="validate">
-				<label for="password">Пароль</label>
-				<small class="helper-text invalid">Password</small>
-			</div>
-			<div class="input-field">
-				<input id="name" type="text" class="validate">
-				<label for="name">Имя</label>
-				<small class="helper-text invalid">Name</small>
-			</div>
-			<p>
-				<label>
-					<input type="checkbox" />
-					<span>С правилами согласен</span>
-				</label>
-			</p>
-		</div>
-		<div class="card-action">
-			<div>
-				<button class="btn waves-effect waves-light auth-submit" type="submit">
+	<v-card width="100%" max-width="450" class="pa-5">
+		<v-card-title class="mb-2 text-center">Домашняя бухгалтерия</v-card-title>
+		<v-card-text>
+			<v-form class="card-content">
+				<v-text-field v-model="email" :rules="emailRules" variant="underlined" label="Email" required />
+				<v-text-field v-model="password" :rules="passwordRules" variant="underlined" label="Пароль" required />
+				<v-text-field v-model="name" :rules="nameRules" variant="underlined" :counter="16" label="Имя" required />
+				<v-checkbox v-model="checkbox">
+					<template v-slot:label>
+						<div>С <a target="_blank" href="#">правилами</a>
+							согласен
+						</div>
+					</template>
+				</v-checkbox>
+				<v-btn type="submit" append-icon="mdi-send" color="teal-lighten-1" width="100%">
 					Зарегистрироваться
-					<i class="material-icons right">send</i>
-				</button>
-			</div>
-
-			<p class="center">
+				</v-btn>
+			</v-form>
+		</v-card-text>
+		<v-card-actions class="justify-center text-subtitle-1">
+			<p class="text-center">
 				Уже есть аккаунт?
-				<a href="/">Войти!</a>
+				<a href="#">Войти!</a>
 			</p>
-		</div>
-	</form>
+		</v-card-actions>
+	</v-card>
 </template>
 
 <script setup>

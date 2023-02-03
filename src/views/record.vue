@@ -1,48 +1,27 @@
 <template>
 	<div>
-		<div class="page-title">
-			<h3>Новая запись</h3>
+		<div class="title">
+			<h3 class="text-h4">Новая запись</h3>
 		</div>
 
-		<form class="form">
-			<div class="input-field">
-				<select>
-					<option>name cat</option>
-				</select>
-				<label>Выберите категорию</label>
-			</div>
+		<v-form class="record-form">
+			<v-select variant="underlined" label="Выберите категорию" :items="['name cat']" density="comfortable">
+			</v-select>
 
-			<p>
-				<label>
-					<input class="with-gap" name="type" type="radio" value="income" />
-					<span>Доход</span>
-				</label>
-			</p>
+			<v-radio-group>
+				<v-radio label="Доход" value="income" density="comfortable" color="orange-accent-3" />
+				<v-radio label="Расход" value="outcome" density="comfortable" color="orange-accent-3" />
+			</v-radio-group>
 
-			<p>
-				<label>
-					<input class="with-gap" name="type" type="radio" value="outcome" />
-					<span>Расход</span>
-				</label>
-			</p>
+			<v-text-field v-model="amount" :rules="amountRules" variant="underlined" label="Сумма" />
 
-			<div class="input-field">
-				<input id="amount" type="number">
-				<label for="amount">Сумма</label>
-				<span class="helper-text invalid">amount пароль</span>
-			</div>
+			<v-text-field v-model="description" :rules="descriptionRules" variant="underlined" label="Описание" />
 
-			<div class="input-field">
-				<input id="description" type="text">
-				<label for="description">Описание</label>
-				<span class="helper-text invalid">description пароль</span>
-			</div>
-
-			<button class="btn waves-effect waves-light" type="submit">
+			<v-btn type="submit" color="light-blue-darken-4">
 				Создать
-				<i class="material-icons right">send</i>
-			</button>
-		</form>
+				<v-icon icon="mdi-send" class="ml-3" />
+			</v-btn>
+		</v-form>
 	</div>
 </template>
 

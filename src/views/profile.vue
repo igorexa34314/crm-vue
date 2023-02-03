@@ -1,21 +1,16 @@
 <template>
 	<div>
-		<div class="page-title">
-			<h3>Профиль</h3>
+		<div class="title">
+			<h3 class="text-h4">Профиль</h3>
 		</div>
+		<v-form class="profile-form">
+			<v-text-field v-model="name" :rules="nameRules" variant="underlined" label="Имя" />
 
-		<form class="form">
-			<div class="input-field">
-				<input id="description" type="text">
-				<label for="description">Имя</label>
-				<span class="helper-text invalid">name</span>
-			</div>
-
-			<button class="btn waves-effect waves-light" type="submit">
+			<v-btn type="submit" color="teal-darken-2">
 				Обновить
-				<i class="material-icons right">send</i>
-			</button>
-		</form>
+				<v-icon icon="mdi-send" class="ml-3" />
+			</v-btn>
+		</v-form>
 	</div>
 </template>
 

@@ -1,32 +1,19 @@
 <template>
-	<form class="card auth-card">
-		<div class="card-content">
-			<span class="card-title">Домашняя бухгалтерия</span>
-			<div class="input-field">
-				<input id="email" type="text" class="validate">
-				<label for="email">Email</label>
-				<small class="helper-text invalid">Email</small>
+	<v-card max-width="400" width="100%" class="pa-4">
+		<v-card-title class="text-center">Домашняя бухгалтерия</v-card-title>
+		<v-card-text>
+			<v-form>
+				<v-text-field v-model="email" :rules="emailRules" variant="underlined" label="Email" required />
+				<v-text-field v-model="password" :rules="passwordRules" variant="underlined" label="Пароль" required />
+				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-4" append-icon="mdi-send">Войти</v-btn>
+			</v-form>
+		</v-card-text>
+		<v-card-actions class="mt-3 justify-center">
+			<div class="text-center text-subtitle-1">
+				Нет аккаунта? <a href="/" class="">Зарегистрироваться</a>
 			</div>
-			<div class="input-field">
-				<input id="password" type="password" class="validate">
-				<label for="password">Пароль</label>
-				<small class="helper-text invalid">Password</small>
-			</div>
-		</div>
-		<div class="card-action">
-			<div>
-				<button class="btn waves-effect waves-light auth-submit" type="submit">
-					Войти
-					<i class="material-icons right">send</i>
-				</button>
-			</div>
-
-			<p class="center">
-				Нет аккаунта?
-				<a href="/">Зарегистрироваться</a>
-			</p>
-		</div>
-	</form>
+		</v-card-actions>
+	</v-card>
 </template>
 
 <script setup>

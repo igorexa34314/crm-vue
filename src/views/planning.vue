@@ -1,19 +1,16 @@
 <template>
 	<div>
-		<div class="page-title">
-			<h3>Планирование</h3>
-			<h4>12 212</h4>
+		<div class="title d-flex flex-row align-center mb-4">
+			<h3 class="text-h4 flex-grow-1">Планирование</h3>
+			<h4 class="text-h4">12 212</h4>
 		</div>
-
 		<section>
 			<div>
-				<p>
-					<strong>Девушка:</strong>
-					12 122 из 14 0000
+				<p class="d-flex flex-row align-center mb-5">
+					<strong class="font-weight-bold mr-4">Девушка:</strong>
+					<span>12 122 из 14 0000</span>
 				</p>
-				<div class="progress">
-					<div class="determinate green" style="width:40%"></div>
-				</div>
+				<v-progress-linear model-value="40" color="green-darken-3" rounded />
 			</div>
 		</section>
 	</div>

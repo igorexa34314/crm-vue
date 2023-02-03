@@ -1,70 +1,53 @@
 <template>
 	<div>
-		<div class="page-title">
-			<h3>Категории</h3>
+		<div class="title mb-7">
+			<h3 class="text-h4">Категории</h3>
 		</div>
 		<section>
-			<div class="row">
-				<div class="col s12 m6">
+			<v-row>
+				<v-col cols="6" md="6" sm="12">
 					<div>
-						<div class="page-subtitle">
-							<h4>Создать</h4>
+						<div class="subtitle">
+							<h4 class="text-h5 mb-5">Создать</h4>
 						</div>
 
-						<form>
-							<div class="input-field">
-								<input id="name" type="text">
-								<label for="name">Название</label>
-								<span class="helper-text invalid">Введите название</span>
-							</div>
+						<v-form>
+							<v-text-field v-model="name" :rules="titleRules" variant="underlined" label="Название" />
 
-							<div class="input-field">
-								<input id="limit" type="number">
-								<label for="limit">Лимит</label>
-								<span class="helper-text invalid">Минимальная величина</span>
-							</div>
+							<v-text-field v-model="limit" :rules="limitRules" variant="underlined" type="number"
+								label="Лимит" />
 
-							<button class="btn waves-effect waves-light" type="submit">
+							<v-btn color="green-darken-3" type="submit">
 								Создать
-								<i class="material-icons right">send</i>
-							</button>
-						</form>
+								<v-icon icon="mdi-send" class="ml-3" />
+							</v-btn>
+						</v-form>
 					</div>
-				</div>
-				<div class="col s12 m6">
+				</v-col>
+				<v-col cols="6" md="6" sm="12">
 					<div>
-						<div class="page-subtitle">
-							<h4>Редактировать</h4>
+						<div class="subtitle">
+							<h4 class="text-h5 mb-5">Редактировать</h4>
 						</div>
+						<v-form>
 
-						<form>
-							<div class="input-field">
-								<select>
-									<option>Category</option>
-								</select>
-								<label>Выберите категорию</label>
-							</div>
+							<v-select label="Выберите категорию" variant="underlined" :items="['Category']"></v-select>
 
-							<div class="input-field">
-								<input type="text" id="name">
-								<label for="name">Название</label>
-								<span class="helper-text invalid">TITLE</span>
-							</div>
 
-							<div class="input-field">
-								<input id="limit" type="number">
-								<label for="limit">Лимит</label>
-								<span class="helper-text invalid">LIMIT</span>
-							</div>
+							<v-text-field v-model="name" :rules="titleRules" variant="underlined" label="Название" />
 
-							<button class="btn waves-effect waves-light" type="submit">
+							<v-text-field v-model="limit" :rules="limitRules" variant="underlined" type="number"
+								label="Лимит" />
+
+
+							<v-btn color="light-green-darken-4" type="submit">
 								Обновить
-								<i class="material-icons right">send</i>
-							</button>
-						</form>
+								<v-icon icon="mdi-send" class="ml-3" />
+							</v-btn>
+						</v-form>
 					</div>
-				</div>
-			</div>
+				</v-col>
+			</v-row>
 		</section>
 	</div>
 </template>
