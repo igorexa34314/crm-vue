@@ -19,9 +19,11 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 const router = useRouter();
+const route = useRoute();
+const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
 
 const form = ref();
 const formValid = ref(true);
@@ -39,7 +41,11 @@ const validations = {
 		v => (v && v.length >= 6 && v.length <= 32) || 'Пароль должен быть в пределах от 6 до 32 символов',
 	],
 };
-
+onMounted(() => {
+	if (route.query.message === 'logout') {
+		snackbar.showMessage('Вы успешно вышли');
+	}
+});
 const submitHandler = async () => {
 	const { valid } = await form.value.validate();
 

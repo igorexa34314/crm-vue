@@ -1,6 +1,6 @@
 <template>
 	<v-layout class="app-main-layout">
-		<Navbar @toggle="drawer = !drawer" />
+		<Navbar @click="drawer = !drawer" />
 
 		<Sidebar v-model="drawer" />
 
@@ -13,8 +13,6 @@
 
 		<v-btn color="indigo-lighten-1" size="large" class="fixed-action-btn" to="/record" position="fixed"
 			icon="mdi-plus" />
-
-
 	</v-layout>
 </template>
 
