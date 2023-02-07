@@ -6,6 +6,8 @@ import vuetify from '@/plugins/vuetify';
 import store from '@/store';
 import snackbarPlugin from '@/plugins/snackbar';
 import { firebaseApp } from '@/firebase';
+import Loader from '@/components/app/Loader.vue';
+import Snackbar from '@/components/app/Snackbar.vue';
 
 const app = createApp(App);
 app.use(VueFire, {
@@ -13,5 +15,8 @@ app.use(VueFire, {
 	modules: [VueFireAuth()]
 });
 app.use(router).use(store).use(vuetify).use(snackbarPlugin, { store });
+
+app.component('loader', Loader);
+app.component('snackbar', Snackbar);
 
 app.mount('#app');

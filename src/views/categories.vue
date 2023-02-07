@@ -3,58 +3,45 @@
 		<div class="title mb-7">
 			<h3 class="text-h4">Категории</h3>
 		</div>
-		<section>
-			<v-row>
-				<v-col cols="6" md="6" sm="12">
-					<div>
-						<div class="subtitle">
-							<h4 class="text-h5 mb-5">Создать</h4>
-						</div>
-
-						<v-form>
-							<v-text-field v-model="name" :rules="titleRules" variant="underlined" label="Название" />
-
-							<v-text-field v-model="limit" :rules="limitRules" variant="underlined" type="number"
-								label="Лимит" />
-
-							<v-btn color="green-darken-3" type="submit">
-								Создать
-								<v-icon icon="mdi-send" class="ml-3" />
-							</v-btn>
-						</v-form>
-					</div>
-				</v-col>
-				<v-col cols="6" md="6" sm="12">
-					<div>
-						<div class="subtitle">
-							<h4 class="text-h5 mb-5">Редактировать</h4>
-						</div>
-						<v-form>
-
-							<v-select label="Выберите категорию" variant="underlined" :items="['Category']"></v-select>
-
-
-							<v-text-field v-model="name" :rules="titleRules" variant="underlined" label="Название" />
-
-							<v-text-field v-model="limit" :rules="limitRules" variant="underlined" type="number"
-								label="Лимит" />
-
-
-							<v-btn color="light-green-darken-4" type="submit">
-								Обновить
-								<v-icon icon="mdi-send" class="ml-3" />
-							</v-btn>
-						</v-form>
-					</div>
-				</v-col>
+		<section class="mt-10">
+			<loader v-if="loading" class="page-loader" />
+			<v-row v-else class="px-4">
+				<CreateCategory class="pr-6" @created="addNewCategory" />
+				<EditCategory v-if="categories.length" :categories="categories" @updated="updateCategories" class="pl-6" />
+				<div class="text-h5 px-5" v-else>Категорий пока нет</div>
 			</v-row>
 		</section>
 	</div>
 </template>
 
 <script setup>
+import CreateCategory from '@/components/categories/CreateCategory.vue';
+import EditCategory from '@/components/categories/EditCategory.vue';
+import { useStore } from 'vuex';
+import { ref, onMounted } from 'vue';
+
+const store = useStore();
+
+const loading = ref(true);
+const categories = ref([]);
+
+const addNewCategory = category => {
+	categories.value.push(category);
+};
+onMounted(async () => {
+	categories.value = await store.dispatch('category/fetchCategories');
+	loading.value = false;
+});
+const updateCategories = category => {
+	const index = categories.value.findIndex(c => c.id === category.id);
+	categories.value[index].title = category.title;
+	categories.value[index].limit = category.limit;
+};
 </script>
 
 <style lang="scss" scoped>
-
+.page-loader {
+	left: 50%;
+	transform: translate(-50%);
+}
 </style>

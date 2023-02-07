@@ -8,7 +8,7 @@ import { getAnalytics } from 'firebase/analytics';
 
 // Initialize Firebase
 export const firebaseApp = initializeApp({
-	apiKey: 'AIzaSyA7-B01NmrrZHdt2Z4ztBnJ5j4_KJK_DaA',
+	apiKey: import.meta.env.VITE_FB_API_KEY,
 	authDomain: 'crm-vue-f0e4a.firebaseapp.com',
 	projectId: 'crm-vue-f0e4a',
 	storageBucket: 'crm-vue-f0e4a.appspot.com',

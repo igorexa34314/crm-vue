@@ -4,15 +4,22 @@
 			<v-app-bar-nav-icon color="blue-grey-darken-3" @click.stop="$emit('click')" />
 		</template>
 		<v-app-bar-title class="mt-1 text-blue-grey-darken-3">{{ formattedDate }}</v-app-bar-title>
+
 		<v-spacer />
 		<v-menu>
 			<template v-slot:activator="{ props }">
-				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="font-weight-bold mr-6"
+				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="mr-7"
 					append-icon="mdi-triangle-small-down">
-					{{ username }}
+					<suspense>
+						<template #default>
+							<div class="text-capitalize text-subtitle-1 font-weight-bold">{{ username }}</div>
+						</template>
+						<template #fallback>
+							<div>Гость</div>
+						</template>
+					</suspense>
 				</v-btn>
 			</template>
-
 			<v-list density="comfortable">
 				<v-list-item>
 					<template v-slot:prepend>

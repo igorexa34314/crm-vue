@@ -1,5 +1,6 @@
 <template>
-	<v-layout class="app-main-layout">
+	<loader v-if="loading" class="main-loader" />
+	<v-layout v-else class="app-main-layout">
 		<Navbar @click="drawer = !drawer" />
 
 		<Sidebar v-model="drawer" />
@@ -11,7 +12,7 @@
 
 		</v-main>
 
-		<v-btn color="indigo-lighten-1" size="large" class="fixed-action-btn" to="/record" position="fixed"
+		<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
 			icon="mdi-plus" />
 	</v-layout>
 </template>
@@ -22,21 +23,32 @@ import Sidebar from '@/components/app/Sidebar.vue';
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
-const drawer = ref(true);
 const store = useStore();
+
+const drawer = ref(true);
+const loading = ref(true);
 
 onMounted(async () => {
 	if (!Object.keys(store.state.info.info).length) {
 		await store.dispatch('info/fetchInfo');
 	}
+	loading.value = false;
 });
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 .app {}
 .fixed-action-btn {
 	right: 0;
 	bottom: 0;
-	transform: translate(-100%, -100%);
+	transform: translate(-70%, -70%);
 }
+.main-loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 100;
+}
+.main-loader {}
 </style>

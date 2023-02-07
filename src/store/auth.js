@@ -1,5 +1,6 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
+import { getCurrentUser } from 'vuefire';
 
 export const authModule = {
 	namespaced: true,
@@ -25,10 +26,11 @@ export const authModule = {
 				throw e;
 			}
 		},
-		getUserId() {
-			console.log(getAuth(), 'getuid');
-			if (getAuth().currentUser.uid) {
-				return getAuth().currentUser.uid;
+		async getUserId() {
+			const currentUser = await getCurrentUser();
+			console.log('Current user', currentUser);
+			if (currentUser.uid) {
+				return currentUser.uid;
 			}
 			return;
 		},

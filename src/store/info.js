@@ -16,14 +16,12 @@ export const infoModule = {
 	actions: {
 		async fetchInfo({ commit, dispatch }) {
 			try {
-				debugger;
 				const uid = await dispatch('auth/getUserId', {}, { root: true });
 				await onValue(
 					ref(getDatabase(), `users/${uid}/info`),
 					snapshot => {
 						const info = snapshot.val();
 						commit('setInfo', info);
-						console.log('Info', info);
 					},
 					{ onlyOnce: true }
 				);
