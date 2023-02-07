@@ -31,8 +31,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { ref } from 'vue';
+
 const router = useRouter();
+const store = useStore();
 
 const form = ref();
 const formValid = ref(true);
@@ -66,11 +69,13 @@ const submitHandler = async () => {
 	if (valid) {
 		const formData = {
 			email: email.value,
-			name: name.value,
 			password: password.value,
+			name: name.value,
 		};
-		console.log(formData)
-		router.push('/');
+		try {
+			await store.dispatch('auth/register', formData);
+			router.push('/');
+		} catch (e) { }
 	}
 }
 </script>

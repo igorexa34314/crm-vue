@@ -21,6 +21,10 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, getCurrentInstance } from 'vue';
+import { useStore } from 'vuex';
+import messages from '@/utils/messages';
+
+const store = useStore()
 const router = useRouter();
 const route = useRoute();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
@@ -42,8 +46,8 @@ const validations = {
 	],
 };
 onMounted(() => {
-	if (route.query.message === 'logout') {
-		snackbar.showMessage('Вы успешно вышли');
+	if (messages[route.query.message]) {
+		snackbar.showMessage(messages[route.query.message]);
 	}
 });
 const submitHandler = async () => {
@@ -54,8 +58,10 @@ const submitHandler = async () => {
 			email: email.value,
 			password: password.value,
 		};
-		console.log(formData)
-		router.push('/');
+		try {
+			await store.dispatch('auth/login', formData);
+			router.push('/');
+		} catch (e) { }
 	}
 }
 </script>

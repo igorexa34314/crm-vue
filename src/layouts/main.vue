@@ -19,9 +19,17 @@
 <script setup>
 import Navbar from '@/components/app/Navbar.vue';
 import Sidebar from '@/components/app/Sidebar.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
 const drawer = ref(true);
+const store = useStore();
+
+onMounted(async () => {
+	if (!Object.keys(store.state.info.info).length) {
+		await store.dispatch('info/fetchInfo');
+	}
+});
 </script>
 
 <style lang="scss" >

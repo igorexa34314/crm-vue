@@ -9,7 +9,7 @@
 			<template v-slot:activator="{ props }">
 				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="font-weight-bold mr-6"
 					append-icon="mdi-triangle-small-down">
-					USER NAME
+					{{ username }}
 				</v-btn>
 			</template>
 
@@ -33,15 +33,16 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { useDateFilter } from '@/composables/dateFilter';
 
 const emit = defineEmits(['click']);
 
 const router = useRouter();
+const store = useStore();
 
-const snackbar = ref(false);
-
+const username = computed(() => store.state.info.info.name);
 const date = ref(new Date());
 const formattedDate = computed(() => useDateFilter(date.value, 'datetime'));
 
@@ -51,9 +52,8 @@ onMounted(() => {
 });
 onBeforeUnmount(() => clearInterval(dateInterval));
 
-const logout = () => {
-	console.log('Logout');
-	snackbar.value = true;
+const logout = async () => {
+	await store.dispatch('auth/logout');
 	router.push({
 		path: '/login',
 		query: {
