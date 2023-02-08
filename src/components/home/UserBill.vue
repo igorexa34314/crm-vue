@@ -26,7 +26,8 @@ onMounted(() => {
 	currencies.value = Object.keys(props.rates);
 })
 
-const base = computed(() => store.state.info.info.bill / (props.rates['UAH'] / props.rates['USD']));
+const info = computed(() => store.state.info.info);
+const base = computed(() => info.value.bill / (props.rates['UAH'] / props.rates['USD']));
 const getCurrency = currency => Math.floor(base.value * props.rates[currency]);
 </script>
 

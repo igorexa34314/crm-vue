@@ -4,6 +4,7 @@ import { snackbarModule } from '@/store/snackbar';
 import { authModule } from '@/store/auth';
 import { infoModule } from '@/store/info';
 import { categoryModule } from '@/store/category';
+import { recordModule } from '@/store/record';
 
 export default createStore({
 	state: () => ({
@@ -29,7 +30,8 @@ export default createStore({
 				});
 				return await res.json();
 			} catch (e) {
-				console.error(e);
+				commit('setError', e);
+				throw e;
 			}
 		}
 	},
@@ -37,6 +39,7 @@ export default createStore({
 		snackbar: snackbarModule,
 		auth: authModule,
 		info: infoModule,
-		category: categoryModule
+		category: categoryModule,
+		record: recordModule
 	}
 });

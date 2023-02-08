@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4">Профиль</h3>
+			<h3 class="text-h4 mt-4 ml-2">Профиль</h3>
 		</div>
 		<v-form class="profile-form">
 			<v-text-field v-model="name" :rules="nameRules" variant="underlined" label="Имя" />

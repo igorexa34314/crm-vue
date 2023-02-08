@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title d-flex flex-row align-center mb-4">
-			<h3 class="text-h4 flex-grow-1">Планирование</h3>
+			<h3 class="text-h4 mt-4 ml-2 flex-grow-1">Планирование</h3>
 			<h4 class="text-h4">12 212</h4>
 		</div>
 		<section>
