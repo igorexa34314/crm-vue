@@ -28,7 +28,6 @@ export const authModule = {
 		},
 		async getUserId() {
 			const currentUser = await getCurrentUser();
-			console.log('Current user', currentUser);
 			if (currentUser.uid) {
 				return currentUser.uid;
 			}

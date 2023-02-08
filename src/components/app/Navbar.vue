@@ -10,14 +10,8 @@
 			<template v-slot:activator="{ props }">
 				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="mr-7"
 					append-icon="mdi-triangle-small-down">
-					<suspense>
-						<template #default>
-							<div class="text-capitalize text-subtitle-1 font-weight-bold">{{ username }}</div>
-						</template>
-						<template #fallback>
-							<div>Гость</div>
-						</template>
-					</suspense>
+					<div v-if="username" class="text-capitalize text-subtitle-1 font-weight-bold">{{ username }}</div>
+					<div v-else class="text-capitalize text-subtitle-1">Гость</div>
 				</v-btn>
 			</template>
 			<v-list density="comfortable">
