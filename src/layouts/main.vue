@@ -9,11 +9,15 @@
 			<div class="app-content pa-5">
 				<router-view />
 			</div>
-
 		</v-main>
 
-		<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
-			icon="mdi-plus" />
+		<v-tooltip activator=".fixed-action-btn" text="Создать новую запись"
+			content-class="bg-indigo-lighten-3 font-weight-medium">
+			<template v-slot:activator="{ attrs }">
+				<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
+					icon="mdi-plus" v-bind="attrs" />
+			</template>
+		</v-tooltip>
 	</v-layout>
 </template>
 

@@ -17,7 +17,7 @@ export const categoryModule = {
 		async fetchCategories({ commit, dispatch }) {
 			try {
 				const uid = await dispatch('auth/getUserId', {}, { root: true });
-				const categories = (await get(ref(getDatabase(), `users/${uid}/categories`))).val() || [];
+				const categories = (await get(ref(getDatabase(), `users/${uid}/categories`))).val() || {};
 				return Object.keys(categories).map(key => ({ ...categories[key], id: key }));
 			} catch (e) {
 				commit('setError', e, { root: true });
