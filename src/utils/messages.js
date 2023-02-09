@@ -1,4 +1,5 @@
 export default {
+	'login': 'Необходимо войти в аккаунт',
 	'logout': 'Вы успешно вышли',
 	'auth/user-not-found': 'Не найден пользователь с данным email',
 	'auth/wrong-password': 'Неверный пароль',

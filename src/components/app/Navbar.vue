@@ -36,7 +36,7 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useDateFilter } from '@/composables/dateFilter';
+import { useDateFilter } from '@/filters/dateFilter';
 
 const emit = defineEmits(['click']);
 

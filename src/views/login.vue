@@ -60,6 +60,7 @@ const submitHandler = async () => {
 		};
 		try {
 			await store.dispatch('auth/login', formData);
+			snackbar.showMessage('Вы успешно авторизовались');
 			router.push('/');
 		} catch (e) { }
 	}

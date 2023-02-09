@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { useDateFilter } from '@/composables/dateFilter'
+import { useDateFilter } from '@/filters/dateFilter'
 import { ref, onMounted } from 'vue';
 const props = defineProps(['rates', 'date']);
 

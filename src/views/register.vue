@@ -32,10 +32,11 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { ref, getCurrentInstance } from 'vue';
 
 const router = useRouter();
 const store = useStore();
+const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
 
 const form = ref();
 const formValid = ref(true);
@@ -74,6 +75,7 @@ const submitHandler = async () => {
 		};
 		try {
 			await store.dispatch('auth/register', formData);
+			snackbar.showMessage('Вы успешно зарегистрировались');
 			router.push('/');
 		} catch (e) { }
 	}

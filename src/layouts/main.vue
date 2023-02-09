@@ -24,10 +24,12 @@
 <script setup>
 import Navbar from '@/components/app/Navbar.vue';
 import Sidebar from '@/components/app/Sidebar.vue';
-import { ref, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
+import messages from '@/utils/messages';
 
 const store = useStore();
+const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
 
 const drawer = ref(true);
 const loading = ref(true);
@@ -38,10 +40,14 @@ onMounted(async () => {
 	}
 	loading.value = false;
 });
+
+const error = computed(() => store.state.error);
+watch(error, fbError => {
+	snackbar.showMessage(messages[fbError.code] || 'Что-то пошло не так', 'red-darken-3', 3000);
+})
 </script>
 
 <style lang="scss" scoped>
-.app {}
 .fixed-action-btn {
 	right: 0;
 	bottom: 0;
@@ -54,5 +60,4 @@ onMounted(async () => {
 	transform: translate(-50%, -50%);
 	z-index: 100;
 }
-.main-loader {}
 </style>

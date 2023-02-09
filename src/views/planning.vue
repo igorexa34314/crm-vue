@@ -32,7 +32,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { useCurrencyFilter } from '@/composables/currencyFilter';
+import { useCurrencyFilter } from '@/filters/currencyFilter';
 
 const store = useStore();
 

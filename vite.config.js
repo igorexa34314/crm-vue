@@ -19,7 +19,16 @@ export default defineConfig({
 	plugins: [
 		vue({ template: { transformAssetUrls } }),
 		Pages({
-			dirs: 'src/views'
+			dirs: 'src/views',
+			extendRoute(route) {
+				if (route.path === '/login' || route.path === '/register') {
+					return route;
+				}
+				return {
+					...route,
+					meta: { auth: true }
+				};
+			}
 		}),
 		Layouts({
 			layoutsDirs: 'src/layouts',
