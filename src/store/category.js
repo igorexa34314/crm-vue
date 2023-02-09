@@ -24,6 +24,17 @@ export const categoryModule = {
 				throw e;
 			}
 		},
+		async fetchCategoryById({ commit, dispatch }, id) {
+			try {
+				const uid = await dispatch('auth/getUserId', {}, { root: true });
+				const categoryRef = await child(ref(getDatabase(), `users/${uid}/categories`), id);
+				const category = (await get(categoryRef)).val() || {};
+				return { ...category, id };
+			} catch (e) {
+				commit('setError', e, { root: true });
+				throw e;
+			}
+		},
 		async createCategory({ commit, dispatch }, { title, limit }) {
 			try {
 				const uid = await dispatch('auth/getUserId', {}, { root: true });

@@ -18,7 +18,7 @@
 				<td>{{ useDateFilter(rec.date, 'datetime') }}</td>
 				<td>{{ rec.category }}</td>
 				<td>
-					<span :class="rec.type === 'income' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
+					<span :class="rec.type === 'outcome' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
 						class="py-2 px-3 text-white text-center">
 						{{ rec.type === 'income' ? 'доход' : 'расход' }}</span>
 				</td>
