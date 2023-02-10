@@ -3,8 +3,9 @@
 		<template v-slot:prepend>
 			<v-app-bar-nav-icon color="blue-grey-darken-3" @click.stop="$emit('click')" />
 		</template>
-		<v-app-bar-title class="mt-1 text-blue-grey-darken-3">{{ formattedDate }}</v-app-bar-title>
-
+		<v-app-bar-title class="mt-1 text-blue-grey-darken-3">
+			{{ $filters.date(date, 'datetime') }}
+		</v-app-bar-title>
 		<v-spacer />
 		<v-menu>
 			<template v-slot:activator="{ props }">
@@ -15,7 +16,7 @@
 				</v-btn>
 			</template>
 			<v-list density="comfortable">
-				<v-list-item>
+				<v-list-item @click="router.push('/profile')">
 					<template v-slot:prepend>
 						<v-icon icon="mdi-account-circle-outline" class="mr-3"></v-icon>
 					</template>
@@ -36,7 +37,6 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useDateFilter } from '@/filters/dateFilter';
 
 const emit = defineEmits(['click']);
 
@@ -45,7 +45,6 @@ const store = useStore();
 
 const username = computed(() => store.state.info.info.name);
 const date = ref(new Date());
-const formattedDate = computed(() => useDateFilter(date.value, 'datetime'));
 
 let dateInterval = null;
 onMounted(() => {

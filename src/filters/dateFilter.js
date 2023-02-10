@@ -1,4 +1,7 @@
+import { useStore } from 'vuex';
+
 export const useDateFilter = (value, format = 'date') => {
+	const store = useStore();
 	const options = {};
 	if (format.includes('date')) {
 		options.day = '2-digit';
@@ -10,5 +13,6 @@ export const useDateFilter = (value, format = 'date') => {
 		options.minute = '2-digit';
 		options.second = '2-digit';
 	}
-	return new Intl.DateTimeFormat('ua', options).format(new Date(value));
+	const locale = store.state.info.info.locale || 'ru-RU';
+	return new Intl.DateTimeFormat(locale, options).format(new Date(value));
 };

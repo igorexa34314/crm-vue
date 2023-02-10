@@ -19,7 +19,8 @@ export const authModule = {
 				const uid = await dispatch('getUserId');
 				await set(ref(getDatabase(), `users/${uid}/info`), {
 					bill: 10000,
-					name
+					name,
+					locale: 'ru-RU'
 				});
 			} catch (e) {
 				commit('setError', e, { root: true });

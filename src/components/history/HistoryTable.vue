@@ -14,8 +14,8 @@
 		<tbody>
 			<tr v-for="(rec, index) in records" :key="rec.id">
 				<td>{{ index+ 1 }}</td>
-				<td>{{ useCurrencyFilter(rec.amount, 'UAH') }}</td>
-				<td>{{ useDateFilter(rec.date, 'datetime') }}</td>
+				<td>{{ $filters.currency(rec.amount, 'UAH') }}</td>
+				<td>{{ $filters.date(rec.date, 'datetime') }}</td>
 				<td>{{ rec.category }}</td>
 				<td>
 					<span :class="rec.type === 'outcome' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
@@ -38,8 +38,6 @@
 </template>
 
 <script setup>
-import { useCurrencyFilter } from '@/filters/currencyFilter';
-import { useDateFilter } from '@/filters/dateFilter';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()

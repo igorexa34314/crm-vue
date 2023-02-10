@@ -26,7 +26,7 @@ export const infoModule = {
 				throw e;
 			}
 		},
-		async updateInfo({ commit, dispatch, state }, toUpdate) {
+		async updateInfo({ state, commit, dispatch }, toUpdate) {
 			try {
 				const uid = await dispatch('auth/getUserId', {}, { root: true });
 				const updateData = { ...state.info, ...toUpdate };

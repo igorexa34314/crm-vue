@@ -17,7 +17,7 @@
 						<tr v-for="cur in currencies" :key="cur" class="text-white text-subtitle-1">
 							<td>{{ cur }}</td>
 							<td>{{ rates[cur].toFixed(4) }}</td>
-							<td>{{ useDateFilter(date, 'date') }}</td>
+							<td>{{ $filters.date(date, 'date') }}</td>
 						</tr>
 					</tbody>
 				</v-table>
@@ -27,7 +27,6 @@
 </template>
 
 <script setup>
-import { useDateFilter } from '@/filters/dateFilter'
 import { ref, onMounted } from 'vue';
 const props = defineProps(['rates', 'date']);
 

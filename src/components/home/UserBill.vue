@@ -4,7 +4,7 @@
 			<v-card-title class="text-h5 mb-6">Счет в валюте</v-card-title>
 			<v-card-text class="text-white text-h5">
 				<div v-for="cur in currencies" :key="cur" class="mt-7">
-					<span class="mx-2">{{ useCurrencyFilter(getCurrency(cur), cur) }}</span>
+					<span class="mx-2">{{ $filters.currency(getCurrency(cur), cur) }}</span>
 					<v-divider color="white" thickness="2.5" class="bg-white mt-4" />
 				</div>
 			</v-card-text>
@@ -15,7 +15,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { useCurrencyFilter } from '@/filters/currencyFilter';
 
 const store = useStore();
 

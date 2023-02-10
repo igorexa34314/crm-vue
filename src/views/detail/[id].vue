@@ -13,9 +13,9 @@
 					<v-card class="pa-3" :color="record.type === 'outcome' ? 'orange-darken-4' : 'light-green-darken-2'">
 						<v-card-text class="text-subtitle-1">
 							<p>Описание: {{ record.description }}</p>
-							<p class="mt-3">Сумма: {{ useCurrencyFilter(record.amount) }}</p>
+							<p class="mt-3">Сумма: {{ $filters.currency(record.amount) }}</p>
 							<p class="mt-3 mb-5">Категория: {{ record.category }}</p>
-							<small class="text-right d-block mr-1">{{ useDateFilter(record.date, 'datetime') }}</small>
+							<small class="text-right d-block mr-1">{{ $filters.date(record.date, 'datetime') }}</small>
 						</v-card-text>
 					</v-card>
 				</v-col>
@@ -35,8 +35,6 @@
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import { useDateFilter } from '@/filters/dateFilter'
-import { useCurrencyFilter } from '@/filters/currencyFilter'
 
 const store = useStore();
 const route = useRoute();
