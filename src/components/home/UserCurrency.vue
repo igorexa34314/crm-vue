@@ -2,15 +2,15 @@
 	<v-col cols="8" lg="8" md="6" sm="12">
 		<v-card color="deep-orange-darken-1" elevation="3" min-height="300">
 			<v-card-item>
-				<v-card-title class="mx-3 mt-3">Курс валют</v-card-title>
+				<v-card-title class="mx-3 mt-3">{{ $filters.localize('exchange_rate') }}</v-card-title>
 			</v-card-item>
 			<v-card-text>
 				<v-table class="bg-transparent">
 					<thead>
 						<tr>
-							<th class="text-white text-subtitle-1 font-weight-bold">Валюта</th>
-							<th class="text-white text-subtitle-1 font-weight-bold">Курс</th>
-							<th class="text-white text-subtitle-1 font-weight-bold">Дата</th>
+							<th class="text-white text-subtitle-1 font-weight-bold">{{ $filters.localize('currency') }}</th>
+							<th class="text-white text-subtitle-1 font-weight-bold">{{ $filters.localize('rate') }}</th>
+							<th class="text-white text-subtitle-1 font-weight-bold">{{ $filters.localize('date') }}</th>
 						</tr>
 					</thead>
 					<tbody>

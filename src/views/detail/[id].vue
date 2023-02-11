@@ -12,9 +12,10 @@
 				<v-col cols="6" md="6" sm="12">
 					<v-card class="pa-3" :color="record.type === 'outcome' ? 'orange-darken-4' : 'light-green-darken-2'">
 						<v-card-text class="text-subtitle-1">
-							<p>Описание: {{ record.description }}</p>
-							<p class="mt-3">Сумма: {{ $filters.currency(record.amount) }}</p>
-							<p class="mt-3 mb-5">Категория: {{ record.category }}</p>
+							<p>{{ $filters.localize('description') + ': ' + record.description }}</p>
+							<p class="mt-3">{{ $filters.localize('amount') + ': ' + $filters.currency(record.amount) }}
+							</p>
+							<p class="mt-3 mb-5">{{ $filters.localize('category') + ': ' + record.category }}</p>
 							<small class="text-right d-block mr-1">{{ $filters.date(record.date, 'datetime') }}</small>
 						</v-card-text>
 					</v-card>
@@ -35,6 +36,7 @@
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore();
 const route = useRoute();
@@ -42,7 +44,7 @@ const route = useRoute();
 const loading = ref(true);
 const record = ref(null);
 const breadcrumbs = [
-	{ title: 'История', to: '/history' },
+	{ title: useLocalizeFilter('menu.history'), to: '/history' },
 ];
 
 onMounted(async () => {

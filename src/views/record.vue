@@ -1,31 +1,36 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">Новая запись</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('pageTitles.newRecord') }}</h3>
 		</div>
 
 		<loader v-if="loading" class="mt-10 page-loader" />
 
-		<div v-else-if="!categories.length" class="mt-10 text-center text-h6">Категорий пока нет. <router-link
-				to="/categories">Создать категорию</router-link></div>
+		<div v-else-if="!categories.length" class="mt-10 text-center text-h6">{{
+			$filters.localize('no_categories') + '. '
+		}}
+			<router-link to="/categories">{{ $filters.localize('create_category') }}</router-link>
+		</div>
 
 		<v-form v-else ref="form" v-model="valid" @submit.prevent="submitHandler" class="record-form mt-8 px-4">
 			<v-select v-model="currentCategoryId" :items="categories" item-title="title" item-value="id"
-				label="Выберите категорию" variant="underlined" />
+				:label="$filters.localize('select_category')" variant="underlined" />
 
 			<v-radio-group class="mt-3" v-model="type">
-				<v-radio label="Доход" value="income" density="comfortable" color="orange-accent-3" />
-				<v-radio label="Расход" value="outcome" density="comfortable" color="orange-accent-3" />
+				<v-radio :label="$filters.localize('income')" value="income" density="comfortable"
+					color="orange-accent-3" />
+				<v-radio :label="$filters.localize('outcome')" value="outcome" density="comfortable"
+					color="orange-accent-3" />
 			</v-radio-group>
 
 			<v-text-field v-model.number="amount" :rules="validations.amount" type="number" variant="underlined"
-				label="Сумма" class="mt-2" required />
+				:label="$filters.localize('amount')" class="mt-2" required />
 
-			<v-text-field v-model="description" :rules="validations.description" variant="underlined" label="Описание"
-				class="mt-2" required />
+			<v-text-field v-model="description" :rules="validations.description" variant="underlined"
+				:label="$filters.localize('description')" class="mt-2" required />
 
 			<v-btn type="submit" color="light-blue-darken-4" class="mt-7">
-				Создать
+				{{ $filters.localize('create') }}
 				<v-icon icon="mdi-send" class="ml-3" />
 			</v-btn>
 		</v-form>
@@ -35,6 +40,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
@@ -60,11 +66,11 @@ const canCreateRecord = computed(() => {
 
 const validations = {
 	amount: [
-		v => !!v || 'Введите сумму',
-		v => (v && v >= 1) || 'Сумма не может быть меньше 1',
+		v => !!v || useLocalizeFilter('message_EnterAmount'),
+		v => (v && v >= 1) || useLocalizeFilter('amount_rules'),
 	],
 	description: [
-		v => !!v || 'Введите описание',
+		v => !!v || useLocalizeFilter('message_EnterDescription'),
 	],
 }
 onMounted(async () => {
@@ -87,7 +93,7 @@ const submitHandler = async () => {
 			})
 			const newBill = type.value === 'income' ? info.value.bill + amount.value : info.value.bill - amount.value
 			await store.dispatch('info/updateInfo', { bill: newBill });
-			snackbar.showMessage('Запись успешно создана');
+			snackbar.showMessage(useLocalizeFilter('createRecord_success'));
 			form.value.reset();
 			amount.value = 1;
 		} catch (e) {
@@ -95,7 +101,7 @@ const submitHandler = async () => {
 		}
 	}
 	else {
-		snackbar.showMessage(`Недостаточно средств на счете (${amount.value - info.value.bill})`);
+		snackbar.showMessage(useLocalizeFilter('lack_of_amount') + ` (${amount.value - info.value.bill})`);
 	}
 }
 </script>

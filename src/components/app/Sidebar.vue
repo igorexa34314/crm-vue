@@ -3,7 +3,7 @@
 		<v-list>
 			<v-list-item v-for="link in links" :key="link.url" :to="link.url" active-class="active" link
 				:exact="link.exact" active-color="light-blue-darken-3" class="px-5">
-				<span class="font-weight-bold">{{ link.title }}</span>
+				<span class="font-weight-bold">{{ $filters.localize('menu.' + link.title) }}</span>
 			</v-list-item>
 		</v-list>
 	</v-navigation-drawer>
@@ -11,6 +11,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
@@ -25,11 +26,11 @@ const drawer = computed({
 });
 
 const links = ref([
-	{ title: 'Счет', url: '/', exact: true, },
-	{ title: 'История', url: '/history' },
-	{ title: 'Планирование', url: '/planning' },
-	{ title: 'Новая запись', url: '/record' },
-	{ title: 'Категории', url: '/categories' },
+	{ title: 'bill', url: '/', exact: true, },
+	{ title: 'history', url: '/history' },
+	{ title: 'plan', url: '/planning' },
+	{ title: 'newRecord', url: '/record' },
+	{ title: 'categories', url: '/categories' },
 ]);
 </script>
 

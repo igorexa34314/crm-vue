@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('profileTitle') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('pageTitles.profile') }}</h3>
 		</div>
 		<v-form ref="form" v-model="valid" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
 			<v-text-field v-model="name" :rules="validations.name" variant="underlined" :label="$filters.localize('name')"
 				required />
 
-			<v-select v-model="currentLocale" :items="langItems" label="Язык" item-title="title" item-value="value"
-				variant="underlined" class="mt-4" />
+			<v-select v-model="currentLocale" :items="langItems" :label="$filters.localize('lang')" item-title="title"
+				item-value="value" variant="underlined" class="mt-4" />
 			<v-btn type="submit" color="teal-darken-2" class="mt-5">
 				{{ $filters.localize('update') }}
 				<v-icon icon="mdi-send" class="ml-3" />
@@ -18,8 +18,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, onMounted, getCurrentInstance, reactive } from 'vue';
 import { useStore } from 'vuex';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
@@ -38,8 +39,6 @@ const langItems = [
 
 const currentLocale = ref('');
 
-
-
 onMounted(() => {
 	setTimeout(() => {
 		currentLocale.value = info.value.locale;
@@ -49,10 +48,10 @@ onMounted(() => {
 
 const validations = {
 	name: [
-		v => !!v || 'Введите имя',
-		v => (v && v.length >= 3 && v.length <= 32) || 'Имя должно быть в пределах от 3 до 20 символов',
+		v => !!v || useLocalizeFilter('message_EnterName'),
+		v => (v && v.length >= 3 && v.length <= 32) || useLocalizeFilter('name_rules'),
 	],
-}
+};
 
 const submitHandler = async () => {
 	const { valid } = await form.value.validate();
@@ -60,7 +59,7 @@ const submitHandler = async () => {
 	if (valid) {
 		try {
 			await store.dispatch('info/updateInfo', { name: name.value, locale: currentLocale.value });
-			snackbar.showMessage('Данные успешно обновлены');
+			snackbar.showMessage(useLocalizeFilter('updateProfile_message'));
 		} catch (e) {
 			console.error(e);
 		}

@@ -12,7 +12,7 @@
 				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="mr-7"
 					append-icon="mdi-triangle-small-down">
 					<div v-if="username" class="text-capitalize text-subtitle-1 font-weight-bold">{{ username }}</div>
-					<div v-else class="text-capitalize text-subtitle-1">Гость</div>
+					<div v-else class="text-capitalize text-subtitle-1">{{ $filters.localize('guest') }}</div>
 				</v-btn>
 			</template>
 			<v-list density="comfortable">
@@ -20,13 +20,13 @@
 					<template v-slot:prepend>
 						<v-icon icon="mdi-account-circle-outline" class="mr-3"></v-icon>
 					</template>
-					<v-list-item-title>Профиль</v-list-item-title>
+					<v-list-item-title>{{ $filters.localize('pageTitles.profile') }}</v-list-item-title>
 				</v-list-item>
 				<v-list-item @click="logout">
 					<template v-slot:prepend>
 						<v-icon icon="mdi-logout" class="mr-3"></v-icon>
 					</template>
-					<v-list-item-title>Выйти</v-list-item-title>
+					<v-list-item-title>{{ $filters.localize('logout') }}</v-list-item-title>
 				</v-list-item>
 			</v-list>
 		</v-menu>

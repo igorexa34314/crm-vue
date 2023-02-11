@@ -2,12 +2,12 @@
 	<v-table>
 		<thead>
 			<tr>
-				<th>#</th>
-				<th>Сумма</th>
-				<th>Дата</th>
-				<th>Категория</th>
-				<th>Тип</th>
-				<th>Открыть</th>
+				<th>{{ '#' }}</th>
+				<th>{{ $filters.localize('amount') }}</th>
+				<th>{{ $filters.localize('date') }}</th>
+				<th>{{ $filters.localize('category') }}</th>
+				<th>{{ $filters.localize('type') }}</th>
+				<th>{{ $filters.localize('open') }}</th>
 			</tr>
 		</thead>
 
@@ -20,7 +20,10 @@
 				<td>
 					<span :class="rec.type === 'outcome' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
 						class="py-2 px-3 text-white text-center">
-						{{ rec.type === 'income' ? 'доход' : 'расход' }}</span>
+						{{
+							rec.type === 'income' ? $filters.localize('income').toLowerCase() :
+								$filters.localize('outcome').toLowerCase()
+						}}</span>
 				</td>
 				<td>
 					<v-tooltip :activator="`#rec-${rec.id}`" text="Посмотреть запись" location="bottom"

@@ -12,7 +12,9 @@
 		</v-card-text>
 		<v-card-actions class="mt-3 justify-center">
 			<div class="text-center text-subtitle-1">
-				Нет аккаунта? <router-link to="/register" tag="a">Зарегистрироваться</router-link>
+				{{ $filters.localize('no_account') + ' ' }}
+				<router-link to="/register" tag="a">
+					{{ $filters.localize('sign_in') }}</router-link>
 			</div>
 		</v-card-actions>
 	</v-card>
@@ -23,6 +25,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import messages from '@/utils/messages';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore()
 const router = useRouter();
@@ -37,17 +40,17 @@ const password = ref('');
 
 const validations = {
 	email: [
-		v => !!v || 'Введите email',
-		v => (v && /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v)) || 'Введите корректный email',
+		v => !!v || useLocalizeFilter('enter_Email'),
+		v => (v && /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v)) || useLocalizeFilter('email_rules'),
 	],
 	password: [
-		v => !!v || 'Введите пароль',
-		v => (v && v.length >= 6 && v.length <= 32) || 'Пароль должен быть в пределах от 6 до 32 символов',
+		v => !!v || useLocalizeFilter('enter_Pass'),
+		v => (v && v.length >= 6 && v.length <= 32) || useLocalizeFilter('pass_rules'),
 	],
 };
 onMounted(() => {
 	if (messages[route.query.message]) {
-		snackbar.showMessage(messages[route.query.message]);
+		snackbar.showMessage(useLocalizeFilter(messages[route.query.message]));
 	}
 });
 const submitHandler = async () => {
@@ -60,7 +63,7 @@ const submitHandler = async () => {
 		};
 		try {
 			await store.dispatch('auth/login', formData);
-			snackbar.showMessage('Вы успешно авторизовались');
+			snackbar.showMessage(useLocalizeFilter('login_success'));
 			router.push('/');
 		} catch (e) { }
 	}

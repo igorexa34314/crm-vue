@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="d-flex flex-row align-center">
-			<h3 class="title text-h4 flex-grow-1 my-2 ">Счет</h3>
+			<h3 class="title text-h4 flex-grow-1 my-2 ">{{ $filters.localize('pageTitles.bill') }}</h3>
 			<v-btn color="green-darken-2" @click="refresh">
 				<v-icon icon="mdi-refresh" />
 			</v-btn>

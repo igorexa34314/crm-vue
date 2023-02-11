@@ -16,14 +16,14 @@
 					</template>
 				</v-checkbox>
 				<v-btn type="submit" append-icon="mdi-send" color="teal-lighten-1" width="100%" class="mt-7">
-					Зарегистрироваться
+					{{ $filters.localize('sign_in') }}
 				</v-btn>
 			</v-form>
 		</v-card-text>
 		<v-card-actions class="justify-center text-subtitle-1">
 			<p class="text-center">
-				Уже есть аккаунт?
-				<router-link to="/login" tag="a">Войти!</router-link>
+				{{ $filters.localize('have_account') + '? ' }}
+				<router-link to="/login" tag="a">{{ $filters.localize('login') + '!' }}</router-link>
 			</p>
 		</v-card-actions>
 	</v-card>
@@ -33,6 +33,7 @@
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, getCurrentInstance } from 'vue';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const router = useRouter();
 const store = useStore();
@@ -48,19 +49,19 @@ const agree = ref(false);
 
 const validations = {
 	email: [
-		v => !!v || 'Введите email',
-		v => (v && /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v)) || 'Введите корректный email',
+		v => !!v || useLocalizeFilter('enter_Email'),
+		v => (v && /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v)) || useLocalizeFilter('email_rules'),
 	],
 	password: [
-		v => !!v || 'Введите пароль',
-		v => (v && v.length >= 6 && v.length <= 32) || 'Пароль должен быть в пределах от 6 до 32 символов',
+		v => !!v || useLocalizeFilter('enter_Pass'),
+		v => (v && v.length >= 6 && v.length <= 32) || useLocalizeFilter('pass_rules'),
 	],
 	name: [
-		v => !!v || 'Введите имя пользователя',
-		v => (v && v.length >= 2 && v.length <= 20) || 'Имя должно быть в пределах от 2 до 20 символов',
+		v => !!v || useLocalizeFilter('message_EnterName'),
+		v => (v && v.length >= 3 && v.length <= 20) || useLocalizeFilter('name_rules'),
 	],
 	agree: [
-		v => !!v || 'Вы должны согласиться с правилами',
+		v => !!v || useLocalizeFilter('agree_rules'),
 	]
 };
 
@@ -75,7 +76,7 @@ const submitHandler = async () => {
 		};
 		try {
 			await store.dispatch('auth/register', formData);
-			snackbar.showMessage('Вы успешно зарегистрировались');
+			snackbar.showMessage(useLocalizeFilter('sign_in_success'));
 			router.push('/');
 		} catch (e) { }
 	}

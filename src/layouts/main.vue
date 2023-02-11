@@ -11,7 +11,7 @@
 			</div>
 		</v-main>
 
-		<v-tooltip activator=".fixed-action-btn" text="Создать новую запись"
+		<v-tooltip activator=".fixed-action-btn" :text="$filters.localize('create_record')"
 			content-class="bg-indigo-lighten-3 font-weight-medium">
 			<template v-slot:activator="{ attrs }">
 				<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
@@ -27,6 +27,7 @@ import Sidebar from '@/components/app/Sidebar.vue';
 import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import messages from '@/utils/messages';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
@@ -43,7 +44,7 @@ onMounted(async () => {
 
 const error = computed(() => store.state.error);
 watch(error, fbError => {
-	snackbar.showMessage(messages[fbError.code] || 'Что-то пошло не так', 'red-darken-3', 3000);
+	snackbar.showMessage(messages[fbError.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
 })
 </script>
 

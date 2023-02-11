@@ -14,7 +14,7 @@ const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$sn
 
 const error = computed(() => store.state.error);
 watch(error, fbError => {
-	snackbar.showMessage(messages[fbError.code] || 'Что-то пошло не так', 'red-darken-3', 3000);
+	snackbar.showMessage(messages[fbError.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
 })
 </script>
 

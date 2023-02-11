@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title mb-7">
-			<h3 class="text-h4 mt-4 ml-2">Категории</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('pageTitles.categories') }}</h3>
 		</div>
 		<section class="mt-10">
 			<loader v-if="loading" class="page-loader" />
