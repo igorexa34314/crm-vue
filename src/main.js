@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { VueFire, VueFireAuth } from 'vuefire';
 import App from './App.vue';
 import router from '@/router';
+import { createMetaManager } from 'vue-meta';
 import vuetify from '@/plugins/vuetify';
 import store from '@/store';
 import snackbarPlugin from '@/plugins/snackbar';
@@ -15,7 +16,7 @@ app.use(VueFire, {
 	firebaseApp,
 	modules: [VueFireAuth()]
 });
-app.use(router).use(store).use(vuetify);
+app.use(router).use(store).use(createMetaManager()).use(vuetify);
 app.use(filters);
 app.use(snackbarPlugin, { store });
 app.component('loader', Loader);

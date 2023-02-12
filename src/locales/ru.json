@@ -27,6 +27,7 @@
 	"create": "Создать",
 	"edit": "Редактировать",
 	"update": "Обновить",
+	"pageTitles.home":"Главная",
 	"pageTitles.bill": "Ваш счёт",
 	"pageTitles.history": "История записей",
 	"pageTitles.plan": "Планирование",

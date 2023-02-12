@@ -22,6 +22,8 @@ import { ref, computed, onMounted, getCurrentInstance, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 
+useMeta({ title: 'pageTitles.profile' });
+
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
 

@@ -21,6 +21,8 @@ import UserCurrency from '@/components/home/UserCurrency.vue';
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
+useMeta({ title: 'pageTitles.bill' });
+
 const store = useStore();
 
 const loading = ref(true);

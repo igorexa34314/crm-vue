@@ -35,6 +35,8 @@ import { useStore } from 'vuex';
 import { ref, getCurrentInstance } from 'vue';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 
+useMeta({ title: 'sign_in' });
+
 const router = useRouter();
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;

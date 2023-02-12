@@ -37,6 +37,8 @@ import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
+useMeta({ title: 'pageTitles.history' });
+
 const store = useStore();
 
 const loading = ref(true);

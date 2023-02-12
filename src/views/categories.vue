@@ -20,6 +20,8 @@ import EditCategory from '@/components/categories/EditCategory.vue';
 import { useStore } from 'vuex';
 import { ref, onMounted } from 'vue';
 
+useMeta({ title: 'pageTitles.categories' });
+
 const store = useStore();
 
 const loading = ref(true);

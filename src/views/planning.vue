@@ -38,6 +38,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
+useMeta({ title: 'pageTitles.plan' });
+
 const store = useStore();
 
 const info = computed(() => store.state.info.info);

@@ -42,6 +42,8 @@ import { useStore } from 'vuex';
 import { ref, computed, onMounted, getCurrentInstance } from 'vue';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 
+useMeta({ title: 'pageTitles.newRecord' });
+
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
 

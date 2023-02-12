@@ -27,6 +27,7 @@
 	"create": "Create",
 	"edit": "Edit",
 	"update": "Update",
+	"pageTitles.home": "Home",
 	"pageTitles.bill": "Your bill",
 	"pageTitles.history": "Records history",
 	"pageTitles.plan": "Planning",
