@@ -34,6 +34,7 @@ import { Pie, Chart } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { randomColor } from 'randomcolor';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useMeta } from 'vue-meta';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 

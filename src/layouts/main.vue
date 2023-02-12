@@ -31,7 +31,6 @@ import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore();
 const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
-
 const drawer = ref(true);
 const loading = ref(true);
 

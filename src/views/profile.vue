@@ -21,6 +21,7 @@
 import { ref, computed, onMounted, getCurrentInstance, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'pageTitles.profile' });
 

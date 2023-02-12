@@ -10,9 +10,7 @@ export const infoModule = {
 			state.info = info;
 		},
 		clearInfo(state) {
-			state.info = {
-				locale: JSON.parse(localStorage.getItem('lang')) || 'ru-RU'
-			};
+			state.info = {};
 		},
 		setLocale(state) {
 			state.info.locale = JSON.parse(localStorage.getItem('lang')) || 'ru-RU';

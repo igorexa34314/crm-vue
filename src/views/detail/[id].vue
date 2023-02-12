@@ -37,6 +37,9 @@ import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useMeta } from 'vue-meta';
+
+useMeta({ title: 'pageTitles.details' });
 
 const store = useStore();
 const route = useRoute();

@@ -19,6 +19,7 @@ import CreateCategory from '@/components/categories/CreateCategory.vue';
 import EditCategory from '@/components/categories/EditCategory.vue';
 import { useStore } from 'vuex';
 import { ref, onMounted } from 'vue';
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'pageTitles.categories' });
 

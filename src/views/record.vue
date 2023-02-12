@@ -41,6 +41,7 @@
 import { useStore } from 'vuex';
 import { ref, computed, onMounted, getCurrentInstance } from 'vue';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'pageTitles.newRecord' });
 

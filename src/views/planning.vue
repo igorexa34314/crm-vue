@@ -37,6 +37,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'pageTitles.plan' });
 

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed, watch, getCurrentInstance } from 'vue';
+import { computed, watch, getCurrentInstance, onBeforeUnmount, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import messages from '@/utils/messages.json';
 
@@ -15,12 +15,13 @@ const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$sn
 if (!store.state.info.info.locale) {
 	store.commit('info/setLocale');
 }
-
 const error = computed(() => store.state.error);
 watch(error, fbError => {
 	snackbar.showMessage(messages[fbError.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
 });
-
+onUnmounted(() => {
+	store.commit('info/clearInfo');
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,6 @@
 {
 	"login": "need_login",
+	"needToLogout": "need_logout",
 	"logout": "logout_success",
 	"auth/user-not-found": "user_not_found",
 	"auth/wrong-password": "wrong_password",

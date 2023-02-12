@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'pageTitles.home' });
 

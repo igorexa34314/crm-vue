@@ -28,7 +28,7 @@ import { ref, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import messages from '@/utils/messages.json';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
-import { useMeta } from 'vue-meta'
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'login' });
 

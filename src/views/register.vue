@@ -34,6 +34,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, getCurrentInstance } from 'vue';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'sign_in' });
 
