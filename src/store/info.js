@@ -10,7 +10,12 @@ export const infoModule = {
 			state.info = info;
 		},
 		clearInfo(state) {
-			state.info = {};
+			state.info = {
+				locale: JSON.parse(localStorage.getItem('lang')) || 'ru-RU'
+			};
+		},
+		setLocale(state) {
+			state.info.locale = JSON.parse(localStorage.getItem('lang')) || 'ru-RU';
 		}
 	},
 	actions: {
@@ -28,6 +33,9 @@ export const infoModule = {
 		},
 		async updateInfo({ state, commit, dispatch }, toUpdate) {
 			try {
+				if (toUpdate.locale) {
+					localStorage.setItem('lang', JSON.stringify(toUpdate.locale));
+				}
 				const uid = await dispatch('auth/getUserId', {}, { root: true });
 				const updateData = { ...state.info, ...toUpdate };
 				await update(ref(getDatabase(), `users/${uid}/info`), updateData);

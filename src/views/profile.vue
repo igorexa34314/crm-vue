@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, getCurrentInstance, reactive } from 'vue';
+import { ref, computed, onMounted, getCurrentInstance, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 
@@ -39,11 +39,17 @@ const langItems = [
 
 const currentLocale = ref('');
 
-onMounted(() => {
-	setTimeout(() => {
+const fillInfo = () => {
+	if (Object.keys(info.value).length) {
 		currentLocale.value = info.value.locale;
 		name.value = info.value.name;
-	}, 1000)
+	}
+}
+watch(info, () => {
+	fillInfo();
+})
+onMounted(() => {
+	fillInfo();
 })
 
 const validations = {

@@ -2,17 +2,6 @@ import { getDatabase, ref, push, set, get, child, update } from 'firebase/databa
 
 export const categoryModule = {
 	namespaced: true,
-	// state: () => ({
-	// 	categories: []
-	// }),
-	// mutations: {
-	// 	setCategories(state, categories) {
-	// 		state.categories = categories;
-	// 	},
-	// 	addCategory(state, category) {
-	// 		state.categories.push(category);
-	// 	}
-	// },
 	actions: {
 		async fetchCategories({ commit, dispatch }) {
 			try {

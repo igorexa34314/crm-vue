@@ -26,7 +26,7 @@ import Navbar from '@/components/app/Navbar.vue';
 import Sidebar from '@/components/app/Sidebar.vue';
 import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
-import messages from '@/utils/messages';
+import messages from '@/utils/messages.json';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 
 const store = useStore();
