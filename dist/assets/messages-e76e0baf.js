@@ -1,0 +1,1 @@
+const o="need_login",e="need_logout",n="logout_success",s={login:o,needToLogout:e,logout:n,"auth/user-not-found":"user_not_found","auth/wrong-password":"wrong_password","auth/email-already-in-use":"email_already_in_use"};export{s as m};
