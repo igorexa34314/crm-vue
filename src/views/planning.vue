@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<div class="title d-flex flex-row align-center mb-3">
-			<h3 class="text-h4 mt-4 ml-2 flex-grow-1">{{ $filters.localize('pageTitles.plan') }}</h3>
-			<h4 class="text-h4">{{ $filters.currency(info.bill, 'UAH') }}</h4>
+			<h3 class="text-h4 mt-4 ml-2 flex-grow-1">{{ useLocalizeFilter('pageTitles.plan') }}</h3>
+			<h4 class="text-h4">{{ useCurrencyFilter(info.bill, 'UAH') }}</h4>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mb-8" />
-		<loader v-if="loading" class="mt-10 page-loader" />
+		<app-loader v-if="loading" class="mt-10 page-loader" />
 
 		<div v-else-if="!categories.length" class="mt-10 text-center text-h6">{{
-			$filters.localize('pageTitles.plan')
-		}}<router-link to="/categories">{{ $filters.localize('no_categories') + '. ' }}</router-link></div>
+			useLocalizeFilter('pageTitles.plan')
+		}}<router-link to="/categories">{{ useLocalizeFilter('no_categories') + '. ' }}</router-link></div>
 
 		<section v-else class="mt-10 px-4">
 			<div v-for="cat in categories" :key="cat.id" class="mt-8">
@@ -17,40 +17,48 @@
 					<strong class="font-weight-bold mr-4">{{ cat.title }}:</strong>
 					<span>
 						{{
-							$filters.currency(cat.spend) + ' ' + $filters.localize('out_of') + ' ' +
-								$filters.currency(cat.limit)
+							useCurrencyFilter(cat.spend) + ' ' + useLocalizeFilter('out_of') + ' ' +
+							useCurrencyFilter(cat.limit)
 						}}
 					</span>
 				</p>
 				<v-progress-linear :model-value="cat.percent" :id="`progress-${cat.id}`"
-					:color="cat.percent >= 90 ? 'red' : cat.percent >= 60 ? 'yellow' : 'green'" style="cursor: pointer;"
-					rounded rounded-bar />
+					:color="cat.percent >= 90 ? 'red' : cat.percent >= 60 ? 'yellow' : 'green'" style="cursor: pointer;" rounded
+					rounded-bar />
 				<v-tooltip :activator="`#progress-${cat.id}`" location="bottom"
 					:content-class="(cat.limit - cat.spend) < 0 ? 'bg-deep-orange-darken-3' : 'bg-light-green-darken-1'">
-					{{((cat.limit - cat.spend) < 0 ? $filters.localize('exceeding') : $filters.localize('left')) + ' ' +
-					$filters.currency(Math.abs(cat.limit - cat.spend)) }} </v-tooltip>
+					{{ ((cat.limit - cat.spend) < 0 ? useLocalizeFilter('exceeding') : useLocalizeFilter('left')) + ' ' +
+						useCurrencyFilter(Math.abs(cat.limit - cat.spend)) }} </v-tooltip>
 			</div>
 		</section>
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useCurrencyFilter } from '@/filters/currencyFilter';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useCategory } from '@/composables/category';
+import type { Record } from '@/composables/record';
+import type { Category } from '@/composables/category';
+import { useRecord } from '@/composables/record';
 import { ref, computed, onMounted } from 'vue';
-import { useStore } from 'vuex';
 import { useMeta } from 'vue-meta';
+import { useInfoStore } from '@/stores/info';
 
 useMeta({ title: 'pageTitles.plan' });
 
-const store = useStore();
+const infoStore = useInfoStore();
+const { fetchCategories } = useCategory();
+const { fetchRecords } = useRecord();
 
-const info = computed(() => store.state.info.info);
+const info = computed(() => infoStore.info);
 const loading = ref(true);
-const records = ref([]);
-const categories = ref([]);
+const records = ref<Record[]>([]);
+const categories = ref<Category[]>([]);
 
 onMounted(async () => {
-	records.value = await store.dispatch('record/fetchRecords');
-	const cats = await store.dispatch('category/fetchCategories');
+	records.value = await fetchRecords();
+	const cats = await fetchCategories();
 	categories.value = cats.map(cat => {
 		const spend = records.value.filter(r => r.categoryId === cat.id)
 			.filter(r => r.type === 'outcome')

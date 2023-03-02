@@ -2,20 +2,20 @@
 	<v-col cols="6" md="6" sm="12">
 		<div>
 			<div class="subtitle">
-				<h4 class="text-h5 mb-7">{{ $filters.localize('edit') }}</h4>
+				<h4 class="text-h5 mb-7">{{ useLocalizeFilter('edit') }}</h4>
 			</div>
 			<v-form ref="form" v-model="valid" @submit.prevent="submitHandler">
 				<v-select v-model="currentCategoryId" :items="categories" item-title="title" item-value="id"
-					:label="$filters.localize('select_category')" variant="underlined" />
+					:label="useLocalizeFilter('select_category')" variant="underlined" />
 
 				<v-text-field v-model="title" :rules="validations.title" variant="underlined"
-					:label="$filters.localize('title')" class="mt-6" required />
+					:label="useLocalizeFilter('title')" class="mt-6" required />
 
 				<v-text-field v-model="limit" :rules="validations.limit" variant="underlined" type="number"
-					:label="$filters.localize('limit')" class="mt-6" required />
+					:label="useLocalizeFilter('limit')" class="mt-6" required />
 
 				<v-btn color="light-green-darken-4" type="submit" class="mt-7">
-					{{ $filters.localize('update') }}
+					{{ useLocalizeFilter('update') }}
 					<v-icon icon="mdi-send" class="ml-3" />
 				</v-btn>
 			</v-form>
@@ -23,21 +23,27 @@
 	</v-col>
 </template>
 
-<script setup>
-import { ref, watch, getCurrentInstance } from 'vue';
-import { useStore } from 'vuex';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import type { PropType } from 'vue';
+import { useCategory } from '@/composables/category';
+import type { Category } from '@/composables/category';
+import { useSnackbarStore } from '@/stores/snackbar';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { category as validations } from '@/utils/validations';
 
-const store = useStore();
-const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
+const { updateCategory } = useCategory();
+const { showMessage } = useSnackbarStore();
 
 const props = defineProps({
 	categories: {
-		type: Array,
+		type: Array as PropType<Category[]>,
 		required: true,
 	}
 })
-const emit = defineEmits(['updated']);
+const emit = defineEmits<{
+	(e: 'updated', cat: Category): void
+}>();
 
 const currentCategoryId = ref(props.categories[0].id);
 
@@ -45,16 +51,6 @@ const form = ref();
 const valid = ref(true);
 const title = ref(props.categories[0].title);
 const limit = ref(props.categories[0].limit);
-const validations = {
-	title: [
-		v => !!v || useLocalizeFilter('message_EnterCategoryName'),
-		v => (v && v.length >= 3 && v.length <= 32) || useLocalizeFilter('category_rules'),
-	],
-	limit: [
-		v => !!v || useLocalizeFilter('message_EnterLimit'),
-		v => (v && v >= 100) || useLocalizeFilter('limit_rules'),
-	],
-}
 
 watch(currentCategoryId, catId => {
 	const cat = props.categories.find(c => c.id === catId)
@@ -68,18 +64,15 @@ const submitHandler = async () => {
 	if (valid) {
 		try {
 			const categoryData = {
-				id: currentCategoryId.value,
 				title: title.value,
 				limit: limit.value,
 			};
-			await store.dispatch('category/updateCategory', categoryData);
-			snackbar.showMessage('Категория успешно обновлена');
+			await updateCategory(currentCategoryId.value, categoryData);
+			showMessage('Категория успешно обновлена');
 			emit('updated', categoryData);
 		} catch (e) { }
 	}
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

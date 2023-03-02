@@ -1,10 +1,10 @@
 <template>
 	<v-col cols="4" lg="4" md="6" sm="12">
 		<v-card color="light-blue darken-3 pa-4" elevation="3" min-height="300">
-			<v-card-title class="text-h5 mb-6">{{ $filters.localize('currency_account') }}</v-card-title>
+			<v-card-title class="text-h5 mb-6">{{ useLocalizeFilter('currency_account') }}</v-card-title>
 			<v-card-text class="text-white text-h5">
 				<div v-for="cur in currencies" :key="cur" class="mt-7">
-					<span class="mx-2">{{ $filters.currency(getCurrency(cur), cur) }}</span>
+					<span class="mx-2">{{ useCurrencyFilter(getCurrency(+cur), cur) }}</span>
 					<v-divider color="white" thickness="2.5" class="bg-white mt-4" />
 				</div>
 			</v-card-text>
@@ -12,22 +12,25 @@
 	</v-col>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useCurrencyFilter } from '@/filters/currencyFilter';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { ref, computed, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { useInfoStore } from '@/stores/info';
 
-const store = useStore();
+const infoStore = useInfoStore();
 
 const props = defineProps(['rates']);
 
-const currencies = ref([]);
+const currencies = ref<string[]>([]);
 onMounted(() => {
 	currencies.value = Object.keys(props.rates);
 })
 
-const info = computed(() => store.state.info.info);
+const info = computed(() => infoStore.info);
+
 const base = computed(() => info.value.bill / (props.rates['UAH'] / props.rates['USD']));
-const getCurrency = currency => Math.floor(base.value * props.rates[currency]);
+const getCurrency = (currency: number) => Math.floor(base.value * props.rates[currency]);
 </script>
 
 <style lang="scss" scoped>

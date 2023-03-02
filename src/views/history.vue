@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('pageTitles.history') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ useLocalizeFilter('pageTitles.history') }}</h3>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
@@ -9,11 +9,11 @@
 			<Pie :options="chartOptions" :data="chartData" />
 		</div>
 
-		<loader v-if="loading" class="mt-7 page-loader" />
+		<app-loader v-if="loading" class="mt-7 page-loader" />
 
 		<div v-else-if="!pagedRecords.length" class="text-center text-h6 mt-9">
-			{{ $filters.localize('no_records') + '. ' }}
-			<router-link to="/record">{{ $filters.localize('create_record') }}</router-link>
+			{{ useLocalizeFilter('no_records') + '. ' }}
+			<router-link to="/record">{{ useLocalizeFilter('create_record') }}</router-link>
 		</div>
 
 		<section v-else class="mt-6">
@@ -25,12 +25,14 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import HistoryTable from '@/components/history/HistoryTable.vue';
 import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { useCategory } from '@/composables/category';
+import type { Record } from '@/composables/record';
+import { useRecord } from '@/composables/record';
 import { usePagination } from '@/composables/pagination';
-import { Pie, Chart } from 'vue-chartjs';
+import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { randomColor } from 'randomcolor';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
@@ -40,10 +42,11 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 useMeta({ title: 'pageTitles.history' });
 
-const store = useStore();
+const { fetchCategories } = useCategory();
+const { fetchRecords } = useRecord();
 
 const loading = ref(true);
-const records = ref([]);
+const records = ref<Record[]>([]);
 
 const chartData = ref({
 	labels: [],
@@ -80,8 +83,8 @@ const chartOptions = ref({
 const { initPagination, page, pageCount, pageChangeHandler, items: pagedRecords } = usePagination();
 
 onMounted(async () => {
-	records.value = await store.dispatch('record/fetchRecords');
-	const categories = await store.dispatch('category/fetchCategories');
+	records.value = await fetchRecords();
+	const categories = await fetchCategories();
 
 	chartData.value.labels = categories.map(c => c.title);
 	chartData.value.datasets[0].data = categories.map(c => {
@@ -98,7 +101,6 @@ onMounted(async () => {
 		...r,
 		category: categories.find(cat => cat.id === r.categoryId).title,
 	})));
-
 
 	loading.value = false;
 });

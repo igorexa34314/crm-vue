@@ -4,24 +4,29 @@
 	</v-layout>
 </template>
 
-<script setup>
-import { computed, watch, getCurrentInstance, onBeforeUnmount, onUnmounted } from 'vue';
-import { useStore } from 'vuex';
+<script setup lang="ts">
+import { computed, watch, onUnmounted } from 'vue';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useInfoStore } from '@/stores/info';
+import { useErrorStore } from '@/stores/error';
+import { useSnackbarStore } from '@/stores/snackbar';
 import messages from '@/utils/messages.json';
 
-const store = useStore();
-const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
+const infoStore = useInfoStore();
+const errorStore = useErrorStore();
+const { showMessage } = useSnackbarStore();
 
-if (!store.state.info.info.locale) {
-	store.commit('info/setLocale');
+if (!infoStore.info.locale) {
+	infoStore.setLocale();
 }
-const error = computed(() => store.state.error);
-watch(error, fbError => {
-	snackbar.showMessage(messages[fbError.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
+const error = computed(() => errorStore.error);
+
+watch(error, newErr => {
+	showMessage(messages[newErr.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
 });
 onUnmounted(() => {
-	store.commit('info/clearInfo');
-})
+	infoStore.clearInfo();
+});
 </script>
 
 <style lang="scss" scoped>

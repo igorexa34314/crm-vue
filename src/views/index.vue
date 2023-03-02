@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<div class="d-flex flex-row align-center">
-			<h3 class="title text-h4 flex-grow-1 my-2 ">{{ $filters.localize('pageTitles.bill') }}</h3>
+			<h3 class="title text-h4 flex-grow-1 my-2 ">{{ useLocalizeFilter('pageTitles.bill') }}</h3>
 			<v-btn color="green-darken-2" @click="refresh">
 				<v-icon icon="mdi-refresh" />
 			</v-btn>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mt-1 mb-8" />
-		<loader v-if="loading" color="#1A237E" class="mt-2 page-loader" />
+		<app-loader v-if="loading" color="#1A237E" class="mt-2 page-loader" />
 		<v-row v-else>
 			<UserBill :rates="currency.rates" />
 			<UserCurrency :rates="currency.rates" :date="currency.date" />
@@ -15,28 +15,27 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useLocalizeFilter } from '@/filters/localizeFilter'
 import UserBill from '@/components/home/UserBill.vue';
 import UserCurrency from '@/components/home/UserCurrency.vue';
 import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { fetchCurrency } from '@/composables/currency';
 import { useMeta } from 'vue-meta';
 
 useMeta({ title: 'pageTitles.bill' });
-
-const store = useStore();
 
 const loading = ref(true);
 let currency = ref();
 
 onMounted(async () => {
-	currency.value = await store.dispatch('fetchCurrency');
+	currency.value = await fetchCurrency();
 	loading.value = false;
 });
 
 const refresh = async () => {
 	loading.value = true;
-	currency.value = await store.dispatch('fetchCurrency');
+	currency.value = await fetchCurrency();
 	loading.value = false;
 };
 </script>

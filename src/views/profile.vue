@@ -1,38 +1,43 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('pageTitles.profile') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ useLocalizeFilter('pageTitles.profile') }}</h3>
 		</div>
-		<v-form ref="form" v-model="valid" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
-			<v-text-field v-model="name" :rules="validations.name" variant="underlined" :label="$filters.localize('name')"
+		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
+			<v-text-field v-model="formState.name" :rules="user.name" variant="underlined" :label="useLocalizeFilter('name')"
 				required />
 
-			<v-select v-model="currentLocale" :items="langItems" :label="$filters.localize('lang')" item-title="title"
+			<v-select v-model="formState.currentLocale" :items="langItems" :label="useLocalizeFilter('lang')" item-title="title"
 				item-value="value" variant="underlined" class="mt-4" />
 			<v-btn type="submit" color="teal-darken-2" class="mt-5">
-				{{ $filters.localize('update') }}
+				{{ useLocalizeFilter('update') }}
 				<v-icon icon="mdi-send" class="ml-3" />
 			</v-btn>
 		</v-form>
 	</div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted, getCurrentInstance, watch } from 'vue';
-import { useStore } from 'vuex';
+<script setup lang="ts">
+import { ref, computed, onMounted, reactive, watchEffect } from 'vue';
+import { useInfoStore } from '@/stores/info';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { useMeta } from 'vue-meta';
+import { useSnackbarStore } from '@/stores/snackbar';
+import { user } from '@/utils/validations';
 
 useMeta({ title: 'pageTitles.profile' });
 
-const store = useStore();
-const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
+const { showMessage } = useSnackbarStore();
+const infoStore = useInfoStore();
 
-const info = computed(() => store.state.info.info);
+const info = computed(() => infoStore.info);
 
 const form = ref();
-const valid = ref(true);
-const name = ref('');
+
+const formState = reactive({
+	name: '',
+	currentLocale :'',
+});
 
 const langItems = [
 	{ title: 'Русский', value: 'ru-RU' },
@@ -40,35 +45,23 @@ const langItems = [
 	{ title: 'English', value: 'en-US' },
 ];
 
-const currentLocale = ref('');
-
 const fillInfo = () => {
 	if (Object.keys(info.value).length) {
-		currentLocale.value = info.value.locale;
-		name.value = info.value.name;
+		formState.currentLocale = info.value.locale;
+		formState.name = info.value.name;
 	}
 }
-watch(info, () => {
+watchEffect( () => {
 	fillInfo();
 })
-onMounted(() => {
-	fillInfo();
-})
-
-const validations = {
-	name: [
-		v => !!v || useLocalizeFilter('message_EnterName'),
-		v => (v && v.length >= 3 && v.length <= 32) || useLocalizeFilter('name_rules'),
-	],
-};
 
 const submitHandler = async () => {
 	const { valid } = await form.value.validate();
 
 	if (valid) {
 		try {
-			await store.dispatch('info/updateInfo', { name: name.value, locale: currentLocale.value });
-			snackbar.showMessage(useLocalizeFilter('updateProfile_message'));
+			await infoStore.updateInfo(formState);
+			showMessage(useLocalizeFilter('updateProfile_message'));
 		} catch (e) {
 			console.error(e);
 		}
@@ -76,6 +69,4 @@ const submitHandler = async () => {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -1,53 +1,50 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ $filters.localize('pageTitles.newRecord') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ useLocalizeFilter('pageTitles.newRecord') }}</h3>
 		</div>
 
-		<loader v-if="loading" class="mt-10 page-loader" />
+		<app-loader v-if="loading" class="mt-10 page-loader" />
 
 		<div v-else-if="!categories.length" class="mt-10 text-center text-h6">{{
-			$filters.localize('no_categories') + '. '
+			useLocalizeFilter('no_categories') + '. '
 		}}
-			<router-link to="/categories">{{ $filters.localize('create_category') }}</router-link>
+			<router-link to="/categories">{{ useLocalizeFilter('create_category') }}</router-link>
 		</div>
 
 		<v-form v-else ref="form" v-model="valid" @submit.prevent="submitHandler" class="record-form mt-8 px-4">
 			<v-select v-model="currentCategoryId" :items="categories" item-title="title" item-value="id"
-				:label="$filters.localize('select_category')" variant="underlined" />
+				:label="useLocalizeFilter('select_category')" variant="underlined" />
 
 			<v-radio-group class="mt-3" v-model="type">
-				<v-radio :label="$filters.localize('income')" value="income" density="comfortable"
-					color="orange-accent-3" />
-				<v-radio :label="$filters.localize('outcome')" value="outcome" density="comfortable"
-					color="orange-accent-3" />
+				<v-radio :label="useLocalizeFilter('income')" value="income" density="comfortable" color="orange-accent-3" />
+				<v-radio :label="useLocalizeFilter('outcome')" value="outcome" density="comfortable" color="orange-accent-3" />
 			</v-radio-group>
 
 			<v-text-field v-model.number="amount" :rules="validations.amount" type="number" variant="underlined"
-				:label="$filters.localize('amount')" class="mt-2" required />
+				:label="useLocalizeFilter('amount')" class="mt-2" required />
 
 			<v-text-field v-model="description" :rules="validations.description" variant="underlined"
-				:label="$filters.localize('description')" class="mt-2" required />
+				:label="useLocalizeFilter('description')" class="mt-2" required />
 
 			<v-btn type="submit" color="light-blue-darken-4" class="mt-7">
-				{{ $filters.localize('create') }}
+				{{ useLocalizeFilter('create') }}
 				<v-icon icon="mdi-send" class="ml-3" />
 			</v-btn>
 		</v-form>
 	</div>
 </template>
 
-<script setup>
-import { useStore } from 'vuex';
-import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { useMeta } from 'vue-meta';
+import { useSnackbarStore } from '@/stores/snackbar';
 
 useMeta({ title: 'pageTitles.newRecord' });
 
+const { showMessage} = useSnackbarStore();
 const store = useStore();
-const snackbar = getCurrentInstance().appContext.app.config.globalProperties.$snackbar;
-
 
 const form = ref();
 const valid = ref(true);
@@ -96,7 +93,7 @@ const submitHandler = async () => {
 			})
 			const newBill = type.value === 'income' ? info.value.bill + amount.value : info.value.bill - amount.value
 			await store.dispatch('info/updateInfo', { bill: newBill });
-			snackbar.showMessage(useLocalizeFilter('createRecord_success'));
+			showMessage(useLocalizeFilter('createRecord_success'));
 			form.value.reset();
 			amount.value = 1;
 		} catch (e) {
@@ -104,7 +101,7 @@ const submitHandler = async () => {
 		}
 	}
 	else {
-		snackbar.showMessage(useLocalizeFilter('lack_of_amount') + ` (${amount.value - info.value.bill})`);
+		showMessage(useLocalizeFilter('lack_of_amount') + ` (${amount.value - info.value.bill})`);
 	}
 }
 </script>
