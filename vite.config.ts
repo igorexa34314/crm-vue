@@ -7,6 +7,7 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	// base: '/crm-vue/',
 	server: {
 		port: 3000
 	},
