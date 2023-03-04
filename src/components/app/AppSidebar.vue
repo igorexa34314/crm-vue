@@ -28,7 +28,7 @@ const drawer = computed({
 	set: val => emit('update:modelValue', val),
 });
 
-const links = ref([
+const links = ref<{ title: string, url: string, exact?: boolean }[]>([
 	{ title: 'bill', url: '/', exact: true, },
 	{ title: 'history', url: '/history' },
 	{ title: 'plan', url: '/planning' },

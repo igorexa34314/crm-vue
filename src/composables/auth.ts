@@ -1,14 +1,20 @@
 import { useErrorStore } from '@/stores/error';
 import { useInfoStore } from '@/stores//info';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthCredential } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
 import { getCurrentUser } from 'vuefire';
+
+export interface Credentials {
+	email: string;
+	password: string;
+	name?: string;
+}
 
 export const useAuth = () => {
 	const auth = getAuth();
 	const { clearInfo } = useInfoStore();
 	const { setError } = useErrorStore();
-	const login = async ({ email, password }) => {
+	const login = async ({ email, password }: Credentials) => {
 		try {
 			await signInWithEmailAndPassword(auth, email, password);
 		} catch (e) {
@@ -16,7 +22,7 @@ export const useAuth = () => {
 			throw e;
 		}
 	};
-	const register = async ({ email, password, name }) => {
+	const register = async ({ email, password, name }: Credentials) => {
 		try {
 			await createUserWithEmailAndPassword(auth, email, password);
 			const uid = await getUserId();

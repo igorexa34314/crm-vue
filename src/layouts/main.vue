@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import AppNavbar from '@/components/app/AppNavbar.vue';
 import AppSidebar from '@/components/app/AppSidebar.vue';
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, watchEffect } from 'vue';
 import { useErrorStore } from '@/stores/error';
 import { useInfoStore } from '@/stores/info';
 import messages from '@/utils/messages.json';
@@ -37,8 +37,8 @@ const { showMessage } = useSnackbarStore();
 const drawer = ref(true);
 const loading = ref(true);
 
-onMounted(async () => {
-	if (!Object.keys(infoStore.info).length) {
+watchEffect(async () => {
+	if (!infoStore.info || !Object.keys(infoStore.info).length) {
 		await infoStore.fetchInfo();
 	}
 	loading.value = false;

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, reactive, watchEffect } from 'vue';
+import { ref, computed, reactive, watchEffect } from 'vue';
 import { useInfoStore } from '@/stores/info';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { useMeta } from 'vue-meta';
@@ -46,7 +46,7 @@ const langItems = [
 ];
 
 const fillInfo = () => {
-	if (Object.keys(info.value).length) {
+	if (info.value && Object.keys(info.value).length) {
 		formState.currentLocale = info.value.locale;
 		formState.name = info.value.name;
 	}

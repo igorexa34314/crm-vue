@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useErrorStore = defineStore('error', () => {
-	const error = ref<Error | null>(null);
+	const error = ref<Error | unknown | null>(null);
 
-	const setError = (err: Error) => {
+	const setError = (err: unknown) => {
 		error.value = err;
 	};
 

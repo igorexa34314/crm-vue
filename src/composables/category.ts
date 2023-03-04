@@ -3,6 +3,7 @@ import { useErrorStore } from '@/stores/error';
 import { useAuth } from '@/composables/auth';
 
 export interface Category {
+	readonly id?: string | null;
 	title: string;
 	limit: number;
 }
@@ -16,17 +17,6 @@ export const useCategory = () => {
 			const uid = await getUserId();
 			const categories = (await get(ref(getDatabase(), `users/${uid}/categories`))).val() || {};
 			return Object.keys(categories).map(key => ({ ...categories[key], id: key }));
-		} catch (e) {
-			setError(e);
-			throw e;
-		}
-	};
-	const fetchCategoryById = async (id: string) => {
-		try {
-			const uid = await getUserId();
-			const categoryRef = await child(ref(getDatabase(), `users/${uid}/categories`), id);
-			const category = (await get(categoryRef)).val() || {};
-			return { ...category, id };
 		} catch (e) {
 			setError(e);
 			throw e;
@@ -48,6 +38,17 @@ export const useCategory = () => {
 			const uid = await getUserId();
 			const categoryRef = await child(ref(getDatabase(), `users/${uid}/categories`), categoryId);
 			await update(categoryRef, { title, limit });
+		} catch (e) {
+			setError(e);
+			throw e;
+		}
+	};
+	const fetchCategoryById = async (id: Category['id']) => {
+		try {
+			const uid = await getUserId();
+			const categoryRef = await child(ref(getDatabase(), `users/${uid}/categories`), id!);
+			const category = (await get(categoryRef)).val() || {};
+			return { ...category, id };
 		} catch (e) {
 			setError(e);
 			throw e;

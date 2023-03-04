@@ -13,7 +13,7 @@
 		"skipLibCheck": true,
 		"noEmit": true,
 		"baseUrl": ".",
-		"types": ["vite-plugin-vue-layouts/client", "vuetify"],
+		"types": ["vite-plugin-vue-layouts/client", "vuetify", "randomcolor"],
 		"paths": {
 			"@/*": ["src/*"]
 		}

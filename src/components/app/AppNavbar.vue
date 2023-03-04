@@ -45,7 +45,7 @@ const { push } = useRouter();
 const { logout: exit } = useAuth();
 const infoStore = useInfoStore();
 
-const username = computed(() => infoStore.info.name);
+const username = computed(() => infoStore.info?.name);
 const date = ref(new Date());
 
 let dateInterval: NodeJS.Timer;

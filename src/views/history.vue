@@ -6,7 +6,7 @@
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
 		<div class="history-chart" v-if="!loading">
-			<Pie :options="chartOptions" :data="chartData" />
+			<Pie :options="chartOptions" :data="chrtData" />
 		</div>
 
 		<app-loader v-if="loading" class="mt-7 page-loader" />
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import HistoryTable from '@/components/history/HistoryTable.vue';
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useCategory } from '@/composables/category';
 import type { Record } from '@/composables/record';
 import { useRecord } from '@/composables/record';
@@ -36,6 +36,7 @@ import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { randomColor } from 'randomcolor';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import type { ChartData } from 'chart.js';
 import { useMeta } from 'vue-meta';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -48,7 +49,7 @@ const { fetchRecords } = useRecord();
 const loading = ref(true);
 const records = ref<Record[]>([]);
 
-const chartData = ref({
+const chrtData: ChartData = reactive({
 	labels: [],
 	datasets: [
 		{ data: [], backgroundColor: [], borderColor: '#8D6E63' }
@@ -86,8 +87,8 @@ onMounted(async () => {
 	records.value = await fetchRecords();
 	const categories = await fetchCategories();
 
-	chartData.value.labels = categories.map(c => c.title);
-	chartData.value.datasets[0].data = categories.map(c => {
+	chrtData.labels = categories.map(c => c.title);
+	chrtData.datasets[0].data = categories.map(c => {
 		return records.value.reduce((acc, r) => {
 			if (r.categoryId === c.id && r.type === 'outcome') {
 				acc += +r.amount;
@@ -95,9 +96,9 @@ onMounted(async () => {
 			return acc;
 		}, 0)
 	});
-	chartData.value.datasets[0].backgroundColor = randomColor({ count: chartData.value.datasets[0].data.length || 1 })
+	chrtData.datasets[0].backgroundColor = randomColor({ count: chrtData.datasets[0].data.length || 1 })
 
-	records.value = initPagination(records.value.map(r => ({
+	initPagination(records.value.map(r => ({
 		...r,
 		category: categories.find(cat => cat.id === r.categoryId).title,
 	})));

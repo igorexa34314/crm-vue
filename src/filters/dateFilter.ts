@@ -1,35 +1,36 @@
 import { useInfoStore } from '@/stores/info';
 
 enum IntlDateFormat {
-	TwoDigit = '2-digit',
-	Long = 'long',
-	Short = 'short',
-	Numeric = 'numeric'
+	TWO_DIGIT = '2-digit',
+	LONG = 'long',
+	SHORT = 'short',
+	NUMERIC = 'numeric',
+	NARROW = 'narrow'
 }
 
 interface DateOptions {
-	day: IntlDateFormat;
+	day: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
 	month: IntlDateFormat;
-	year: IntlDateFormat;
+	year: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
 }
 
 export const useDateFilter = (value: Date, format = 'date') => {
-	const info = useInfoStore();
+	const infoStore = useInfoStore();
 	const options: DateOptions = {
-		day: IntlDateFormat.TwoDigit,
-		month: IntlDateFormat.Long,
-		year:IntlDateFormat.Numeric
+		day: IntlDateFormat.TWO_DIGIT,
+		month: IntlDateFormat.LONG,
+		year: IntlDateFormat.NUMERIC
 	};
 	if (format.includes('date')) {
-		options.day = IntlDateFormat.TwoDigit;
-		options.month = IntlDateFormat.Long;
-		options.year = IntlDateFormat.Numeric;
+		options.day = IntlDateFormat.TWO_DIGIT;
+		options.month = IntlDateFormat.LONG;
+		options.year = IntlDateFormat.NUMERIC;
 	}
 	if (format.includes('time')) {
-		options.day = IntlDateFormat.TwoDigit;
-		options.month = IntlDateFormat.TwoDigit;
-		options.year = IntlDateFormat.TwoDigit;
+		options.day = IntlDateFormat.TWO_DIGIT;
+		options.month = IntlDateFormat.TWO_DIGIT;
+		options.year = IntlDateFormat.TWO_DIGIT;
 	}
-	const locale = info.info.locale || 'ru-RU';
+	const locale = infoStore.info?.locale || 'ru-RU';
 	return new Intl.DateTimeFormat(locale, options).format(new Date(value));
 };

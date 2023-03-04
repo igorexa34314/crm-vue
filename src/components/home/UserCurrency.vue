@@ -29,17 +29,22 @@
 <script setup lang="ts">
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { useDateFilter } from '@/filters/dateFilter';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import type { PropType } from 'vue';
+import type { CurrencyRates } from '@/composables/currency';
 
-const props = defineProps(['rates', 'date']);
+const props = defineProps({
+	rates: {
+		type: Object as PropType<CurrencyRates>,
+		required: true,
+	},
+	date: {
+		type: Date,
+		default: new Date
+	}
+});
 
-const currencies = ref<string[]>([]);
-onMounted(() => {
-	currencies.value = Object.keys(props.rates);
-})
-
+const currencies = ref(Object.keys(props.rates) as Array<keyof CurrencyRates>);
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

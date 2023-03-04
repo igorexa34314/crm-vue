@@ -2,13 +2,14 @@ import { getDatabase, ref, push, set, get, child } from 'firebase/database';
 import { useAuth } from '@/composables/auth';
 import { useErrorStore } from '@/stores/error';
 
-enum RecordType {
+export enum RecordType {
 	income = 'income',
 	outcome = 'outcome'
 }
 
 export interface Record {
-	categoryId: string;
+	readonly id?: string;
+	categoryId: string | undefined;
 	description?: string;
 	amount: number;
 	type: RecordType;
@@ -28,7 +29,7 @@ export const useRecord = () => {
 			throw e;
 		}
 	};
-	const fetchRecords = async () => {
+	const fetchRecords = async (): Promise<Record[]> => {
 		try {
 			const uid = await getUserId();
 			const records = (await get(ref(getDatabase(), `users/${uid}/records`))).val() || {};
@@ -38,7 +39,7 @@ export const useRecord = () => {
 			throw e;
 		}
 	};
-	const fetchRecordById = async (id: string) => {
+	const fetchRecordById = async (id: string): Promise<Record> => {
 		try {
 			const uid = await getUserId();
 			const recordRef = await child(ref(getDatabase(), `users/${uid}/records`), id);

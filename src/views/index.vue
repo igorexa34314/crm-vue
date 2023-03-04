@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalizeFilter } from '@/filters/localizeFilter'
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 import UserBill from '@/components/home/UserBill.vue';
 import UserCurrency from '@/components/home/UserCurrency.vue';
 import { ref, onMounted } from 'vue';
@@ -26,7 +26,8 @@ import { useMeta } from 'vue-meta';
 useMeta({ title: 'pageTitles.bill' });
 
 const loading = ref(true);
-let currency = ref();
+
+const currency = ref();
 
 onMounted(async () => {
 	currency.value = await fetchCurrency();

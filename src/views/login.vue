@@ -46,8 +46,9 @@ const formState = reactive({
 });
 
 onMounted(() => {
-	if (messages[route.query.message]) {
-		showMessage(useLocalizeFilter(messages[route.query.message]));
+	const msg = route.query.message as string;
+	if (messages[msg]) {
+		showMessage(useLocalizeFilter(messages[msg]));
 	}
 });
 const submitHandler = async () => {

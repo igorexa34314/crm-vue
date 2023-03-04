@@ -36,6 +36,7 @@
 import { ref, onMounted } from 'vue';
 import { useCategory } from '@/composables/category';
 import { useRecord } from '@/composables/record';
+import type { Record } from '@/composables/record';
 import { useRoute } from 'vue-router';
 import { useCurrencyFilter } from '@/filters/currencyFilter';
 import { useDateFilter } from '@/filters/dateFilter';
@@ -54,18 +55,22 @@ const { fetchCategoryById } = useCategory();
 const { fetchRecordById } = useRecord();
 const route = useRoute();
 
+interface RecordWithCategoryName extends Record {
+	category: string;
+}
+
 const loading = ref(true);
-const record = ref(null);
+const record = ref<RecordWithCategoryName>();
 const breadcrumbs = ref<Breadcrumbs[]>([
 	{ title: useLocalizeFilter('menu.history'), to: '/history' },
 ]);
 
 onMounted(async () => {
-	const id = route.params.id;
+	const id = route.params.id as string;
 	const rec = await fetchRecordById(id);
 	const category = await fetchCategoryById(rec.categoryId);
 	record.value = { ...rec, category: category.title };
-	breadcrumbs.value.push({ title: record.value.type === 'income' ? 'Доход' : 'Расход', disabled: true })
+	breadcrumbs.value.push({ title: record.value!.type === 'income' ? 'Доход' : 'Расход', disabled: true })
 	loading.value = false;
 });
 </script>

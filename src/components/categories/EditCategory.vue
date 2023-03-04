@@ -54,8 +54,8 @@ const limit = ref(props.categories[0].limit);
 
 watch(currentCategoryId, catId => {
 	const cat = props.categories.find(c => c.id === catId)
-	title.value = cat.title;
-	limit.value = cat.limit;
+	title.value = cat!.title;
+	limit.value = cat!.limit;
 })
 
 const submitHandler = async () => {
@@ -67,7 +67,7 @@ const submitHandler = async () => {
 				title: title.value,
 				limit: limit.value,
 			};
-			await updateCategory(currentCategoryId.value, categoryData);
+			await updateCategory(currentCategoryId.value!, categoryData);
 			showMessage('Категория успешно обновлена');
 			emit('updated', categoryData);
 		} catch (e) { }

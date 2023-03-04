@@ -16,7 +16,7 @@ const infoStore = useInfoStore();
 const errorStore = useErrorStore();
 const { showMessage } = useSnackbarStore();
 
-if (!infoStore.info.locale) {
+if (infoStore.info && !infoStore.info.locale) {
 	infoStore.setLocale();
 }
 const error = computed(() => errorStore.error);

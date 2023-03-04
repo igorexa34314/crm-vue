@@ -14,10 +14,14 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
 import { useSnackbarStore } from '@/stores/snackbar';
-
+import type { Snackbar } from '@/stores/snackbar';
 const { $onAction } = useSnackbarStore();
 
-const sbProps = reactive({
+interface SnackbarProps extends Snackbar {
+	show: boolean;
+}
+
+const sbProps: SnackbarProps = reactive({
 	show: false,
 	color: '',
 	text: '',
@@ -27,9 +31,9 @@ const sbProps = reactive({
 $onAction(({ name, store, after }) => {
 	after(() => {
 		if (name === 'showMessage') {
-			sbProps.text = store.text;
-			sbProps.color = store.color;
-			sbProps.timeout = store.timeout;
+			sbProps.text = store.snackbar.text;
+			sbProps.color = store.snackbar.color;
+			sbProps.timeout = store.snackbar.timeout;
 			sbProps.show = true;
 		}
 	})

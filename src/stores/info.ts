@@ -5,9 +5,9 @@ import { getDatabase, ref as docRef, onValue, update } from 'firebase/database';
 import { ref } from 'vue';
 
 export enum Locales {
-	ru = 'ru-RU',
-	ua = 'uk-UA',
-	en = 'en-US'
+	RU = 'ru-RU',
+	UA = 'uk-UA',
+	EN = 'en-US'
 }
 
 export interface UserInfo {
@@ -20,18 +20,18 @@ export const useInfoStore = defineStore('info', () => {
 	const { getUserId } = useAuth();
 	const { setError } = useErrorStore();
 
-	const info = ref<UserInfo | {}>({});
+	const info = ref<UserInfo | null>(null);
 
-	const setInfo = (data: UserInfo) => {
+	const setInfo = (data: UserInfo): void => {
 		info.value = data;
 	};
-	const clearInfo = () => {
-		info.value = {};
+	const clearInfo = (): void => {
+		info.value = null;
 	};
-	const setLocale = () => {
-		info.value = { ...info.value, locale: JSON.parse(localStorage.getItem('lang') || '') || 'ru-RU' };
+	const setLocale = (): void => {
+		info.value!.locale = JSON.parse(localStorage.getItem('lang') || '') || Locales.RU;
 	};
-	const fetchInfo = async () => {
+	const fetchInfo = async (): Promise<void> => {
 		try {
 			const uid = await getUserId();
 			await onValue(docRef(getDatabase(), `users/${uid}/info`), snapshot => {
@@ -43,7 +43,7 @@ export const useInfoStore = defineStore('info', () => {
 			throw e;
 		}
 	};
-	const updateInfo = async (toUpdate: Partial<UserInfo>) => {
+	const updateInfo = async (toUpdate: Partial<UserInfo>): Promise<void> => {
 		try {
 			if (toUpdate.locale) {
 				localStorage.setItem('lang', JSON.stringify(toUpdate.locale));
