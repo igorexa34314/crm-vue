@@ -3,10 +3,9 @@
 ###This project is based on Vue 3 Composition API using Vuetify UI library. Bundled with Vite. 
 ###Powered on Firebase SDK
 
-[![crm1.png](https://i.postimg.cc/ZKx1K4dc/crm.png)](https://postimg.cc/hfhC2FMz)
-[![crm2.png](https://i.postimg.cc/tTmYxCzP/crm.png)](https://postimg.cc/dkrsMFpt)
-[![crm3.png](https://i.postimg.cc/SxsC1sZX/crm1.png)](https://postimg.cc/Yh5vhpBk)
-[![crm4.png](https://i.postimg.cc/s2GSyLCs/crm2.png)](https://postimg.cc/Jymt5Ph2)
+[![crm1.png](https://i.postimg.cc/tTmYxCzP/crm.png)](https://postimg.cc/dkrsMFpt)
+[![crm2.png](https://i.postimg.cc/SxsC1sZX/crm1.png)](https://postimg.cc/Yh5vhpBk)
+[![crm3.png](https://i.postimg.cc/s2GSyLCs/crm2.png)](https://postimg.cc/Jymt5Ph2)
 
 
 Try it on:\
