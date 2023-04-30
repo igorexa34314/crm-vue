@@ -1,18 +1,18 @@
 <template>
-	<div class="app-loader">
+	<div :class="{ '_page': page }" class="app-loader">
 		<div v-for="i in 8" :key="i" :style="cssProps"></div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
-const props = defineProps({
-	color: {
-		type: String,
-		default: '#000000'
-	}
-})
+const props = withDefaults(defineProps<{
+	page?: boolean;
+	color?: string;
+}>(), {
+	page: false,
+	color: '#000000',
+});
 const cssProps = computed(() => ({
 	'--app-loader-color': props.color
 }))
@@ -24,6 +24,10 @@ const cssProps = computed(() => ({
 	position: relative;
 	width: 80px;
 	height: 80px;
+	&._page {
+		left: 50%;
+		transform: translate(-50%);
+	}
 	& div {
 		animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 		transform-origin: 40px 40px;

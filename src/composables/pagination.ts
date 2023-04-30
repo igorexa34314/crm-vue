@@ -4,9 +4,9 @@ import { useRouter, useRoute } from 'vue-router';
 
 export const usePagination = () => {
 	const { push } = useRouter();
-	const route = useRoute();
+	const { query } = useRoute();
 
-	const page = ref<number>(+(route.query.page || 1));
+	const page = ref(+(query.page || 1));
 	const pageCount = ref(0);
 	const items = ref<any[]>([]);
 	const allItems = ref<any[]>([]);

@@ -3,19 +3,20 @@
 		<v-card-title class="mb-2 text-center">Домашняя бухгалтерия</v-card-title>
 		<v-card-text>
 			<v-form class="card-content" ref="form" @submit.prevent="submitHandler">
-				<v-text-field v-model="formState.email" :rules="validations.email" variant="underlined" label="Email" required />
-				<v-text-field v-model="formState.password" :rules="validations.password" variant="underlined" label="Пароль" class="mt-5"
+				<v-text-field v-model="formState.email" :rules="validations.email" variant="underlined" label="Email"
 					required />
+				<v-text-field v-model="formState.password" :rules="validations.password" variant="underlined" label="Пароль"
+					class="mt-5" required />
 				<v-text-field v-model="formState.name" :rules="validations.name" variant="underlined" :counter="20" label="Имя"
 					class="mt-5" required />
 				<v-checkbox v-model="formState.agree" :rules="validations.agree" class="mt-5" required>
-					<template v-slot:label>
+					<template #label>
 						<p>С <a target="_blank" href="#">правилами</a>
 							согласен
 						</p>
 					</template>
 				</v-checkbox>
-				<v-btn type="submit" append-icon="mdi-send" color="teal-lighten-1" width="100%" class="mt-7">
+				<v-btn type="submit" :append-icon="mdiSend" color="teal-lighten-1" width="100%" class="mt-7">
 					{{ useLocalizeFilter('sign_in') }}
 				</v-btn>
 			</v-form>
@@ -30,21 +31,22 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { useAuth } from '@/composables/auth';
-import { useSnackbarStore } from '@/stores/snackbar';
 import { ref, reactive } from 'vue';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useRouter } from 'vue-router';
 import { useMeta } from 'vue-meta';
+import { mdiSend } from '@mdi/js';
+import { register } from '@/api/auth';
+import { useSnackbarStore } from '@/stores/snackbar';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { user as validations } from '@/utils/validations';
+import { VForm } from 'vuetify/components';
 
 useMeta({ title: 'sign_in' });
 
 const { push } = useRouter();
-const {register} = useAuth();
-const {showMessage} = useSnackbarStore();
+const { showMessage } = useSnackbarStore();
 
-const form = ref();
+const form = ref<VForm>();
 const formState = reactive({
 	email: '',
 	password: '',
@@ -53,15 +55,16 @@ const formState = reactive({
 });
 
 const submitHandler = async () => {
-	const { valid } = await form.value.validate();
-
+	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
-		const { agree, ...data} = formState;
+		const { agree, ...data } = formState;
 		try {
 			await register(data);
 			showMessage(useLocalizeFilter('sign_in_success'));
 			push('/');
-		} catch (e) { }
+		} catch (e) {
+			showMessage(useLocalizeFilter(e as string) || e as string);
+		}
 	}
 }
 </script>

@@ -10,25 +10,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useVModel } from '@vueuse/core';
 
+type NavLink = { title: string, url: string, exact?: boolean };
 const emit = defineEmits<{
-	(e: 'update:modelValue', val: boolean): void
+	(e: 'update:modelValue', val: boolean): void;
 }>();
 
-const props = defineProps({
-	modelValue: {
-		type: Boolean,
-		default: false,
-	}
+const props = withDefaults(defineProps<{
+	modelValue?: boolean;
+}>(), {
+	modelValue: false,
 });
-const drawer = computed({
-	get: () => props.modelValue,
-	set: val => emit('update:modelValue', val),
-});
+const drawer = useVModel(props, 'modelValue', emit);
 
-const links = ref<{ title: string, url: string, exact?: boolean }[]>([
+const links = ref<NavLink[]>([
 	{ title: 'bill', url: '/', exact: true, },
 	{ title: 'history', url: '/history' },
 	{ title: 'plan', url: '/planning' },

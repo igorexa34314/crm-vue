@@ -5,13 +5,13 @@
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
-		<div class="history-chart" v-if="!loading">
-			<Pie :options="chartOptions" :data="chrtData" />
+		<div class="history-chart" v-if="!isLoading && pagedRecords">
+			<Pie :options="chartOptions" :data="chartData" />
 		</div>
 
-		<app-loader v-if="loading" class="mt-7 page-loader" />
+		<app-loader v-if="isLoading" class="mt-7" page />
 
-		<div v-else-if="!pagedRecords.length" class="text-center text-h6 mt-9">
+		<div v-else-if="!pagedRecords || !pagedRecords.length" class="text-center text-h6 mt-9">
 			{{ useLocalizeFilter('no_records') + '. ' }}
 			<router-link to="/record">{{ useLocalizeFilter('create_record') }}</router-link>
 		</div>
@@ -19,99 +19,84 @@
 		<section v-else class="mt-6">
 			<HistoryTable :records="pagedRecords" />
 
-			<v-pagination v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount" :total-visible="4"
-				class="mt-4" density="comfortable" />
+			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
+				:total-visible="4" class="mt-4" density="comfortable" />
 		</section>
 	</div>
 </template>
 
 <script setup lang="ts">
 import HistoryTable from '@/components/history/HistoryTable.vue';
-import { ref, reactive, onMounted } from 'vue';
-import { useCategory } from '@/composables/category';
-import type { Record } from '@/composables/record';
-import { useRecord } from '@/composables/record';
-import { usePagination } from '@/composables/pagination';
-import { Pie } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-import { randomColor } from 'randomcolor';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
-import type { ChartData } from 'chart.js';
+import { ref, reactive, computed, watchEffect } from 'vue';
 import { useMeta } from 'vue-meta';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
+import { Pie } from 'vue-chartjs';
+import { chartData as chartDataConfig, chartOptions } from '@/utils/chartjs';
+import { Category, fetchCategories } from '@/api/category';
+import { Record, fetchRecords } from '@/api/record';
+import { usePagination } from '@/composables/pagination';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useSnackbarStore } from '@/stores/snackbar';
+// @ts-ignore
+import { randomColor } from 'randomcolor';
+
+export type RecordWithCategory = Record & { category: Category['title'] };
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 useMeta({ title: 'pageTitles.history' });
+const records = ref<Record[]>();
+const categories = ref<Category[]>();
+const isLoading = ref(false);
+const { showMessage } = useSnackbarStore();
 
-const { fetchCategories } = useCategory();
-const { fetchRecords } = useRecord();
-
-const loading = ref(true);
-const records = ref<Record[]>([]);
-
-const chrtData: ChartData = reactive({
-	labels: [],
-	datasets: [
-		{ data: [], backgroundColor: [], borderColor: '#8D6E63' }
-	]
-});
-const chartOptions = ref({
-	responsive: true,
-	plugins: {
-		legend: {
-			position: 'left',
-			align: 'center',
-			labels: {
-				boxHeight: '30',
-				font: {
-					weight: 'bold',
-					size: '16px'
+const chartData = reactive({ ...chartDataConfig });
+const fillChartData = () => {
+	if (categories.value && records.value) {
+		chartData.labels = categories.value.map(c => c.title);
+		chartData.datasets[0].data = categories.value.map(c => {
+			return records.value?.reduce((acc, r) => {
+				if (r.categoryId === c.id && r.type === 'outcome') {
+					acc += +r.amount;
 				}
-			}
-		},
-		title: {
-			display: true,
-			text: useLocalizeFilter('chart_title'),
-			color: '#D50000',
-			font: {
-				size: '22px',
-				lineHeight: '1.5'
-			}
-		}
+				return acc;
+			}, 0)
+		}) as number[];
+		chartData.datasets[0].backgroundColor = randomColor({ count: chartData.datasets[0].data.length || 1 })
+	}
+};
+
+// Init History table pagination
+const { initPagination, page, pageCount, pageChangeHandler, items: pagedRecords } = usePagination();
+const recordsWithCategory = computed(() => records.value?.map(r => ({
+	...r,
+	category: categories.value?.find(cat => cat.id === r.categoryId)?.title,
+}) as RecordWithCategory));
+watchEffect(() => {
+	if (recordsWithCategory.value) {
+		initPagination(recordsWithCategory.value);
 	}
 });
 
-const { initPagination, page, pageCount, pageChangeHandler, items: pagedRecords } = usePagination();
-
-onMounted(async () => {
+try {
+	isLoading.value = true;
 	records.value = await fetchRecords();
-	const categories = await fetchCategories();
+	categories.value = await fetchCategories();
+	fillChartData();
+} catch (e) {
+	showMessage('error_loading_records_or_categories');
+}
+finally {
+	isLoading.value = false;
+}
 
-	chrtData.labels = categories.map(c => c.title);
-	chrtData.datasets[0].data = categories.map(c => {
-		return records.value.reduce((acc, r) => {
-			if (r.categoryId === c.id && r.type === 'outcome') {
-				acc += +r.amount;
-			}
-			return acc;
-		}, 0)
-	});
-	chrtData.datasets[0].backgroundColor = randomColor({ count: chrtData.datasets[0].data.length || 1 })
 
-	initPagination(records.value.map(r => ({
-		...r,
-		category: categories.find(cat => cat.id === r.categoryId).title,
-	})));
 
-	loading.value = false;
-});
+
+
 </script>
 
 <style lang="scss" scoped>
-.page-loader {
-	left: 50%;
-	transform: translate(-50%);
-}
 .history-chart {
 	margin: 0 auto;
 	max-width: 550px;

@@ -5,14 +5,12 @@
 			<h4 class="text-h4">{{ useCurrencyFilter(bill!, 'UAH') }}</h4>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mb-8" />
-		<app-loader v-if="loading" class="mt-10 page-loader" />
-
-		<div v-else-if="categories && !categories.length" class="mt-10 text-center text-h6">{{
+		<app-loader v-if="isLoading" class="mt-10" page />
+		<div v-else-if="catStats && !catStats.length" class="mt-10 text-center text-h6">{{
 			useLocalizeFilter('pageTitles.plan')
 		}}<router-link to="/categories">{{ useLocalizeFilter('no_categories') + '. ' }}</router-link></div>
-
 		<section v-else class="mt-10 px-4">
-			<div v-for="(cat, index) of categories" :key="cat.id || index" class="mt-8">
+			<div v-for="(cat, index) of catStats" :key="cat.id || index" class="mt-8">
 				<p class="d-flex flex-row align-center mb-3">
 					<strong class="font-weight-bold mr-4">{{ cat.title }}:</strong>
 					<span>
@@ -37,54 +35,52 @@
 <script setup lang="ts">
 import { useCurrencyFilter } from '@/filters/currencyFilter';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
-import { useCategory } from '@/composables/category';
-import type { Record } from '@/composables/record';
-import type { Category } from '@/composables/category';
-import { useRecord } from '@/composables/record';
-import { ref, computed, onMounted } from 'vue';
+import { fetchCategories, Category } from '@/api/category';
+import { fetchRecords } from '@/api/record';
+import { ref, computed } from 'vue';
 import { useMeta } from 'vue-meta';
 import { useInfoStore } from '@/stores/info';
+import { useSnackbarStore } from '@/stores/snackbar';
+import messages from '@/utils/messages.json';
 
 useMeta({ title: 'pageTitles.plan' });
 
 const infoStore = useInfoStore();
-const { fetchCategories } = useCategory();
-const { fetchRecords } = useRecord();
+const { showMessage } = useSnackbarStore();
 
 const bill = computed(() => {
 	if (infoStore.info && infoStore.info.bill)
 		return infoStore.info.bill
 });
-const loading = ref(true);
-const records = ref<Record[]>([]);
+const isLoading = ref(false);
 
 interface CategoryStats extends Category {
 	percent: number;
 	spend: number;
 }
-const categories = ref<CategoryStats[]>();
-
-onMounted(async () => {
-	records.value = await fetchRecords();
-	const cats = await fetchCategories() as Category[];
-	categories.value = cats.map(cat => {
-		const spend = records.value.filter(r => r.categoryId === cat.id)
-			.filter(r => r.type === 'outcome')
-			.reduce((sum, r) => sum += +r.amount, 0);
-		const percent = ((100 * spend / cat.limit) > 100) ? 100 : (100 * spend / cat.limit);
-		return {
-			...cat,
-			percent,
-			spend,
-		}
-	});
-	loading.value = false;
-})
+const catStats = ref<CategoryStats[]>();
+try {
+	isLoading.value = true;
+	const records = await fetchRecords();
+	const cats = await fetchCategories();
+	if (cats && records) {
+		catStats.value = cats.map(cat => {
+			const spend = records.filter(r => r.categoryId === cat.id)
+				.filter(r => r.type === 'outcome')
+				.reduce((sum, r) => sum += +r.amount, 0);
+			const percent = ((100 * spend / cat.limit) > 100) ? 100 : (100 * spend / cat.limit);
+			return {
+				...cat,
+				percent,
+				spend,
+			}
+		});
+	}
+} catch (e) {
+	showMessage(messages[e as keyof typeof messages] || e as string);
+} finally {
+	isLoading.value = false;
+}
 </script>
 
-<style lang="scss" scoped>
-.page-loader {
-	left: 50%;
-	transform: translate(-50%);
-}
-</style>
+<style lang="scss" scoped></style>

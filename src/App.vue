@@ -1,7 +1,8 @@
 <template>
   <metainfo>
-    <template v-slot:title="{ content }">
-      {{ content ? `${useLocalizeFilter(content)} | ${AppTitle}` : AppTitle }}</template>
+    <template #title="{ content }: any">
+      {{ content ? `${ useLocalizeFilter(content) } | ${ AppTitle } ` : AppTitle }}
+    </template>
   </metainfo>
   <GlobalSnackbar />
   <Suspense>

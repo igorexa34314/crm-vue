@@ -4,19 +4,16 @@
 			<div class="subtitle">
 				<h4 class="text-h5 mb-7">{{ useLocalizeFilter('edit') }}</h4>
 			</div>
-			<v-form ref="form" v-model="valid" @submit.prevent="submitHandler">
-				<v-select v-model="currentCategoryId" :items="categories" item-title="title" item-value="id"
+			<v-form ref="form" @submit.prevent="submitHandler">
+				<v-select v-model="currentCategory.id" :items="categories" item-title="title" item-value="id"
 					:label="useLocalizeFilter('select_category')" variant="underlined" />
-
-				<v-text-field v-model="title" :rules="validations.title" variant="underlined"
+				<v-text-field v-model="currentCategory.title" :rules="validations.title" variant="underlined"
 					:label="useLocalizeFilter('title')" class="mt-6" required />
-
-				<v-text-field v-model="limit" :rules="validations.limit" variant="underlined" type="number"
+				<v-text-field v-model="currentCategory.limit" :rules="validations.limit" variant="underlined" type="number"
 					:label="useLocalizeFilter('limit')" class="mt-6" required />
-
 				<v-btn color="light-green-darken-4" type="submit" class="mt-7">
 					{{ useLocalizeFilter('update') }}
-					<v-icon icon="mdi-send" class="ml-3" />
+					<v-icon :icon="mdiSend" class="ml-3" />
 				</v-btn>
 			</v-form>
 		</div>
@@ -24,53 +21,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import type { PropType } from 'vue';
-import { useCategory } from '@/composables/category';
-import type { Category } from '@/composables/category';
+import { ref, watchEffect, reactive } from 'vue';
+import { mdiSend } from '@mdi/js';
+import { updateCategory, Category } from '@/api/category';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { category as validations } from '@/utils/validations';
+import { VForm } from 'vuetify/components';
 
-const { updateCategory } = useCategory();
 const { showMessage } = useSnackbarStore();
 
-const props = defineProps({
-	categories: {
-		type: Array as PropType<Category[]>,
-		required: true,
-	}
-})
+const props = defineProps<{
+	categories: Category[];
+}>();
 const emit = defineEmits<{
-	(e: 'updated', cat: Category): void
+	(e: 'updated', cat: Category): void;
 }>();
 
-const currentCategoryId = ref(props.categories[0].id);
+const form = ref<VForm>();
+const currentCategory: Category = reactive({
+	id: props.categories[0].id,
+	title: '',
+	limit: 1
+});
 
-const form = ref();
-const valid = ref(true);
-const title = ref(props.categories[0].title);
-const limit = ref(props.categories[0].limit);
-
-watch(currentCategoryId, catId => {
-	const cat = props.categories.find(c => c.id === catId)
-	title.value = cat!.title;
-	limit.value = cat!.limit;
-})
+watchEffect(() => {
+	const cat = props.categories.find(c => c.id === currentCategory.id);
+	if (cat) {
+		currentCategory.title = cat.title;
+		currentCategory.limit = cat.limit;
+	}
+});
 
 const submitHandler = async () => {
-	const { valid } = await form.value.validate();
-
-	if (valid) {
+	const valid = (await form.value?.validate())?.valid;
+	const { id, ...categoryData } = currentCategory;
+	if (valid && id) {
 		try {
-			const categoryData = {
-				title: title.value,
-				limit: limit.value,
-			};
-			await updateCategory(currentCategoryId.value!, categoryData);
+			await updateCategory(id, categoryData);
 			showMessage('Категория успешно обновлена');
-			emit('updated', categoryData);
-		} catch (e) { }
+			emit('updated', { id, ...categoryData });
+		} catch (e) {
+			showMessage('error_update_category');
+		}
 	}
 }
 </script>

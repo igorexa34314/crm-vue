@@ -1,13 +1,17 @@
-import { useErrorStore } from '@/stores/error';
+import { errorHandler } from '@/utils/errorHandler';
 
-export interface CurrencyRates<T = number> {
-	EUR: T;
-	UAH: T;
-	USD: T;
+export interface Currency {
+	rates: CurrencyRates;
+	date: Date;
+}
+
+interface CurrencyRates {
+	EUR: number;
+	UAH: number;
+	USD: number;
 }
 
 export const fetchCurrency = async () => {
-	const { setError } = useErrorStore();
 	try {
 		const res = await fetch('https://api.apilayer.com/exchangerates_data/latest?base=USD&symbols=EUR%2C%20UAH%2C%20USD', {
 			method: 'GET',
@@ -16,9 +20,8 @@ export const fetchCurrency = async () => {
 				'apikey': import.meta.env.VITE_APILAYER_API_KEY
 			})
 		});
-		return await res.json();
+		return (await res.json()) as Currency;
 	} catch (e) {
-		setError(e);
-		throw e;
+		errorHandler(e);
 	}
 };

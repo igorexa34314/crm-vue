@@ -9,11 +9,14 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
 		"lib": ["ESNext", "DOM"],
+		"allowSyntheticDefaultImports": true,
 		"skipLibCheck": true,
 		"noEmit": true,
 		"baseUrl": ".",
-		"types": ["vite-plugin-vue-layouts/client", "vuetify", "randomcolor"],
+		"types": ["vite-plugin-vue-layouts/client", "vuetify"],
 		"paths": {
 			"@/*": ["src/*"]
 		}

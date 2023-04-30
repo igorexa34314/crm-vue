@@ -2,7 +2,6 @@
 	<app-loader v-if="loading" class="main-loader" />
 	<v-layout v-else class="app-main-layout">
 		<AppNavbar @click="drawer = !drawer" />
-
 		<AppSidebar v-model="drawer" />
 
 		<v-main class="app">
@@ -13,9 +12,9 @@
 
 		<v-tooltip activator=".fixed-action-btn" :text="useLocalizeFilter('create_record')"
 			content-class="bg-indigo-lighten-3 font-weight-medium">
-			<template v-slot:activator="{ props }">
+			<template #activator="{ props }">
 				<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
-					icon="mdi-plus" v-bind="props" />
+					:icon="mdiPlus" v-bind="props" />
 			</template>
 		</v-tooltip>
 	</v-layout>
@@ -24,30 +23,30 @@
 <script setup lang="ts">
 import AppNavbar from '@/components/app/AppNavbar.vue';
 import AppSidebar from '@/components/app/AppSidebar.vue';
-import { ref, computed, watch, watchEffect } from 'vue';
-import { useErrorStore } from '@/stores/error';
+import { ref, watchEffect } from 'vue';
 import { useInfoStore } from '@/stores/info';
-import messages from '@/utils/messages.json';
+import { mdiPlus } from '@mdi/js';
+import { fetchInfo } from '@/api/userinfo';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { useSnackbarStore } from '@/stores/snackbar';
+import messages from '@/utils/messages.json';
 
-const errorStore = useErrorStore();
 const infoStore = useInfoStore();
 const { showMessage } = useSnackbarStore();
 const drawer = ref(true);
-const loading = ref(true);
+const loading = ref(false);
 
 watchEffect(async () => {
-	if (!infoStore.info || !Object.keys(infoStore.info).length) {
-		await infoStore.fetchInfo();
+	try {
+		if (!infoStore.info || !Object.keys(infoStore.info).length) {
+			await fetchInfo();
+		}
+	} catch (e) {
+		showMessage(messages[e as keyof typeof messages] || e as string);
+	} finally {
+		loading.value = false;
 	}
-	loading.value = false;
 });
-
-const error = computed(() => errorStore.error);
-watch(error, newErr => {
-	showMessage(messages[newErr.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
-})
 </script>
 
 <style lang="scss" scoped>

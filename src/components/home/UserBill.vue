@@ -16,24 +16,21 @@
 import { useCurrencyFilter } from '@/filters/currencyFilter';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { ref, computed } from 'vue';
-import type { PropType } from 'vue';
 import { useInfoStore } from '@/stores/info';
-import type { CurrencyRates } from '@/composables/currency';
+import { Currency } from '@/api/currency';
 
 const infoStore = useInfoStore();
 
-const props = defineProps({
-	rates: {
-		type: Object as PropType<CurrencyRates>,
-		required: true,
-	}
-});
-const currencies = ref(Object.keys(props.rates) as Array<keyof CurrencyRates>);
+const props = defineProps<{
+	rates: Currency['rates'];
+}>();
+
+const currencies = ref(Object.keys(props.rates) as Array<keyof Currency['rates']>);
 
 const info = computed(() => infoStore.info);
 
 const base = computed(() => info.value && info.value.bill ? info.value.bill / (props.rates['UAH'] / props.rates['USD']) : null);
-const getCurrency = (currency: keyof CurrencyRates) => Math.floor((base.value! | 0) * props.rates[currency]);
+const getCurrency = (currency: keyof Currency['rates']) => Math.floor((base.value! | 0) * props.rates[currency]);
 </script>
 
 <style lang="scss" scoped>

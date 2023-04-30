@@ -5,27 +5,29 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onUnmounted } from 'vue';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { computed, onUnmounted, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
 import { useInfoStore } from '@/stores/info';
-import { useErrorStore } from '@/stores/error';
 import { useSnackbarStore } from '@/stores/snackbar';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 import messages from '@/utils/messages.json';
 
 const infoStore = useInfoStore();
-const errorStore = useErrorStore();
+const { setLocale, $reset } = infoStore;
+const { query } = useRoute();
+const info = computed(() => infoStore.info);
 const { showMessage } = useSnackbarStore();
 
-if (infoStore.info && !infoStore.info.locale) {
-	infoStore.setLocale();
+if (info.value && !info.value.locale) {
+	setLocale();
 }
-const error = computed(() => errorStore.error);
-
-watch(error, newErr => {
-	showMessage(messages[newErr.code] || useLocalizeFilter('error_message'), 'red-darken-3', 3000);
+watchEffect(() => {
+	if (messages[query.message as keyof typeof messages]) {
+		showMessage(useLocalizeFilter(messages[query.message as keyof typeof messages]));
+	}
 });
 onUnmounted(() => {
-	infoStore.clearInfo();
+	$reset();
 });
 </script>
 
