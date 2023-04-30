@@ -34,7 +34,7 @@ import { VForm } from 'vuetify/components';
 
 useMeta({ title: 'login' });
 
-const { push, replace } = useRouter();
+const { push } = useRouter();
 const { showMessage } = useSnackbarStore();
 
 const form = ref<VForm>();
@@ -45,7 +45,6 @@ const formState = reactive({
 });
 
 const submitHandler = async () => {
-	replace({ query: undefined });
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {

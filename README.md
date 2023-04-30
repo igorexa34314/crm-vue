@@ -1,7 +1,20 @@
-# Vue 3 + Vite
+# CRM System on Vue 3 Composition Api
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This project is based on Vue 3 Composition API using Vuetify UI library. Bundled with Vite.
+Powered on Firebase SDK
 
-## Recommended IDE Setup
+![crm.png](https://postimg.cc/hfhC2FMz)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Try it on:
+[CRM Vue](crm-vue-f0e4a.web.app "CRM Vue")
+Or:
+[CRM Vue](crm-vue-f0e4a.firebaseapp.com "CRM Vue")
+
+
+Copy repo code and setup it (with yarn package manager):
+```
+git clone https://github.com/igorexa34314/crm-vue.git
+cd ./crm-vue
+yarn
+yarn dev
+```  

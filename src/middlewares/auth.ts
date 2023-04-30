@@ -1,22 +1,13 @@
 import { getCurrentUser } from 'vuefire';
-import type { RouteLocationNormalized } from 'vue-router';
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 
-export const checkAuth = async (to: RouteLocationNormalized) => {
-	if (to.meta.requiresAuth) {
-		const currentUser = await getCurrentUser();
-		if (!currentUser) {
-			return {
-				path: '/login',
-				query: {
-					message: 'needAuth'
-				}
-			};
-		}
-	} else if (to.path === '/login' || to.path === '/register') {
-		const currentUser = await getCurrentUser();
-		if (currentUser) {
-			return '/profile';
-		}
+export const checkAuth = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+	const currentUser = await getCurrentUser();
+	const requireAuth = to.matched.some(record => record.meta.auth);
+	if (requireAuth && !currentUser) {
+		next({ path: '/login', query: { message: 'login' } });
+	} else if (!requireAuth && currentUser) {
+		next({ path: '/' });
 	}
-	return;
+	else next();
 };

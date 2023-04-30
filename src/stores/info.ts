@@ -23,7 +23,7 @@ export const useInfoStore = defineStore('info', () => {
 		info.value = null;
 	};
 	const setLocale = () => {
-		info.value!.locale = JSON.parse(localStorage.getItem('lang') || '') || Locales.RU;
+		(info.value as Partial<UserInfo>) = { locale: JSON.parse(localStorage.getItem('lang') || '') || Locales.RU };
 	};
 
 	return {

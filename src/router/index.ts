@@ -11,8 +11,8 @@ const router = createRouter({
 	routes
 });
 
-router.beforeEach(async to => {
-	await checkAuth(to);
+router.beforeEach(async (to, from, next) => {
+	await checkAuth(to, from, next);
 });
 
 export default router;

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, watchEffect } from 'vue';
+import { computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
@@ -14,18 +14,19 @@ import messages from '@/utils/messages.json';
 
 const infoStore = useInfoStore();
 const { setLocale, $reset } = infoStore;
-const { query } = useRoute();
 const info = computed(() => infoStore.info);
 const { showMessage } = useSnackbarStore();
+const { query } = useRoute();
 
-if (info.value && !info.value.locale) {
+if (!info.value?.locale) {
 	setLocale();
 }
-watchEffect(() => {
+watch(() => query.message, () => {
 	if (messages[query.message as keyof typeof messages]) {
 		showMessage(useLocalizeFilter(messages[query.message as keyof typeof messages]));
 	}
-});
+}, { deep: true, immediate: true });
+
 onUnmounted(() => {
 	$reset();
 });
