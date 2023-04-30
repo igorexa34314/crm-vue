@@ -9,9 +9,9 @@
 
 
 Try it on:\
-[CRM Vue 1](crm-vue-f0e4a.web.app "CRM Vue")\
+[CRM Vue 1](https://crm-vue-f0e4a.web.app "CRM Vue")\
 Or:\
-[CRM Vue 2](crm-vue-f0e4a.firebaseapp.com "CRM Vue")
+[CRM Vue 2](https://crm-vue-f0e4a.firebaseapp.com "CRM Vue")
 
 
 Copy repo code and setup it (with yarn package manager):
