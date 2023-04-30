@@ -16,7 +16,7 @@ export interface Record {
 	type: RecordType;
 	date: Date;
 }
-const TimestampToDate = (tsObject: Timestamp) => new Timestamp(tsObject.seconds, tsObject.nanoseconds).toDate();
+const TimestampToDate = ({ seconds, nanoseconds }: Timestamp) => new Timestamp(seconds, nanoseconds).toDate();
 export const createRecord = async (record: Record) => {
 	try {
 		const uid = await getUserId();
