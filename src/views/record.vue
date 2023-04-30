@@ -4,11 +4,10 @@
 			<h3 class="text-h4 mt-4 ml-2">{{ useLocalizeFilter('pageTitles.newRecord') }}</h3>
 		</div>
 
-		<app-loader v-if="loading" class="mt-10 page-loader" />
+		<app-loader v-if="isLoading" class="mt-10" page />
 
-		<div v-else-if="!categories.length" class="mt-10 text-center text-h6">{{
-			useLocalizeFilter('no_categories') + '. '
-		}}
+		<div v-else-if="!categories?.length" class="mt-10 text-center text-h6">
+			{{ useLocalizeFilter('no_categories') + '. ' }}
 			<router-link to="/categories">{{ useLocalizeFilter('create_category') }}</router-link>
 		</div>
 
@@ -29,38 +28,37 @@
 
 			<v-btn type="submit" color="light-blue-darken-4" class="mt-7">
 				{{ useLocalizeFilter('create') }}
-				<v-icon icon="mdi-send" class="ml-3" />
+				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
 		</v-form>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { ref, reactive, computed } from 'vue';
+import { useAsyncState } from '@vueuse/core';
 import { useMeta } from 'vue-meta';
+import { mdiSend } from '@mdi/js';
+import { useLocalizeFilter } from '@/filters/localizeFilter';
 import { useInfoStore } from '@/stores/info';
+import { updateInfo } from '@/api/userinfo';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { useCategory } from '@/composables/category';
-import { useRecord } from '@/composables/record';
-import type { Category } from '@/composables/category';
-import type { RecordType } from '@/composables/record';
+import { fetchCategories } from '@/api/category';
+import { createRecord, RecordType, Record } from '@/api/record';
 import { record as validations } from '@/utils/validations';
+import { VForm } from 'vuetify/components';
+import messages from '@/utils/messages.json';
 
 useMeta({ title: 'pageTitles.newRecord' });
 
-const { fetchCategories } = useCategory();
-const { createRecord } = useRecord();
 const { showMessage } = useSnackbarStore();
 const infoStore = useInfoStore();
 
-const form = ref();
-const loading = ref(true);
-const categories = ref<Category[]>([]);
+const form = ref<VForm>();
 
-const currentCategoryId = ref<string>('');
+const currentCategoryId = ref('');
 const formState = reactive({
-	amount: 1,
+	amount: 100,
 	description: '',
 	type: 'outcome' as RecordType,
 });
@@ -68,21 +66,20 @@ const formState = reactive({
 const info = computed(() => infoStore.info);
 
 const canCreateRecord = computed(() => {
-	if (formState.type === 'income') {
-		return true;
-	}
-	return info.value!.bill >= formState.amount;
-})
+	return formState.type === 'income' ? true : info.value!.bill >= formState.amount;
+});
 
-onMounted(async () => {
-	categories.value = await fetchCategories();
-	loading.value = false;
-	currentCategoryId.value = categories.value[0].id || '';
+const { state: categories, isLoading } = useAsyncState(fetchCategories, [], {
+	onError: (e) => {
+		// showMessage(messages[e as keyof typeof messages] || 'error_loading_categories')
+	},
+	onSuccess: (cats) => {
+		currentCategoryId.value = cats?.[0].id || '';
+	}
 });
 
 const submitHandler = async () => {
-	const { valid } = await form.value.validate();
-
+	const valid = (await form.value?.validate())?.valid;
 	if (valid && canCreateRecord.value) {
 		try {
 			await createRecord({
@@ -90,16 +87,15 @@ const submitHandler = async () => {
 				amount: formState.amount,
 				description: formState.description,
 				type: formState.type,
-				date: new Date(),
-			})
+			} as Record);
 			const newBill = formState.type === 'income' ?
 				info.value!.bill + formState.amount : info.value!.bill - formState.amount;
-			await infoStore.updateInfo({ bill: newBill });
+			await updateInfo({ bill: newBill });
 			showMessage(useLocalizeFilter('createRecord_success'));
-			form.value.reset();
+			form.value?.reset();
 			formState.amount = 1;
 		} catch (e) {
-			console.error(e)
+			showMessage(messages[e as keyof typeof messages] || e as string);
 		}
 	}
 	else {
@@ -108,9 +104,4 @@ const submitHandler = async () => {
 }
 </script>
 
-<style lang="scss" scoped>
-.page-loader {
-	left: 50%;
-	transform: translate(-50%);
-}
-</style>
+<style lang="scss" scoped></style>

@@ -2,15 +2,10 @@
 	<v-table>
 		<thead>
 			<tr>
-				<th>{{ '#' }}</th>
-				<th>{{ useLocalizeFilter('amount') }}</th>
-				<th>{{ useLocalizeFilter('date') }}</th>
-				<th>{{ useLocalizeFilter('category') }}</th>
-				<th>{{ useLocalizeFilter('open') }}</th>
-				<th>{{ useLocalizeFilter('type') }}</th>
+				<th>#</th>
+				<th v-for="h in tableCaptions" :key="h">{{ useLocalizeFilter(h) }}</th>
 			</tr>
 		</thead>
-
 		<tbody>
 			<tr v-for="(rec, index) in records" :key="rec.id">
 				<td>{{ index + 1 }}</td>
@@ -28,9 +23,9 @@
 				<td>
 					<v-tooltip :activator="`#rec-${rec.id}`" text="Посмотреть запись" location="bottom"
 						content-class="bg-teal-lighten-2 font-weight-medium">
-						<template v-slot:activator="{ props }">
+						<template #activator="{ props }">
 							<v-btn :id="`rec-${rec.id}`" color="teal-darken-1" @click="push('/detail/' + rec.id)">
-								<v-icon icon="mdi-open-in-new" v-bind="props" />
+								<v-icon v-bind="props" :icon="mdiOpenInNew" />
 							</v-btn>
 						</template>
 					</v-tooltip>
@@ -41,21 +36,19 @@
 </template>
 
 <script setup lang="ts">
-import type { Record } from '@/composables/record';
-import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
+import { mdiOpenInNew } from '@mdi/js';
 import { useDateFilter } from '@/filters/dateFilter';
 import { useCurrencyFilter } from '@/filters/currencyFilter';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { RecordWithCategory } from '@/views/history.vue';
 
 const { push } = useRouter();
 
-const props = defineProps({
-	records: {
-		required: true,
-		type: Array as PropType<Record[]>,
-	}
-});
+const props = defineProps<{
+	records: RecordWithCategory[]
+}>();
+const tableCaptions = ['amount', 'date', 'category', 'type', 'open'];
 </script>
 
 <style lang="scss" scoped></style>

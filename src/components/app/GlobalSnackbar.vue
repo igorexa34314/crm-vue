@@ -3,18 +3,18 @@
 		variant="elevated" elevation="3" transition="slide-y-transition">
 		<p class="px-2 font-weight-medium">{{ sbProps.text }}</p>
 
-		<template v-slot:actions>
+		<template #actions>
 			<v-btn variant="text" color="white" @click="sbProps.show = false">
-				<v-icon icon="mdi-close" />
+				<v-icon :icon="mdiClose" />
 			</v-btn>
 		</template>
 	</v-snackbar>
 </template>
 
 <script setup lang="ts">
+import { mdiClose } from '@mdi/js';
 import { reactive } from 'vue';
-import { useSnackbarStore } from '@/stores/snackbar';
-import type { Snackbar } from '@/stores/snackbar';
+import { useSnackbarStore, Snackbar } from '@/stores/snackbar';
 const { $onAction } = useSnackbarStore();
 
 interface SnackbarProps extends Snackbar {

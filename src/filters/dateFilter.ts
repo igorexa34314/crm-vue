@@ -9,9 +9,12 @@ enum IntlDateFormat {
 }
 
 interface DateOptions {
-	day: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
-	month: IntlDateFormat;
-	year: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
+	hour?: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
+	minute?: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
+	second?: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
+	day?: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
+	month?: IntlDateFormat;
+	year?: IntlDateFormat.NUMERIC | IntlDateFormat.TWO_DIGIT;
 }
 
 export const useDateFilter = (value: Date, format = 'date') => {
@@ -30,6 +33,9 @@ export const useDateFilter = (value: Date, format = 'date') => {
 		options.day = IntlDateFormat.TWO_DIGIT;
 		options.month = IntlDateFormat.TWO_DIGIT;
 		options.year = IntlDateFormat.TWO_DIGIT;
+		options.second = IntlDateFormat.TWO_DIGIT;
+		options.minute = IntlDateFormat.TWO_DIGIT;
+		options.hour = IntlDateFormat.TWO_DIGIT;
 	}
 	const locale = infoStore.info?.locale || 'ru-RU';
 	return new Intl.DateTimeFormat(locale, options).format(new Date(value));

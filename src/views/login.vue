@@ -7,7 +7,7 @@
 					class="mt-4" required />
 				<v-text-field v-model.trim="formState.password" :rules="validations.password" variant="underlined"
 					label="Пароль" class="mt-6" required />
-				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" append-icon="mdi-send">
+				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" :append-icon="mdiSend">
 					{{ useLocalizeFilter('login') }}</v-btn>
 			</v-form>
 		</v-card-text>
@@ -22,38 +22,31 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
-import { ref, reactive, onMounted } from 'vue';
-import messages from '@/utils/messages.json';
-import { useAuth } from '@/composables/auth';
+import { useRouter } from 'vue-router';
+import { ref, reactive } from 'vue';
+import { useMeta } from 'vue-meta';
+import { mdiSend } from '@mdi/js';
+import { login } from '@/api/auth';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useLocalizeFilter } from '@/filters/localizeFilter';
-import { useMeta } from 'vue-meta';
-import { user as validations } from '@/utils/validations'
+import { user as validations } from '@/utils/validations';
+import { VForm } from 'vuetify/components';
 
 useMeta({ title: 'login' });
 
-const { login } = useAuth()
-const { push } = useRouter();
-const route = useRoute();
+const { push, replace } = useRouter();
 const { showMessage } = useSnackbarStore();
 
-const form = ref();
+const form = ref<VForm>();
 
 const formState = reactive({
 	email: '',
 	password: ''
 });
 
-onMounted(() => {
-	const msg = route.query.message as string;
-	if (messages[msg]) {
-		showMessage(useLocalizeFilter(messages[msg]));
-	}
-});
 const submitHandler = async () => {
-	const { valid } = await form.value.validate();
-
+	replace({ query: undefined });
+	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
 			await login(formState);
