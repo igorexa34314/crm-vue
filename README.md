@@ -1,7 +1,7 @@
 # CRM System on Vue 3 Composition Api
 
-###This project is based on Vue 3 Composition API using Vuetify UI library. Bundled with Vite. 
-###Powered on Firebase SDK
+### This project is based on Vue 3 Composition API using Vuetify UI library. Bundled with Vite. 
+### Powered on Firebase SDK
 
 [![crm1.png](https://i.postimg.cc/tTmYxCzP/crm.png)](https://postimg.cc/dkrsMFpt)
 [![crm2.png](https://i.postimg.cc/SxsC1sZX/crm1.png)](https://postimg.cc/Yh5vhpBk)
