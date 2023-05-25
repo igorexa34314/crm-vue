@@ -3,10 +3,7 @@ import { getUserId } from '@/api/auth';
 import { errorHandler } from '@/utils/errorHandler';
 import { Timestamp } from 'firebase/firestore';
 
-export enum RecordType {
-	income = 'income',
-	outcome = 'outcome'
-}
+type RecordType = 'income' | 'outcome';
 
 export interface Record {
 	readonly id?: string;
@@ -16,7 +13,8 @@ export interface Record {
 	type: RecordType;
 	date: Date;
 }
-const TimestampToDate = ({ seconds, nanoseconds }: Timestamp) => new Timestamp(seconds, nanoseconds).toDate();
+const TimestampToDate = ({ seconds, nanoseconds }: Timestamp) =>
+	new Timestamp(seconds, nanoseconds).toDate();
 export const createRecord = async (record: Record) => {
 	try {
 		const uid = await getUserId();
@@ -30,7 +28,10 @@ export const fetchRecords = async () => {
 	try {
 		const uid = await getUserId();
 		const records = (await get(ref(getDatabase(), `users/${uid}/records`))).val() || {};
-		return Object.keys(records).map((key: NonNullable<Record['id']>) => ({ ...records[key], date: TimestampToDate(records[key].date), id: key } as Record));
+		return Object.keys(records).map(
+			(key: NonNullable<Record['id']>) =>
+				({ ...records[key], date: TimestampToDate(records[key].date), id: key } as Record)
+		);
 	} catch (e) {
 		errorHandler(e);
 	}

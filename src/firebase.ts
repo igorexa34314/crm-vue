@@ -9,13 +9,13 @@ import { getAnalytics } from 'firebase/analytics';
 // Initialize Firebase
 export const firebaseApp = initializeApp({
 	apiKey: import.meta.env.VITE_FB_API_KEY,
-	authDomain: 'crm-vue-f0e4a.firebaseapp.com',
-	projectId: 'crm-vue-f0e4a',
-	storageBucket: 'crm-vue-f0e4a.appspot.com',
-	messagingSenderId: '469816396554',
-	appId: '1:469816396554:web:a2d798c538d3a1daa5c8f3',
-	measurementId: 'G-SLZNXYN52E',
-	databaseURL: 'https://crm-vue-f0e4a-default-rtdb.europe-west1.firebasedatabase.app/'
+	authDomain: import.meta.env.VITE_FB_AUTH_DOMAIN,
+	projectId: import.meta.env.VITE_FB_PROJECT_ID,
+	storageBucket: import.meta.env.VITE_FB_STORAGE_BUCKET,
+	messagingSenderId: import.meta.env.VITE_FB_MESSAGING_SENDER_ID,
+	appId: import.meta.env.VITE_FB_APP_ID,
+	measurementId: import.meta.env.VITE_FB_MEASUREMENT_ID,
+	databaseURL: import.meta.env.VITE_FB_DATABASE_URL
 });
 
 // Initialize Realtime Database and get a reference to the service

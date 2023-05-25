@@ -1,45 +1,48 @@
 <template>
 	<v-card max-width="450" width="100%" class="pa-4">
-		<v-card-title class="text-center">{{ useLocalizeFilter('home_bookkeeping') }}</v-card-title>
+		<v-card-title class="text-center">{{ t('home_bookkeeping') }}</v-card-title>
 		<v-card-text>
 			<v-form @submit.prevent="submitHandler" ref="form">
-				<v-text-field v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email"
+				<LocalizedInput v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email"
 					class="mt-4" required />
-				<v-text-field v-model.trim="formState.password" :rules="validations.password" variant="underlined"
+				<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined"
 					label="Пароль" class="mt-6" required />
 				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" :append-icon="mdiSend">
-					{{ useLocalizeFilter('login') }}</v-btn>
+					{{ t('login') }}</v-btn>
 			</v-form>
 		</v-card-text>
 		<v-card-actions class="mt-3 justify-center">
 			<div class="text-center text-subtitle-1">
-				{{ useLocalizeFilter('no_account') + '? ' }}
+				{{ t('no_account') + '? ' }}
 				<router-link to="/register" tag="a">
-					{{ useLocalizeFilter('sign_in') }}</router-link>
+					{{ t('sign_in') }}</router-link>
 			</div>
 		</v-card-actions>
 	</v-card>
 </template>
 
 <script setup lang="ts">
+import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { useRouter } from 'vue-router';
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
 import { login } from '@/api/auth';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useI18n } from 'vue-i18n';
 import { user as validations } from '@/utils/validations';
+import messages from '@/utils/fbMessages.json';
 import { VForm } from 'vuetify/components';
 
 useMeta({ title: 'login' });
 
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { push } = useRouter();
 const { showMessage } = useSnackbarStore();
 
 const form = ref<VForm>();
 
-const formState = reactive({
+const formState = ref({
 	email: '',
 	password: ''
 });
@@ -48,11 +51,11 @@ const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
-			await login(formState);
-			showMessage(useLocalizeFilter('login_success'));
+			await login(formState.value);
+			showMessage(t('login_success'));
 			push('/');
 		} catch (e) {
-			showMessage(useLocalizeFilter('login_error'));
+			showMessage(messages[e as keyof typeof messages] || t('login_error'));
 		}
 	}
 }

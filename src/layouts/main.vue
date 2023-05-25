@@ -10,7 +10,7 @@
 			</div>
 		</v-main>
 
-		<v-tooltip activator=".fixed-action-btn" :text="useLocalizeFilter('create_record')"
+		<v-tooltip activator=".fixed-action-btn" :text="t('create_record')"
 			content-class="bg-indigo-lighten-3 font-weight-medium">
 			<template #activator="{ props }">
 				<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
@@ -23,16 +23,22 @@
 <script setup lang="ts">
 import AppNavbar from '@/components/app/AppNavbar.vue';
 import AppSidebar from '@/components/app/AppSidebar.vue';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, provide } from 'vue';
+import { fetchCurrency } from '@/api/currency';
 import { useInfoStore } from '@/stores/info';
 import { mdiPlus } from '@mdi/js';
-import { fetchInfo } from '@/api/userinfo';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { fetchInfo } from '@/api/user';
+import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
-import messages from '@/utils/messages.json';
+import { useAsyncState } from '@vueuse/core';
+import { currencyKey } from '@/injection-keys';
+import messages from '@/utils/fbMessages.json';
 
+const { state: currency, isLoading, isReady, execute: refresh } = useAsyncState(fetchCurrency, null);
+provide(currencyKey, { currency, isLoading, isReady, refresh });
+
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const infoStore = useInfoStore();
-const { showMessage } = useSnackbarStore();
 const drawer = ref(true);
 const loading = ref(false);
 
@@ -41,7 +47,9 @@ watchEffect(async () => {
 		if (!infoStore.info || !Object.keys(infoStore.info).length) {
 			await fetchInfo();
 		}
+		await fetchCurrency();
 	} catch (e) {
+		const { showMessage } = useSnackbarStore();
 		showMessage(messages[e as keyof typeof messages] || e as string);
 	} finally {
 		loading.value = false;
