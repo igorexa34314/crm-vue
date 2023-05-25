@@ -9,9 +9,10 @@ import { computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
-import messages from '@/utils/messages.json';
+import { useI18n } from 'vue-i18n';
+import messages from '@/utils/fbMessages.json';
 
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const infoStore = useInfoStore();
 const { setLocale, $reset } = infoStore;
 const info = computed(() => infoStore.info);
@@ -23,7 +24,7 @@ if (!info.value?.locale) {
 }
 watch(() => query.message, () => {
 	if (messages[query.message as keyof typeof messages]) {
-		showMessage(useLocalizeFilter(messages[query.message as keyof typeof messages]));
+		showMessage(t(messages[query.message as keyof typeof messages]));
 	}
 }, { deep: true, immediate: true });
 

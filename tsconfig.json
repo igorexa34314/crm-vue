@@ -16,7 +16,7 @@
 		"skipLibCheck": true,
 		"noEmit": true,
 		"baseUrl": ".",
-		"types": ["vite-plugin-vue-layouts/client", "vuetify"],
+		"types": ["vite-plugin-vue-layouts/client", "vuetify", "@intlify/unplugin-vue-i18n/messages"],
 		"paths": {
 			"@/*": ["src/*"]
 		}

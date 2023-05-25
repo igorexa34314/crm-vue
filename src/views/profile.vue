@@ -1,15 +1,17 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ useLocalizeFilter('pageTitles.profile') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.profile') }}</h3>
 		</div>
 		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
-			<v-text-field v-model="formState.name" :rules="user.name" variant="underlined" :label="useLocalizeFilter('name')"
-				required />
-			<v-select v-model="formState.locale" :items="langItems" :label="useLocalizeFilter('lang')" item-title="title"
+			<LocalizedInput v-model="formState.name" :rules="user.name" variant="underlined" :label="t('name')" required />
+			<v-select v-model="formState.locale" :items="locales" :label="t('lang')" item-title="title" item-value="value"
+				variant="underlined" class="mt-4" />
+			<v-select v-model="formState.currency" :items="currencies" :label="t('currency')" item-title="title"
 				item-value="value" variant="underlined" class="mt-4" />
+
 			<v-btn type="submit" color="teal-darken-2" class="mt-5">
-				{{ useLocalizeFilter('update') }}
+				{{ t('update') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
 		</v-form>
@@ -17,55 +19,65 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, watchEffect } from 'vue';
+import LocalizedInput from '@/components/UI/LocalizedInput.vue';
+import { ref, computed, watchEffect, inject } from 'vue';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
-import { updateInfo } from '@/api/userinfo';
+import { updateInfo } from '@/api/user';
 import { useInfoStore } from '@/stores/info';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { user } from '@/utils/validations';
 import { VForm } from 'vuetify/components';
 import { Locales } from '@/stores/info';
+import { CurrencyRates } from '@/api/currency';
+import { currencyKey } from '@/injection-keys';
 
 useMeta({ title: 'pageTitles.profile' });
 
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 const infoStore = useInfoStore();
+
+const { currency } = inject(currencyKey)!;
+
+const currencies = computed(() => {
+	const currencyNames = (currency.value?.rates ? Object.keys(currency.value.rates) : [import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD']) as CurrencyRates[];
+	return currencyNames.map(c => ({ title: t(`currencies.${c}`) + ` (${c})`, value: c }));
+});
 
 const info = computed(() => infoStore.info);
 
 const form = ref<VForm>();
 
-const formState = reactive({
+const formState = ref({
 	name: '',
 	locale: '' as Locales,
+	currency: '' as CurrencyRates
 });
 
-const langItems = [
+const locales = [
 	{ title: 'Русский', value: 'ru-RU' },
 	{ title: 'Українська', value: 'uk-UA' },
 	{ title: 'English', value: 'en-US' },
 ];
 
-const fillInfo = () => {
-	if (info.value && Object.keys(info.value).length) {
-		formState.locale = info.value.locale;
-		formState.name = info.value.name;
-	}
-}
+//fillInfo
 watchEffect(() => {
-	fillInfo();
+	if (info.value && Object.keys(info.value).length) {
+		const { bill, ...userdata } = info.value;
+		formState.value = userdata;
+	}
 })
 
 const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
-			await updateInfo(formState);
-			showMessage(useLocalizeFilter('updateProfile_message'));
+			await updateInfo(formState.value);
+			showMessage(t('updateProfile_message'));
 		} catch (e) {
-			showMessage(useLocalizeFilter(e as string) || e as string);
+			showMessage(t(e as string) || e as string);
 		}
 	}
 }

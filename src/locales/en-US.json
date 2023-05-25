@@ -1,0 +1,171 @@
+{
+	"home_bookkeeping": "Home bookkeeping",
+	"error_message": "Something went wrong",
+	"login": "Login",
+	"email": "Email",
+	"password": "Password",
+	"need_logout": "You need to logout before",
+	"no_account": "Don't have an account",
+	"have_account": "Have an account",
+	"sign_in": "Sign up",
+	"enter_Email": "Enter email",
+	"enter_Pass": "Enter password",
+	"email_rules": "Enter correct email",
+	"pass_rules": "Password must be between 6 and 32 characters",
+	"name_rules": "Name must be between 3 and 20 characters",
+	"agree_rules": "You must agree to the rules",
+	"rules": "rules",
+	"agree_with": "agree with",
+	"login_success": "You have successfully logged in",
+	"sign_in_success": "You have successfully signed up",
+	"need_login": "Need to sign in",
+	"login_error": "Invalid username or password",
+	"logout_success": "You have successfully logged out",
+	"user_not_found": "No user found with given email",
+	"wrong_password": "Incorrect password",
+	"email_already_in_use": "User with this email already exists",
+	"guest": "Guest",
+	"logout": "Logout",
+	"name": "Name",
+	"lang": "Language",
+	"updateProfile_message": "Data updated successfully",
+	"create": "Create",
+	"edit": "Edit",
+	"update": "Update",
+	"pageTitles": {
+		"home": "Home",
+		"bill": "Your bill",
+		"history": "Records history",
+		"plan": "Planning",
+		"newRecord": "New record",
+		"categories": "Categories",
+		"profile": "Profile",
+		"details": "Record detail"
+	},
+	"menu": {
+		"bill": "Your bill",
+		"history": "History",
+		"plan": "Planning",
+		"newRecord": "New record",
+		"categories": "Categories"
+	},
+	"currencies": {
+		"USD": "USA Dollar",
+		"EUR": "Euro",
+		"RUB": "Russian ruble",
+		"UAH": "Ukrainian hryvnia"
+	},
+	"currency_account": "Currency account",
+	"exchange_rate": "Exchange rate",
+	"currency": "Currency",
+	"rate": "Rate",
+	"select_category": "Choose category",
+	"title": "Title",
+	"limit": "Limit",
+	"messages": {
+		"enterCategoryName": "Enter category name",
+		"enterLimit": "Enter limit",
+		"description_rules": "Description should contain less than 256 characters",
+		"enterAmount": "Enter amount",
+		"enterName": "Enter name",
+		"limit_rules": "Limit must be greater than 100",
+		"amount_rules": "The amount cannot be less than 1"
+	},
+	"category_rules": "Category name must be between 3 and 20 characters",
+	"create_category": "Create category",
+	"no_categories": "There are no categories yet",
+	"create_record": "Create record",
+	"no_records": "There are no records yet",
+	"error_load_categories": "Error loading categories",
+	"left": "Left",
+	"exceeding": "Exceeding",
+	"income": "Income",
+	"outcome": "Outcome",
+	"amount": "Amount",
+	"category": "Category",
+	"description": "Description",
+	"createRecord_success": "Record created successfully",
+	"lack_of_amount": "Insufficient funds on the account",
+	"date": "Date",
+	"type": "Type",
+	"open": "Open",
+	"chart_title": "Your spending schedule",
+	"out_of": "out of",
+	"$vuetify": {
+		"badge": "Badge",
+		"close": "Close",
+		"dataIterator": {
+			"noResultsText": "No matching records found",
+			"loadingText": "Loading items..."
+		},
+		"dataTable": {
+			"itemsPerPageText": "Rows per page:",
+			"ariaLabel": {
+				"sortDescending": "Sorted descending.",
+				"sortAscending": "Sorted ascending.",
+				"sortNone": "Not sorted.",
+				"activateNone": "Activate to remove sorting.",
+				"activateDescending": "Activate to sort descending.",
+				"activateAscending": "Activate to sort ascending."
+			},
+			"sortBy": "Sort by"
+		},
+		"dataFooter": {
+			"itemsPerPageText": "Items per page:",
+			"itemsPerPageAll": "All",
+			"nextPage": "Next page",
+			"prevPage": "Previous page",
+			"firstPage": "First page",
+			"lastPage": "Last page",
+			"pageText": "{0}-{1} of {2}"
+		},
+		"datePicker": {
+			"itemsSelected": "{0} selected",
+			"nextMonthAriaLabel": "Next month",
+			"nextYearAriaLabel": "Next year",
+			"prevMonthAriaLabel": "Previous month",
+			"prevYearAriaLabel": "Previous year"
+		},
+		"noDataText": "No data available",
+		"carousel": {
+			"prev": "Previous visual",
+			"next": "Next visual",
+			"ariaLabel": {
+				"delimiter": "Carousel slide {0} of {1}"
+			}
+		},
+		"calendar": {
+			"moreEvents": "{0} more"
+		},
+		"input": {
+			"clear": "Clear {0}",
+			"prependAction": "{0} prepended action",
+			"appendAction": "{0} appended action"
+		},
+		"fileInput": {
+			"counter": "{0} files",
+			"counterSize": "{0} files ({1} in total)"
+		},
+		"timePicker": {
+			"am": "AM",
+			"pm": "PM"
+		},
+		"pagination": {
+			"ariaLabel": {
+				"root": "Pagination Navigation",
+				"next": "Next page",
+				"previous": "Previous page",
+				"page": "Go to page {0}",
+				"currentPage": "Page {0}, Current page",
+				"first": "First page",
+				"last": "Last page"
+			}
+		},
+		"rating": {
+			"ariaLabel": {
+				"item": "Rating {0} of {1}"
+			}
+		},
+		"loading": "Loading..."
+	}
+}

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { CurrencyRates } from '@/api/currency';
 
 export enum Locales {
 	RU = 'ru-RU',
@@ -11,6 +12,7 @@ export interface UserInfo {
 	bill: number;
 	locale: Locales;
 	name: string;
+	currency: CurrencyRates;
 }
 
 export const useInfoStore = defineStore('info', () => {
@@ -22,12 +24,19 @@ export const useInfoStore = defineStore('info', () => {
 	const $reset = () => {
 		info.value = null;
 	};
+	const userCurrency = computed(
+		() => info.value?.currency || import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD'
+	);
+
 	const setLocale = () => {
-		(info.value as Partial<UserInfo>) = { locale: JSON.parse(localStorage.getItem('lang') || '') || Locales.RU };
+		(info.value as Partial<UserInfo>) = {
+			locale: JSON.parse(localStorage.getItem('lang') || '') || Locales.RU
+		};
 	};
 
 	return {
 		info,
+		userCurrency,
 		setInfo,
 		$reset,
 		setLocale
