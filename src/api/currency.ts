@@ -1,26 +1,33 @@
 import { errorHandler } from '@/utils/errorHandler';
 
+export type CurrencyRates = 'USD' | 'EUR' | 'UAH' | 'RUB';
 export interface Currency {
-	rates: CurrencyRates;
+	rates: Record<CurrencyRates, number>;
 	date: Date;
 }
 
-interface CurrencyRates {
-	EUR: number;
-	UAH: number;
-	USD: number;
-}
+const DEFAULT_CURRENCY_RESPONSE = {
+	rates: { [import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD']: 1 },
+	date: new Date()
+};
 
 export const fetchCurrency = async () => {
 	try {
-		const res = await fetch('https://api.apilayer.com/exchangerates_data/latest?base=USD&symbols=EUR%2C%20UAH%2C%20USD', {
-			method: 'GET',
-			redirect: 'follow',
-			headers: new Headers({
-				'apikey': import.meta.env.VITE_APILAYER_API_KEY
-			})
-		});
-		return (await res.json()) as Currency;
+		const res = await fetch(
+			import.meta.env.VITE_EXCHANGER_API_URL +
+				`?base=${
+					import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD'
+				}&symbols=EUR%2CUAH%2CUSD%2CRUB`,
+			{
+				method: 'GET',
+				redirect: 'follow',
+				headers: new Headers({
+					'Content-Type': 'application/json'
+				})
+			}
+		);
+		const { rates, date } = (await res.json()) as Awaited<Currency>;
+		return ({ rates, date } || DEFAULT_CURRENCY_RESPONSE) as Currency;
 	} catch (e) {
 		errorHandler(e);
 	}

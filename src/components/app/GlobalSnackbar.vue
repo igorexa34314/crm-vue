@@ -13,15 +13,13 @@
 
 <script setup lang="ts">
 import { mdiClose } from '@mdi/js';
-import { reactive } from 'vue';
+import { ref } from 'vue';
 import { useSnackbarStore, Snackbar } from '@/stores/snackbar';
 const { $onAction } = useSnackbarStore();
 
-interface SnackbarProps extends Snackbar {
-	show: boolean;
-}
+type SnackbarProps = Snackbar & { show: boolean };
 
-const sbProps: SnackbarProps = reactive({
+const sbProps = ref<SnackbarProps>({
 	show: false,
 	color: '',
 	text: '',
@@ -31,10 +29,7 @@ const sbProps: SnackbarProps = reactive({
 $onAction(({ name, store, after }) => {
 	after(() => {
 		if (name === 'showMessage') {
-			sbProps.text = store.snackbar.text;
-			sbProps.color = store.snackbar.color;
-			sbProps.timeout = store.snackbar.timeout;
-			sbProps.show = true;
+			sbProps.value = { ...store.snackbar, show: true };
 		}
 	})
 });

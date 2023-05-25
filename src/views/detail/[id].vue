@@ -13,12 +13,12 @@
 					<v-card class="pa-3"
 						:color="recordWithCategory.type === 'outcome' ? 'orange-darken-4' : 'light-green-darken-2'">
 						<v-card-text class="text-subtitle-1">
-							<p>{{ useLocalizeFilter('description') + ': ' + recordWithCategory.description }}</p>
-							<p class="mt-3">{{ useLocalizeFilter('amount') + ': ' + useCurrencyFilter(recordWithCategory.amount)
+							<p>{{ t('description') + ': ' + recordWithCategory.description }}</p>
+							<p class="mt-3">{{ t('amount') + ': ' + n(cf(recordWithCategory.amount), 'currency', userCurrency)
 							}}
 							</p>
-							<p class="mt-3 mb-5">{{ useLocalizeFilter('category') + ': ' + recordWithCategory.category }}</p>
-							<small class="text-right d-block mr-1">{{ useDateFilter(recordWithCategory.date, 'datetime')
+							<p class="mt-3 mb-5">{{ t('category') + ': ' + recordWithCategory.category }}</p>
+							<small class="text-right d-block mr-1">{{ d(recordWithCategory.date, 'short')
 							}}</small>
 						</v-card-text>
 					</v-card>
@@ -37,16 +37,17 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
 import { computedAsync } from '@vueuse/core';
 import { useRoute } from 'vue-router';
 import { useMeta } from 'vue-meta';
 import { mdiChevronRight } from '@mdi/js';
 import { fetchCategoryById } from '@/api/category';
 import { fetchRecordById, Record } from '@/api/record';
-import { useCurrencyFilter } from '@/filters/currencyFilter';
-import { useDateFilter } from '@/filters/dateFilter';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useI18n } from 'vue-i18n';
+import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
+import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 
 interface Breadcrumbs {
 	title: string;
@@ -58,12 +59,14 @@ interface RecordWithCategoryName extends Record {
 }
 
 const route = useRoute();
-const { showMessage } = useSnackbarStore();
+const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { currencyFilter: cf } = useCurrencyFilter();
 useMeta({ title: 'pageTitles.details' });
 
+const { userCurrency } = storeToRefs(useInfoStore());
 const isLoading = ref(false);
 const breadcrumbs = computed<Breadcrumbs[]>(() => ([
-	{ title: useLocalizeFilter('menu.history'), to: '/history' },
+	{ title: t('menu.history'), to: '/history' },
 	{ title: recordWithCategory.value?.type === 'income' ? 'Доход' : 'Расход', disabled: true }
 ].filter(Boolean)));
 
@@ -75,7 +78,11 @@ const recordWithCategory = computedAsync(async () => {
 	}
 }, undefined, {
 	evaluating: isLoading,
-	onError: (e) => showMessage('no_record_found')
+	onError: (e) => {
+		console.error(e);
+		const { showMessage } = useSnackbarStore();
+		showMessage('no_record_found');
+	}
 });
 </script>
 

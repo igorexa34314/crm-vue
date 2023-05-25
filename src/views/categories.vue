@@ -1,14 +1,18 @@
 <template>
 	<div>
 		<div class="title mb-7">
-			<h3 class="text-h4 mt-4 ml-2">{{ useLocalizeFilter('pageTitles.categories') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.categories') }}</h3>
 		</div>
 		<section class="mt-10">
 			<app-loader v-if="isLoading" page />
 			<v-row v-else class="px-4">
-				<CreateCategory class="pr-6" @created="addNewCategory" />
-				<EditCategory v-if="categories?.length" :categories="categories" @updated="updateCategories" class="pl-6" />
-				<div class="text-h5 px-5" v-else>Категорий пока нет</div>
+				<v-col cols="6" md="6" sm="12" class="create-category">
+					<CreateCategory @created="addNewCategory" class="pr-6" />
+				</v-col>
+				<v-col cols="6" md="6" sm="12" class="edit-category">
+					<EditCategory v-if="categories?.length" :categories="categories" @updated="updateCategories" class="pl-6" />
+					<div class="text-h5 px-5 no-categories" v-else>Категорий пока нет</div>
+				</v-col>
 			</v-row>
 		</section>
 	</div>
@@ -20,11 +24,12 @@ import EditCategory from '@/components/categories/EditCategory.vue';
 import { useMeta } from 'vue-meta';
 import { useAsyncState } from '@vueuse/core';
 import { fetchCategories, Category } from '@/api/category';
-import { useLocalizeFilter } from '@/filters/localizeFilter';
+import { useI18n } from 'vue-i18n';
 
 // Page title: Categories
 useMeta({ title: 'pageTitles.categories' });
 
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { state: categories, isLoading } = useAsyncState(fetchCategories, []);
 const addNewCategory = (cat: Category) => {
 	if (categories.value) {
@@ -39,4 +44,10 @@ const updateCategories = ({ id, title, limit }: Category) => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.edit-category {
+	@media(max-width: 960px) {
+		margin-top: 2rem;
+	}
+}
+</style>
