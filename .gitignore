@@ -1,3 +1,12 @@
+node_modules
+.nuxt
+.nitro
+.cache
+.output
+.env
+dist
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -6,10 +15,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
-*.local
-*.env
 
 # Editor directories and files
 .vscode/*
@@ -22,4 +27,4 @@ node_modules
 *.sln
 *.sw?
 
-.nuxt
+admin/

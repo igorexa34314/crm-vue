@@ -1,0 +1,171 @@
+{
+	"home_bookkeeping": "Домашняя бухгалтерия",
+	"error_message": "Что-то пошло не так",
+	"login": "Войти",
+	"email": "Почта",
+	"password": "Пароль",
+	"need_logout": "Для начала выйдите с аккаута",
+	"no_account": "Нет аккаута",
+	"have_account": "Есть аккаунт",
+	"sign_in": "Зарегистрироваться",
+	"enter_Email": "Введите email",
+	"enter_Pass": "Введите пароль",
+	"email_rules": "Введите корректный email",
+	"pass_rules": "Пароль должен быть в пределах от 6 до 32 символов",
+	"name_rules": "Имя должно быть в пределах от 3 до 20 символов",
+	"agree_rules": "Вы должны согласиться с правилами",
+	"rules": "правилами",
+	"agree_with": "согласен с",
+	"login_success": "Вы успешно авторизовались",
+	"sign_in_success": "Вы успешно зарегистрировались",
+	"need_login": "Необходимо войти в аккаунт",
+	"login_error": "Неправильное имя пользователя или пароль",
+	"logout_success": "Вы успешно вышли",
+	"user_not_found": "Не найден пользователь с данным email",
+	"wrong_password": "Неверный пароль",
+	"email_already_in_use": "Пользователь с таким email уже существует",
+	"guest": "Гость",
+	"logout": "Выйти",
+	"name": "Имя",
+	"lang": "Язык",
+	"updateProfile_message": "Данные успешно обновлены",
+	"create": "Создать",
+	"edit": "Редактировать",
+	"update": "Обновить",
+	"pageTitles": {
+		"home": "Главная",
+		"bill": "Ваш счёт",
+		"history": "История записей",
+		"plan": "Планирование",
+		"newRecord": "Новая запись",
+		"categories": "Категории",
+		"profile": "Профиль",
+		"details": "Детали записи"
+	},
+	"menu": {
+		"bill": "Ваш счёт",
+		"history": "История",
+		"plan": "Планирование",
+		"newRecord": "Новая запись",
+		"categories": "Категории"
+	},
+	"currency_account": "Счет в валюте",
+	"currencies": {
+		"USD": "Доллар США",
+		"EUR": "Евро",
+		"RUB": "Российский рубль",
+		"UAH": "Украинская гривна"
+	},
+	"exchange_rate": "Курс валют",
+	"currency": "Валюта",
+	"rate": "Курс",
+	"select_category": "Выберите категорию",
+	"title": "Название",
+	"limit": "Лимит",
+	"messages": {
+		"enterCategoryName": "Введите имя категории",
+		"enterLimit": "Введите лимит",
+		"description_rules": "Максимальная длина описания - 256 символов",
+		"enterAmount": "Введите сумму",
+		"enterName": "Введите имя",
+		"limit_rules": "Лимит должен быть больше 100",
+		"amount_rules": "Сумма не может быть меньше 1"
+	},
+	"category_rules": "Имя категории должно быть в пределах от 3 до 20 символов",
+	"create_category": "Создать категорию",
+	"no_categories": "Категорий пока нет",
+	"error_load_categories": "Ошибка загрузки категорий",
+	"create_record": "Создать запись",
+	"no_records": "Записей пока нет",
+	"left": "Осталось",
+	"exceeding": "Превышение на",
+	"income": "Доход",
+	"outcome": "Расход",
+	"amount": "Сумма",
+	"category": "Категория",
+	"description": "Описание",
+	"createRecord_success": "Запись успешно создана",
+	"lack_of_amount": "Недостаточно средств на счете",
+	"date": "Дата",
+	"type": "Тип",
+	"open": "Открыть",
+	"chart_title": "График ваших расходов",
+	"out_of": "из",
+	"$vuetify": {
+		"badge": "знак",
+		"close": "Закрыть",
+		"dataIterator": {
+			"noResultsText": "Не найдено подходящих записей",
+			"loadingText": "Запись загружается..."
+		},
+		"dataTable": {
+			"itemsPerPageText": "Строк на странице:",
+			"ariaLabel": {
+				"sortDescending": "Упорядочено по убыванию.",
+				"sortAscending": "Упорядочено по возрастанию.",
+				"sortNone": "Не упорядочено.",
+				"activateNone": "Активируйте, чтобы убрать сортировку.",
+				"activateDescending": "Активируйте для упорядочивания убыванию.",
+				"activateAscending": "Активируйте для упорядочивания по возрастанию."
+			},
+			"sortBy": "Сортировать по"
+		},
+		"dataFooter": {
+			"itemsPerPageText": "Записей на странице:",
+			"itemsPerPageAll": "Все",
+			"nextPage": "Следующая страница",
+			"prevPage": "Предыдущая страница",
+			"firstPage": "Первая страница",
+			"lastPage": "Последняя страница",
+			"pageText": "{0}-{1} из {2}"
+		},
+		"datePicker": {
+			"itemsSelected": "{0} выбран",
+			"nextMonthAriaLabel": "Следующий месяц",
+			"nextYearAriaLabel": "Следующий год",
+			"prevMonthAriaLabel": "Прошлый месяц",
+			"prevYearAriaLabel": "Предыдущий год"
+		},
+		"noDataText": "Отсутствуют данные",
+		"carousel": {
+			"prev": "Предыдущий слайд",
+			"next": "Следующий слайд",
+			"ariaLabel": {
+				"delimiter": "Слайд {0} из {1}"
+			}
+		},
+		"calendar": {
+			"moreEvents": "Еще {0}"
+		},
+		"input": {
+			"clear": "Очистить {0}",
+			"prependAction": "{0} предварительных действий",
+			"appendAction": "{0} добавленных действий"
+		},
+		"fileInput": {
+			"counter": "Файлов: {0}",
+			"counterSize": "Файлов: {0} (всего {1})"
+		},
+		"timePicker": {
+			"am": "AM",
+			"pm": "PM"
+		},
+		"pagination": {
+			"ariaLabel": {
+				"root": "Навигация по страницам",
+				"next": "Следующая страница",
+				"previous": "Предыдущая страница",
+				"page": "Перейти на страницу {0}",
+				"currentPage": "Текущая страница, Страница {0}",
+				"first": "Первая страница",
+				"last": "Последняя страница"
+			}
+		},
+		"rating": {
+			"ariaLabel": {
+				"item": "Рейтинг {0} из {1}"
+			}
+		},
+		"loading": "Загрузка..."
+	}
+}
