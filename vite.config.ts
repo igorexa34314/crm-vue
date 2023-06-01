@@ -1,3 +1,5 @@
+///<reference types="vitest"/>
+
 import { defineConfig } from 'vite';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -11,7 +13,7 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 export default defineConfig({
 	// base: '/crm-vue/',
 	server: {
-		port: 3000,
+		port: 3000
 	},
 	resolve: {
 		alias: {
@@ -41,5 +43,9 @@ export default defineConfig({
 			defaultLayout: 'main'
 		}),
 		vuetify()
-	]
+	],
+	test: {
+		globals: true,
+		environment: 'jsdom'
+	}
 });
