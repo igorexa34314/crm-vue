@@ -1,7 +1,26 @@
 {
-	// https://nuxt.com/docs/guide/concepts/typescript
 	"compilerOptions": {
-		"types": ["vuetify", "@intlify/unplugin-vue-i18n/messages"]
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"strict": true,
+		"jsx": "preserve",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"lib": ["ESNext", "DOM"],
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true,
+		"noEmit": true,
+		"baseUrl": ".",
+		"types": ["vite-plugin-vue-layouts/client", "vuetify", "@intlify/unplugin-vue-i18n/messages"],
+		"paths": {
+			"@/*": ["src/*"]
+		}
 	},
-	"extends": "./.nuxt/tsconfig.json"
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+	"references": [{ "path": "./tsconfig.node.json" }]
 }
