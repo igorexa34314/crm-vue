@@ -6,7 +6,8 @@ import {
 	signInWithEmailAndPassword,
 	signOut
 } from 'firebase/auth';
-import { getDatabase, ref as dbRef, set } from 'firebase/database';
+import { db } from '@/firebase';
+import { doc, collection, setDoc } from 'firebase/firestore';
 import { getCurrentUser } from 'vuefire';
 import { CurrencyRates } from '@/api/currency';
 
@@ -32,12 +33,14 @@ export const register = async ({ email, password, name }: UserCredentials) => {
 		const auth = getAuth();
 		await createUserWithEmailAndPassword(auth, email, password);
 		const uid = await getUserId();
-		await set(dbRef(getDatabase(), `users/${uid}/info`), {
-			bill: DEFAULT_BILL,
-			name,
-			locale: 'ru-RU',
-			currency: DEFAULT_CURRENCY
-		} as UserInfo);
+		await setDoc(doc(collection(db, 'users'), uid), {
+			info: {
+				bill: DEFAULT_BILL,
+				name,
+				locale: 'ru-RU',
+				currency: DEFAULT_CURRENCY
+			} as UserInfo
+		});
 	} catch (e) {
 		errorHandler(e);
 	}

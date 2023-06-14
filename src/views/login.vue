@@ -4,9 +4,9 @@
 		<v-card-text>
 			<v-form @submit.prevent="submitHandler" ref="form">
 				<LocalizedInput v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email"
-					class="mt-4" required />
+					class="mt-4" required validate-on="lazy blur" />
 				<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined"
-					label="Пароль" class="mt-6" required />
+					label="Пароль" class="mt-6" required validate-on="lazy blur" />
 				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" :append-icon="mdiSend">
 					{{ t('login') }}</v-btn>
 			</v-form>
@@ -61,7 +61,7 @@ const submitHandler = async () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
 
 <route lang="yaml">
 meta:

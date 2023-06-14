@@ -1,4 +1,5 @@
-import { getDatabase, ref as dbRef, push, set, get, child, update } from 'firebase/database';
+import { db } from '@/firebase';
+import { doc, collection as col, setDoc, getDoc, getDocs, updateDoc, addDoc } from 'firebase/firestore';
 import { getUserId } from '@/api/auth';
 import { errorHandler } from '@/utils/errorHandler';
 
@@ -10,28 +11,39 @@ export interface Category {
 
 export const fetchCategories = async () => {
 	try {
+		const categories: Category[] = [];
 		const uid = await getUserId();
-		const categories = (await get(dbRef(getDatabase(), `users/${uid}/categories`))).val() || {};
-		return Object.keys(categories).map(key => ({ ...categories[key], id: key })) as Category[];
+		const categoriesSnapshot = await getDocs(
+			col(doc(col(db, 'users'), uid), 'categories')
+		);
+		categoriesSnapshot.forEach(doc => {
+			categories.push({ id: doc.id, ...(doc.data() as Category) });
+		});
+		return categories;
 	} catch (e) {
 		errorHandler(e);
 	}
 };
-export const createCategory = async ({ title, limit }: Category) => {
+export const createCategory = async (categoryData: Category) => {
 	try {
 		const uid = await getUserId();
-		const newCategoryRef = await push(dbRef(getDatabase(), `users/${uid}/categories`));
-		await set(newCategoryRef, { title, limit });
-		return { title, limit, id: newCategoryRef.key as string };
+		const newCategoryRef = await addDoc(
+			col(doc(col(db, 'users'), uid), 'categories'),
+			categoryData
+		);
+		return { ...categoryData, id: newCategoryRef.id as string };
 	} catch (e) {
 		errorHandler(e);
 	}
 };
-export const updateCategory = async (categoryId: string, { title, limit }: Partial<Category>) => {
+export const updateCategory = async (categoryId: string, categoryData: Partial<Category>) => {
 	try {
 		const uid = await getUserId();
-		const categoryRef = await child(dbRef(getDatabase(), `users/${uid}/categories`), categoryId);
-		await update(categoryRef, { title, limit });
+		const categoryRef = doc(
+			col(doc(col(db, 'users'), uid), 'categories'),
+			categoryId
+		);
+		await updateDoc(categoryRef, categoryData);
 	} catch (e) {
 		errorHandler(e);
 	}
@@ -39,9 +51,12 @@ export const updateCategory = async (categoryId: string, { title, limit }: Parti
 export const fetchCategoryById = async (id: Category['id']) => {
 	try {
 		const uid = await getUserId();
-		const categoryRef = await child(dbRef(getDatabase(), `users/${uid}/categories`), id!);
-		const category = (await get(categoryRef)).val() || {};
-		return { ...category, id } as Category;
+		const categoryRef = await doc(col(doc(col(db, 'users'), uid), 'categories'), id);
+		const categoryDoc = await getDoc(categoryRef);
+		if (!categoryDoc.exists()) { 
+			throw new Error('Category with this id does not exist');
+		}
+		return { ...categoryDoc.data(), id } as Category;
 	} catch (e) {
 		errorHandler(e);
 	}

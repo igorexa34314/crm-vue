@@ -36,7 +36,7 @@ const getCurrency = computed(() => (currency: CurrencyRates) => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .v-theme--light .v-divider {
 	--v-border-opacity: 1;
 }

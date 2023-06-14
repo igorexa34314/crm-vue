@@ -45,7 +45,11 @@ export default defineConfig({
 		vuetify()
 	],
 	test: {
+		include: ['**/__tests__/**'],
 		globals: true,
-		environment: 'jsdom'
+		environment: 'jsdom',
+		deps: {
+			inline: ['vuetify']
+		}
 	}
 });

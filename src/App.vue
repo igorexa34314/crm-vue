@@ -6,7 +6,12 @@
   </metainfo>
   <GlobalSnackbar />
   <Suspense>
-    <router-view />
+    <template #default>
+      <router-view />
+    </template>
+    <template #fallback>
+      <app-loader class="mt-7" page />
+    </template>
   </Suspense>
 </template>
 

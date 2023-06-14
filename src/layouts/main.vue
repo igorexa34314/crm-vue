@@ -1,7 +1,7 @@
 <template>
 	<app-loader v-if="loading" class="main-loader" />
 	<v-layout v-else class="app-main-layout">
-		<AppNavbar @click="drawer = !drawer" />
+		<AppNavbar @click="drawer = !drawer" @logout="logout" />
 		<AppSidebar v-model="drawer" />
 
 		<v-main class="app">
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import AppNavbar from '@/components/app/AppNavbar.vue';
 import AppSidebar from '@/components/app/AppSidebar.vue';
-import { ref, watchEffect, provide } from 'vue';
+import { ref, onMounted, provide, onUnmounted } from 'vue';
 import { fetchCurrency } from '@/api/currency';
 import { useInfoStore } from '@/stores/info';
 import { mdiPlus } from '@mdi/js';
@@ -33,19 +33,24 @@ import { useSnackbarStore } from '@/stores/snackbar';
 import { useAsyncState } from '@vueuse/core';
 import { currencyKey } from '@/injection-keys';
 import messages from '@/utils/fbMessages.json';
+import { Unsubscribe } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
+import { logout as exit } from '@/api/auth';
 
+let unsub: Unsubscribe | undefined;
 const { state: currency, isLoading, isReady, execute: refresh } = useAsyncState(fetchCurrency, null);
 provide(currencyKey, { currency, isLoading, isReady, refresh });
 
+const { push } = useRouter();
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const infoStore = useInfoStore();
 const drawer = ref(true);
 const loading = ref(false);
 
-watchEffect(async () => {
+onMounted(async () => {
 	try {
 		if (!infoStore.info || !Object.keys(infoStore.info).length) {
-			await fetchInfo();
+			unsub = await fetchInfo();
 		}
 		await fetchCurrency();
 	} catch (e) {
@@ -55,9 +60,25 @@ watchEffect(async () => {
 		loading.value = false;
 	}
 });
+
+onUnmounted(() => {
+	unsub?.();
+});
+
+const logout = async () => {
+	unsub?.();
+	await exit();
+	push({
+		path: '/login',
+		query: {
+			message: 'logout'
+		}
+	})
+}
+
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .fixed-action-btn {
 	right: 0;
 	bottom: 0;

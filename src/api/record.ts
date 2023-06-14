@@ -1,4 +1,13 @@
-import { getDatabase, ref, push, set, get, child, serverTimestamp } from 'firebase/database';
+import { db } from '@/firebase';
+import {
+	doc,
+	collection as col,
+	setDoc,
+	getDoc,
+	getDocs,
+	serverTimestamp,
+	addDoc
+} from 'firebase/firestore';
 import { getUserId } from '@/api/auth';
 import { errorHandler } from '@/utils/errorHandler';
 import { Timestamp } from 'firebase/firestore';
@@ -18,20 +27,29 @@ const TimestampToDate = ({ seconds, nanoseconds }: Timestamp) =>
 export const createRecord = async (record: Record) => {
 	try {
 		const uid = await getUserId();
-		const newRecordRef = await push(ref(getDatabase(), `users/${uid}/records`));
-		await set(newRecordRef, { ...record, date: Timestamp.now() });
+		await addDoc(col(doc(col(db, 'users'), uid), 'records'), {
+			...record,
+			date: Timestamp.now()
+		});
 	} catch (e) {
 		errorHandler(e);
 	}
 };
 export const fetchRecords = async () => {
 	try {
+		const records: Record[] = [];
 		const uid = await getUserId();
-		const records = (await get(ref(getDatabase(), `users/${uid}/records`))).val() || {};
-		return Object.keys(records).map(
-			(key: NonNullable<Record['id']>) =>
-				({ ...records[key], date: TimestampToDate(records[key].date), id: key } as Record)
-		);
+		const recordDocs = await getDocs(col(doc(col(db, 'users'), uid), 'records'));
+		if (!recordDocs.empty) {
+			recordDocs.forEach(doc => {
+				records.push({
+					...doc.data(),
+					date: TimestampToDate(doc.data().date),
+					id: doc.id
+				} as Record);
+			});
+			return records;
+		}
 	} catch (e) {
 		errorHandler(e);
 	}
@@ -39,9 +57,12 @@ export const fetchRecords = async () => {
 export const fetchRecordById = async (id: string) => {
 	try {
 		const uid = await getUserId();
-		const recordRef = await child(ref(getDatabase(), `users/${uid}/records`), id);
-		const record = (await get(recordRef)).val() || {};
-		return { ...record, date: TimestampToDate(record.date), id } as Record;
+		const recordRef = doc(col(doc(col(db, 'users'), uid), 'records`'), id);
+		const recordDoc = await getDoc(recordRef);
+		if (!recordDoc.exists()) {
+			throw new Error('Record not found');
+		}
+		return { ...recordDoc.data(), date: TimestampToDate(recordDoc.data().date), id } as Record;
 	} catch (e) {
 		errorHandler(e);
 	}

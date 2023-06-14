@@ -22,7 +22,7 @@
 					</template>
 					<v-list-item-title>{{ t('pageTitles.profile') }}</v-list-item-title>
 				</v-list-item>
-				<v-list-item @click="logout">
+				<v-list-item @click="emit('logout')">
 					<template #prepend>
 						<v-icon :icon="mdiLogout" class="mr-3"></v-icon>
 					</template>
@@ -36,12 +36,12 @@
 <script setup lang="ts">
 import { mdiTriangleSmallDown, mdiAccountCircleOutline, mdiLogout } from '@mdi/js';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { logout as exit } from '@/api/auth';
 import { useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 const emit = defineEmits<{
+	(e: 'logout'): void;
 	(e: 'click'): void;
 }>();
 
@@ -57,16 +57,6 @@ onMounted(() => {
 	dateInterval = setInterval(() => date.value = new Date(), 1000 * 20);
 });
 onUnmounted(() => clearInterval(dateInterval));
-
-const logout = async () => {
-	await exit();
-	push({
-		path: '/login',
-		query: {
-			message: 'logout'
-		}
-	})
-}
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

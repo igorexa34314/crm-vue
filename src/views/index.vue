@@ -32,7 +32,7 @@ const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { currency, isLoading, isReady, refresh } = inject(currencyKey)!;
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .v-theme--light .v-table {
 	--v-border-opacity: 0.18;
 }

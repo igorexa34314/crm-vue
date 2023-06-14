@@ -44,9 +44,9 @@ const updateCategories = ({ id, title, limit }: Category) => {
 };
 </script>
 
-<style lang="scss" scoped>
-.edit-category {
-	@media(max-width: 960px) {
+<style scoped>
+@media(max-width: 960px) {
+	.edit-category {
 		margin-top: 2rem;
 	}
 }

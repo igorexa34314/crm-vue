@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database';
+import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -19,6 +19,6 @@ export const firebaseApp = initializeApp({
 });
 
 // Initialize Realtime Database and get a reference to the service
-const db = getDatabase(firebaseApp);
+export const db = getFirestore(firebaseApp);
 
 const analytics = getAnalytics(firebaseApp);

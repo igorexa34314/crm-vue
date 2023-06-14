@@ -60,4 +60,4 @@ const { userCurrency } = storeToRefs(useInfoStore());
 const tableHeaders = ['amount', 'date', 'category', 'type', 'open'];
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
