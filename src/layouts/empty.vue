@@ -33,7 +33,7 @@ onUnmounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .app {
 	min-height: 100vh;
 	overflow: hidden;

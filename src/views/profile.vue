@@ -29,7 +29,7 @@ import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { user } from '@/utils/validations';
 import { VForm } from 'vuetify/components';
-import { Locales } from '@/stores/info';
+import { Locales } from '@/plugins/i18n';
 import { CurrencyRates } from '@/api/currency';
 import { currencyKey } from '@/injection-keys';
 
@@ -52,7 +52,7 @@ const form = ref<VForm>();
 
 const formState = ref({
 	name: '',
-	locale: '' as Locales,
+	locale: 'en-US' as Locales,
 	currency: '' as CurrencyRates
 });
 
@@ -83,4 +83,4 @@ const submitHandler = async () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

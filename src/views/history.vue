@@ -86,7 +86,7 @@ const catsAmount = computed(() => {
 const { chartData, chartOptions } = useChart(catsTitle, catsAmount);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .history-chart {
 	margin: 0 auto;
 	max-width: 550px;

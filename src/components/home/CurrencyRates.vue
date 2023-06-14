@@ -42,4 +42,4 @@ const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });
 const currencies = computed(() => Object.keys(props.rates || {}) as CurrencyRates[]);
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

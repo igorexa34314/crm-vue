@@ -116,4 +116,4 @@ const submitHandler = async () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

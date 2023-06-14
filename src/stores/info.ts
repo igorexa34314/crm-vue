@@ -1,12 +1,7 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { CurrencyRates } from '@/api/currency';
-
-export enum Locales {
-	RU = 'ru-RU',
-	UA = 'uk-UA',
-	EN = 'en-US'
-}
+import { Locales } from '@/plugins/i18n';
 
 export interface UserInfo {
 	bill: number;
@@ -30,15 +25,30 @@ export const useInfoStore = defineStore('info', () => {
 
 	const setLocale = () => {
 		(info.value as Partial<UserInfo>) = {
-			locale: JSON.parse(localStorage.getItem('lang') || '') || Locales.RU
+			locale:
+				JSON.parse(localStorage.getItem('lang') || '') ||
+				import.meta.env.VITE_APP_DEFAULT_LOCALE ||
+				'en-US'
 		};
 	};
 
+	const $subscribeLocale = (cb: (locale: Locales) => any) => {
+		return watch(
+			() => info.value?.locale,
+			newVal => {
+				if (newVal) {
+					cb(newVal);
+				}
+			},
+			{ deep: true, immediate: true }
+		);
+	};
 	return {
 		info,
 		userCurrency,
 		setInfo,
 		$reset,
+		$subscribeLocale,
 		setLocale
 	};
 });
