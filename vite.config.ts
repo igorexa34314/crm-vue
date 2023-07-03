@@ -14,6 +14,7 @@ export default ({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
 	return defineConfig({
+		appType: 'mpa',
 		base: process.env.VITE_BASE || '/',
 		server: {
 			port: +process.env.VITE_PORT || 3000
