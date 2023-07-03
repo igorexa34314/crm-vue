@@ -11,9 +11,10 @@ This CRM system allows you to calculate expenses by created categories, as well 
 The application contains pages: Your Account, History, Planning, New Entry, Category.
 
 Try it on:\
-[CRM Vue 1](https://crm-vue-f0e4a.web.app "CRM Vue")\
+[Firebase](https://crm-vue-f0e4a.web.app "CRM Vue")\
 Or:\
-[CRM Vue 2](https://crm-vue-f0e4a.firebaseapp.com "CRM Vue")
+[Netlify](https://crm-vue-igorexa34314.netlify.app "CRM Vue")\
+[Github Pages](https://igorexa34314.github.io/crm-vue/ "CRM Vue")
 
 
 Copy repo code and setup it (with yarn package manager):
