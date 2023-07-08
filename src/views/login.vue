@@ -10,6 +10,9 @@
 				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" :append-icon="mdiSend">
 					{{ t('login') }}</v-btn>
 			</v-form>
+
+			<v-btn variant="elevated" @click="signInWithGoogle" class="mt-4" size="large" location="center bottom"
+				rounded><v-img :src="googleProvider" aspect-ratio="1" max-width="32" /></v-btn>
 		</v-card-text>
 		<v-card-actions class="mt-3 justify-center">
 			<div class="text-center text-subtitle-1">
@@ -22,12 +25,13 @@
 </template>
 
 <script setup lang="ts">
+import googleProvider from '@/assets/img/google-provider.png'
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
-import { login } from '@/api/auth';
+import { login, signInWithGoogle } from '@/services/auth';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { user as validations } from '@/utils/validations';

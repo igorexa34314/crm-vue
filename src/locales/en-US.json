@@ -65,7 +65,7 @@
 	"messages": {
 		"enterCategoryName": "Enter category name",
 		"enterLimit": "Enter limit",
-		"description_rules": "Description should contain less than 256 characters",
+		"description_rules": "Description should contain less than 2056 characters",
 		"enterAmount": "Enter amount",
 		"enterName": "Enter name",
 		"limit_rules": "Limit must be greater than 100",

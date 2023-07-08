@@ -36,7 +36,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
-import { register } from '@/api/auth';
+import { register } from '@/services/auth';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { user as validations } from '@/utils/validations';

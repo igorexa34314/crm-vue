@@ -1,0 +1,22 @@
+<template>
+	<v-textarea v-bind="{ variant }">
+		<template #message="{ message }">
+			{{ t(message) }}
+		</template>
+	</v-textarea>
+</template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+import { VTextField } from 'vuetify/components';
+
+const props = withDefaults(defineProps<{
+	variant: VTextField['variant']
+}>(), {
+	variant: 'underlined'
+});
+
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+</script>
+
+<style scoped></style>

@@ -10,7 +10,7 @@
 			<v-select v-model="formState.currency" :items="currencies" :label="t('currency')" item-title="title"
 				item-value="value" variant="underlined" class="mt-4" />
 
-			<v-btn type="submit" color="teal-darken-2" class="mt-5">
+			<v-btn type="submit" color="teal-darken-2" :class="xs ? 'mt-3' : 'mt-5'">
 				{{ t('update') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
@@ -23,19 +23,21 @@ import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { ref, computed, watchEffect, inject } from 'vue';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
-import { updateInfo } from '@/api/user';
+import { updateInfo } from '@/services/user';
 import { useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { user } from '@/utils/validations';
 import { VForm } from 'vuetify/components';
 import { Locales } from '@/plugins/i18n';
-import { CurrencyRates } from '@/api/currency';
+import { CurrencyRates } from '@/services/currency';
 import { currencyKey } from '@/injection-keys';
+import { useDisplay } from 'vuetify';
 
 useMeta({ title: 'pageTitles.profile' });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 const { showMessage } = useSnackbarStore();
 const infoStore = useInfoStore();
 

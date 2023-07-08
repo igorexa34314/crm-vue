@@ -31,8 +31,8 @@ import { ref, computed } from 'vue';
 import { useMeta } from 'vue-meta';
 import { ChartData } from 'chart.js';
 import { Pie } from 'vue-chartjs';
-import { Category, fetchCategories } from '@/api/category';
-import { Record, fetchRecords } from '@/api/record';
+import { Category, fetchCategories } from '@/services/category';
+import { Record, fetchRecords } from '@/services/record';
 import { usePagination } from '@/composables/usePagination';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
@@ -86,7 +86,7 @@ const catsAmount = computed(() => {
 const { chartData, chartOptions } = useChart(catsTitle, catsAmount);
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .history-chart {
 	margin: 0 auto;
 	max-width: 550px;

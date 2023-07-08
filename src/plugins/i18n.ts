@@ -3,7 +3,7 @@ import { nextTick } from 'vue';
 import messages from '@intlify/unplugin-vue-i18n/messages';
 import datetimeFormats from '@/utils/datetimeFormats.json';
 import numberFormats from '@/utils/numberFormats.json';
-import { fetchLocale } from '@/api/locale';
+import { fetchLocale } from '@/services/locale';
 
 const availableLocales = ['ru-RU', 'uk-UA', 'en-US'] as const;
 export type Locales = (typeof availableLocales)[number];

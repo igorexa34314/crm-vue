@@ -1,18 +1,15 @@
-import { UserInfo, useInfoStore } from '@/stores/info';
+import { useInfoStore } from '@/stores/info';
 import { errorHandler } from '@/utils/errorHandler';
 import {
-	getAuth,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
-	signOut
+	signOut,
+	GoogleAuthProvider,
+	signInWithPopup
 } from 'firebase/auth';
-import { db } from '@/firebase';
-import { doc, collection, setDoc } from 'firebase/firestore';
+import { auth } from '@/firebase';
 import { getCurrentUser } from 'vuefire';
-import { CurrencyRates } from '@/api/currency';
-
-const DEFAULT_BILL = import.meta.env.VITE_APP_DEFAULT_BILL;
-const DEFAULT_CURRENCY = import.meta.env.VITE_APP_DEFAULT_CURRENCY as CurrencyRates;
+import { createUser } from './user';
 
 export interface UserCredentials {
 	email: string;
@@ -22,7 +19,6 @@ export interface UserCredentials {
 
 export const login = async ({ email, password }: UserCredentials) => {
 	try {
-		const auth = getAuth();
 		await signInWithEmailAndPassword(auth, email, password);
 	} catch (e) {
 		errorHandler(e);
@@ -30,17 +26,8 @@ export const login = async ({ email, password }: UserCredentials) => {
 };
 export const register = async ({ email, password, name }: UserCredentials) => {
 	try {
-		const auth = getAuth();
-		await createUserWithEmailAndPassword(auth, email, password);
-		const uid = await getUserId();
-		await setDoc(doc(collection(db, 'users'), uid), {
-			info: {
-				bill: DEFAULT_BILL,
-				name,
-				locale: 'ru-RU',
-				currency: DEFAULT_CURRENCY
-			} as UserInfo
-		});
+		const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
+		await createUser({ uid: user.uid, email, name: name || '' });
 	} catch (e) {
 		errorHandler(e);
 	}
@@ -52,8 +39,16 @@ export const getUserId = async () => {
 	}
 	return;
 };
+export const signInWithGoogle = async () => {
+	try {
+		const provider = new GoogleAuthProvider();
+		const user = (await signInWithPopup(auth, provider)).user;
+		await createUser({ uid: user.uid, email: user.email || '', name: user.displayName || '' });
+	} catch (e) {
+		errorHandler(e);
+	}
+};
 export const logout = async () => {
-	const auth = getAuth();
 	const { $reset } = useInfoStore();
 	await signOut(auth);
 	$reset();

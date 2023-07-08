@@ -1,5 +1,5 @@
 import { Ref, InjectionKey } from 'vue';
-import { Currency } from '@/api/currency';
+import { Currency } from '@/services/currency';
 import { UseAsyncStateReturn } from '@vueuse/core';
 
 type CurrencyAPIResult = UseAsyncStateReturn<Currency | null | undefined, [], true>;

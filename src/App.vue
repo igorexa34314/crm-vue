@@ -23,4 +23,6 @@ const AppTitle = import.meta.env.VITE_APP_TITLE || 'CRM VUE';
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import "./assets/styles.scss";
+</style>

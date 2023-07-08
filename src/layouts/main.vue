@@ -13,8 +13,8 @@
 		<v-tooltip activator=".fixed-action-btn" :text="t('create_record')"
 			content-class="bg-indigo-lighten-3 font-weight-medium">
 			<template #activator="{ props }">
-				<v-btn color="indigo-lighten-1" size="x-large" class="fixed-action-btn" to="/record" position="fixed"
-					:icon="mdiPlus" v-bind="props" />
+				<v-btn color="indigo-lighten-1" :size="xs ? 'default' : mdAndDown ? 'large' : 'x-large'"
+					class="fixed-action-btn" to="/record" position="fixed" :icon="mdiPlus" v-bind="props" />
 			</template>
 		</v-tooltip>
 	</v-layout>
@@ -24,10 +24,10 @@
 import AppNavbar from '@/components/app/AppNavbar.vue';
 import AppSidebar from '@/components/app/AppSidebar.vue';
 import { ref, onMounted, provide, onUnmounted } from 'vue';
-import { fetchCurrency } from '@/api/currency';
+import { fetchCurrency } from '@/services/currency';
 import { useInfoStore } from '@/stores/info';
 import { mdiPlus } from '@mdi/js';
-import { fetchInfo } from '@/api/user';
+import { fetchInfo } from '@/services/user';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useAsyncState } from '@vueuse/core';
@@ -35,7 +35,8 @@ import { currencyKey } from '@/injection-keys';
 import messages from '@/utils/fbMessages.json';
 import { Unsubscribe } from 'firebase/firestore';
 import { useRouter } from 'vue-router';
-import { logout as exit } from '@/api/auth';
+import { logout as exit } from '@/services/auth';
+import { useDisplay } from 'vuetify';
 
 let unsub: Unsubscribe | undefined;
 const { state: currency, isLoading, isReady, execute: refresh } = useAsyncState(fetchCurrency, null);
@@ -46,6 +47,7 @@ const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const infoStore = useInfoStore();
 const drawer = ref(true);
 const loading = ref(false);
+const { xs, mdAndDown } = useDisplay();
 
 onMounted(async () => {
 	try {
@@ -84,6 +86,7 @@ const logout = async () => {
 	bottom: 0;
 	transform: translate(-70%, -70%);
 }
+
 .main-loader {
 	position: fixed;
 	top: 50%;

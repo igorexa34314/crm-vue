@@ -5,12 +5,14 @@
 		</div>
 		<section class="mt-10">
 			<app-loader v-if="isLoading" page />
-			<v-row v-else class="px-4">
-				<v-col cols="6" md="6" sm="12" class="create-category">
-					<CreateCategory @created="addNewCategory" class="pr-6" />
+			<v-row v-else :class="xs ? 'px-2' : 'px-4'">
+				<v-col cols="6" md="6" sm="12" xs="12" class="create-category v-col-xs-12">
+					<CreateCategory :default-limit="100" @created="addNewCategory"
+						:class="{ 'pr-6': !smAndDown, 'px-3': smAndDown && !xs }" />
 				</v-col>
-				<v-col cols="6" md="6" sm="12" class="edit-category">
-					<EditCategory v-if="categories?.length" :categories="categories" @updated="updateCategories" class="pl-6" />
+				<v-col cols="6" md="6" sm="12" xs="12" class="edit-category v-col-xs-12">
+					<EditCategory v-if="categories?.length" v-bind="{ categories, defaultLimit: 100 }"
+						@updated="updateCategories" :class="{ 'pl-6': !smAndDown, 'px-3': smAndDown && !xs }" />
 					<div class="text-h5 px-5 no-categories" v-else>Категорий пока нет</div>
 				</v-col>
 			</v-row>
@@ -23,14 +25,17 @@ import CreateCategory from '@/components/categories/CreateCategory.vue';
 import EditCategory from '@/components/categories/EditCategory.vue';
 import { useMeta } from 'vue-meta';
 import { useAsyncState } from '@vueuse/core';
-import { fetchCategories, Category } from '@/api/category';
+import { fetchCategories, Category } from '@/services/category';
 import { useI18n } from 'vue-i18n';
+import { useDisplay } from 'vuetify';
 
 // Page title: Categories
 useMeta({ title: 'pageTitles.categories' });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { state: categories, isLoading } = useAsyncState(fetchCategories, []);
+const { smAndDown, xs } = useDisplay();
+
 const addNewCategory = (cat: Category) => {
 	if (categories.value) {
 		categories.value = [...categories.value, cat];

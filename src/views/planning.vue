@@ -34,8 +34,8 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { fetchCategories, Category } from '@/api/category';
-import { fetchRecords } from '@/api/record';
+import { fetchCategories, Category } from '@/services/category';
+import { fetchRecords } from '@/services/record';
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMeta } from 'vue-meta';

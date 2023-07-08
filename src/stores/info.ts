@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { CurrencyRates } from '@/api/currency';
+import { CurrencyRates } from '@/services/currency';
 import { Locales } from '@/plugins/i18n';
 
 export interface UserInfo {

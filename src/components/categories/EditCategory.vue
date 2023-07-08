@@ -10,7 +10,7 @@
 				:label="t('title')" class="mt-6" required />
 			<LocalizedInput v-model="currentCategory.limit" :rules="validations.limit" variant="underlined" type="number"
 				:label="t('limit') + ` (${userCurrency})`" class="mt-6" required />
-			<v-btn color="light-green-darken-4" type="submit" class="mt-7">
+			<v-btn color="light-green-darken-4" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
 				{{ t('update') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
@@ -20,9 +20,9 @@
 
 <script setup lang="ts">
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { mdiSend } from '@mdi/js';
-import { updateCategory, Category } from '@/api/category';
+import { updateCategory, Category } from '@/services/category';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { category as validations } from '@/utils/validations';
@@ -30,35 +30,39 @@ import { VForm } from 'vuetify/components';
 import { useInfoStore } from '@/stores/info';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { storeToRefs } from 'pinia';
+import { useDisplay } from 'vuetify';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	categories: Category[];
-}>();
+	defaultLimit?: number
+}>(), {
+	defaultLimit: 100
+});
+
 const emit = defineEmits<{
 	(e: 'updated', cat: Category): void;
 }>();
 
-
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 const { currencyFilter: cf } = useCurrencyFilter();
+const { xs } = useDisplay();
 const { userCurrency } = storeToRefs(useInfoStore());
-const DEFAULT_LIMIT = Math.floor(cf.value(50));
 
 const form = ref<VForm>();
 const currentCategory = ref<Category>({
 	id: props.categories[0].id,
 	title: '',
-	limit: DEFAULT_LIMIT
+	limit: Math.round(cf.value(props.defaultLimit) / 100) * 100
 });
 
-watch(() => currentCategory.value.id, (newId) => {
-	const cat = props.categories.find(({ id }) => id === newId);
+watchEffect(() => {
+	const cat = props.categories.find(({ id }) => id === currentCategory.value.id);
 	if (cat) {
 		const { limit, ...data } = cat;
 		currentCategory.value = { ...data, limit: Math.round(cf.value(limit)) };
 	}
-}, { immediate: true });
+});
 
 const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;

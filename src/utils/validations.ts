@@ -32,5 +32,5 @@ export const record = {
 		(v: number) => !!v || 'messages.enterAmount',
 		(v: number) => (v && v >= 1) || 'messages.amount_rules'
 	],
-	description: [(v: string) => (v && v.length <= 256) || 'messages.description_rules']
+	description: [(v: string) => v.length <= 2056 || 'messages.description_rules']
 };

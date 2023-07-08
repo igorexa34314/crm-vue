@@ -8,7 +8,7 @@
 				required />
 			<LocalizedInput v-model.number="formState.limit" :rules="validations.limit" variant="underlined" type="number"
 				:label="t('limit') + ` (${userCurrency})`" class="mt-6" required />
-			<v-btn color="green-darken-3" type="submit" class="mt-7">
+			<v-btn color="green-darken-3" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
 				{{ t('create') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
@@ -19,8 +19,8 @@
 <script setup lang="ts">
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { mdiSend } from '@mdi/js';
-import { ref } from 'vue';
-import { createCategory, Category } from '@/api/category';
+import { ref, watchEffect } from 'vue';
+import { createCategory, Category } from '@/services/category';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { category as validations } from '@/utils/validations';
@@ -28,7 +28,13 @@ import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { useInfoStore } from '@/stores/info';
 import { storeToRefs } from 'pinia';
 import { VForm } from 'vuetify/components';
+import { useDisplay } from 'vuetify';
 
+const props = withDefaults(defineProps<{
+	defaultLimit?: number
+}>(), {
+	defaultLimit: 100
+});
 const emit = defineEmits<{
 	(e: 'created', category: Category): void;
 }>();
@@ -36,13 +42,17 @@ const emit = defineEmits<{
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { currencyFilter: cf } = useCurrencyFilter();
 const { showMessage } = useSnackbarStore();
-const DEFAULT_LIMIT = Math.floor(cf.value(50));
+const { xs } = useDisplay();
 
 const { userCurrency } = storeToRefs(useInfoStore());
 const form = ref<VForm>();
 const formState = ref<Category>({
 	title: '',
-	limit: DEFAULT_LIMIT,
+	limit: Math.floor(cf.value(props.defaultLimit) / 100) * 100,
+});
+
+watchEffect(() => {
+	formState.value.limit = Math.floor(cf.value(props.defaultLimit) / 100) * 100;
 });
 
 const submitHandler = async () => {
@@ -54,7 +64,7 @@ const submitHandler = async () => {
 			if (category) {
 				emit('created', category);
 				form.value?.reset();
-				formState.value.limit = DEFAULT_LIMIT;
+				formState.value.limit = Math.floor(cf.value(props.defaultLimit) / 100) * 100;
 				showMessage('Категория создана');
 			}
 			else {
