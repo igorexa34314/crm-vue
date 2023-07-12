@@ -85,5 +85,3 @@ const recordWithCategory = computedAsync(async () => {
 	}
 });
 </script>
-
-<style scoped></style>

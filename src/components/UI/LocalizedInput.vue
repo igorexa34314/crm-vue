@@ -11,12 +11,10 @@ import { useI18n } from 'vue-i18n';
 import { VTextField } from 'vuetify/components';
 
 const props = withDefaults(defineProps<{
-	variant: VTextField['variant']
+	variant?: VTextField['variant']
 }>(), {
 	variant: 'underlined'
 });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 </script>
-
-<style scoped></style>

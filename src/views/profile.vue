@@ -4,11 +4,27 @@
 			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.profile') }}</h3>
 		</div>
 		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
-			<LocalizedInput v-model="formState.name" :rules="user.name" variant="underlined" :label="t('name')" required />
-			<v-select v-model="formState.locale" :items="locales" :label="t('lang')" item-title="title" item-value="value"
-				variant="underlined" class="mt-4" />
-			<v-select v-model="formState.currency" :items="currencies" :label="t('currency')" item-title="title"
-				item-value="value" variant="underlined" class="mt-4" />
+			<div class="d-flex flex-column items-center mb-4 flex-sm-row">
+				<LocalizedInput v-model="formState.firstName" :rules="user.firstName" variant="underlined"
+					:label="t('user.firstName')" class="mr-sm-3" required />
+				<LocalizedInput v-model="formState.lastName" :rules="user.lastName" variant="underlined"
+					:label="t('user.lastName')" class="ml-sm-3" required />
+			</div>
+
+			<v-radio-group v-model="formState.gender" :label="t('user.gender.label')">
+				<v-radio v-for="gender in genderItems" :label="gender.title" :value="gender.value" />
+			</v-radio-group>
+
+			<LocalizedTextarea v-model="formState.bio" rows="1" auto-grow :label="t('user.bio')" :rules="user.bio"
+				class="mb-4" />
+
+			<div class="d-flex flex-column items-center mt-4 flex-sm-row">
+				<v-select v-model="formState.locale" :items="locales" :label="t('lang')" item-title="title" item-value="value"
+					variant="underlined" class="mr-sm-4" />
+
+				<v-select v-model="formState.currency" :items="currencies" :label="t('currency')" item-title="title"
+					item-value="value" variant="underlined" class="ml-sm-4" />
+			</div>
 
 			<v-btn type="submit" color="teal-darken-2" :class="xs ? 'mt-3' : 'mt-5'">
 				{{ t('update') }}
@@ -20,16 +36,16 @@
 
 <script setup lang="ts">
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
+import LocalizedTextarea from '@/components/UI/LocalizedTextarea.vue';
 import { ref, computed, watchEffect, inject } from 'vue';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
 import { updateInfo } from '@/services/user';
-import { useInfoStore } from '@/stores/info';
+import { UserInfo, useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { user } from '@/utils/validations';
 import { VForm } from 'vuetify/components';
-import { Locales } from '@/plugins/i18n';
 import { CurrencyRates } from '@/services/currency';
 import { currencyKey } from '@/injection-keys';
 import { useDisplay } from 'vuetify';
@@ -52,11 +68,21 @@ const info = computed(() => infoStore.info);
 
 const form = ref<VForm>();
 
-const formState = ref({
-	name: '',
-	locale: 'en-US' as Locales,
-	currency: '' as CurrencyRates
+const formState = ref<Omit<UserInfo, 'bill'>>({
+	displayName: '',
+	firstName: '',
+	lastName: '',
+	bio: '',
+	gender: 'unknown',
+	locale: 'en-US',
+	currency: 'USD'
 });
+
+const genderItems = computed<{ title: string, value: UserInfo['gender'] }[]>(() => ([
+	{ title: t('user.gender.male'), value: 'male' },
+	{ title: t('user.gender.female'), value: 'female' },
+	{ title: t('user.gender.unknown'), value: 'unknown' }
+]));
 
 const locales = [
 	{ title: 'Русский', value: 'ru-RU' },
@@ -84,5 +110,3 @@ const submitHandler = async () => {
 	}
 }
 </script>
-
-<style scoped></style>

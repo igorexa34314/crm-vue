@@ -11,14 +11,18 @@ const DEFAULT_CURRENCY = import.meta.env.VITE_APP_DEFAULT_CURRENCY as CurrencyRa
 export interface UserCredentials {
 	uid: string;
 	email: string;
-	name: string;
+	displayName: string;
 }
 
 export const createUser = async ({ uid, ...user }: UserCredentials) => {
 	return setDoc(doc(col(db, 'users'), uid), {
 		info: {
 			bill: DEFAULT_BILL,
-			name: user.name,
+			displayName: user.displayName,
+			firstName: '',
+			lastName: '',
+			bio: '',
+			gender: 'unknown',
 			locale: 'ru-RU',
 			currency: DEFAULT_CURRENCY
 		} as UserInfo

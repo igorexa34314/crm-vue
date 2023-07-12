@@ -3,7 +3,9 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th v-for="h in tableHeaders" :key="h">{{ t(h) }}</th>
+				<th v-for="h in tableHeaders" :key="h"
+					@click="Object.keys(records[0]).includes(h) ? emit('sort', h as keyof RecordWithCategory) : null">{{
+						t(h) }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -55,6 +57,10 @@ const props = withDefaults(defineProps<{
 	startIndex: 1
 });
 
+const emit = defineEmits<{
+	(e: 'sort', field: keyof RecordWithCategory): void;
+}>();
+
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { push } = useRouter();
 const { smAndDown, xs } = useDisplay();
@@ -67,6 +73,9 @@ const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAn
 
 <style lang="scss" scoped>
 .records-table {
+	& thead tr th {
+		cursor: pointer;
+	}
 	& tbody tr {
 		cursor: pointer;
 		&:hover {

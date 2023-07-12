@@ -43,5 +43,3 @@ const { xs } = useDisplay();
 const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });
 const currencies = computed(() => Object.keys(props.rates || {}) as CurrencyRates[]);
 </script>
-
-<style scoped></style>

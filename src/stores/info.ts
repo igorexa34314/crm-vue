@@ -6,7 +6,11 @@ import { Locales } from '@/plugins/i18n';
 export interface UserInfo {
 	bill: number;
 	locale: Locales;
-	name: string;
+	displayName: string;
+	firstName: string;
+	lastName: string;
+	gender: 'male' | 'female' | 'unknown';
+	bio?: string;
 	currency: CurrencyRates;
 }
 

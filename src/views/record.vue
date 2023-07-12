@@ -57,5 +57,3 @@ const create = async (formData: Omit<Record, 'date'>) => {
 	}
 }
 </script>
-
-<style scoped></style>

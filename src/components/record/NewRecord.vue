@@ -93,5 +93,3 @@ const resetForm = () => {
 	formState.value.amount = Math.round(cf.value(props.defaultAmount) / 100) * 100;
 }
 </script>
-
-<style scoped></style>

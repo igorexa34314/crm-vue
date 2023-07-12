@@ -27,7 +27,7 @@ export const login = async ({ email, password }: UserCredentials) => {
 export const register = async ({ email, password, name }: UserCredentials) => {
 	try {
 		const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
-		await createUser({ uid: user.uid, email, name: name || '' });
+		await createUser({ uid: user.uid, email, displayName: name || '' });
 	} catch (e) {
 		errorHandler(e);
 	}
@@ -43,7 +43,7 @@ export const signInWithGoogle = async () => {
 	try {
 		const provider = new GoogleAuthProvider();
 		const user = (await signInWithPopup(auth, provider)).user;
-		await createUser({ uid: user.uid, email: user.email || '', name: user.displayName || '' });
+		await createUser({ uid: user.uid, email: user.email || '', displayName: user.displayName || '' });
 	} catch (e) {
 		errorHandler(e);
 	}

@@ -36,5 +36,3 @@ const links = ref<NavLink[]>([
 	{ title: 'categories', url: '/categories' },
 ]);
 </script>
-
-<style scoped></style>

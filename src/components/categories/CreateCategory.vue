@@ -76,5 +76,3 @@ const submitHandler = async () => {
 	}
 }
 </script>
-
-<style scoped></style>

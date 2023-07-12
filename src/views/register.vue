@@ -7,12 +7,12 @@
 					required />
 				<LocalizedInput v-model="formState.password" :rules="validations.password" variant="underlined"
 					:label="t('password')" class="mt-5" validate-on="lazy blur" required />
-				<LocalizedInput v-model="formState.name" :rules="validations.name" variant="underlined" :counter="20"
-					:label="t('name')" class="mt-5" validate-on="lazy blur" required />
+				<LocalizedInput v-model="formState.name" :rules="validations.displayName" variant="underlined" :counter="20"
+					:label="t('displayName')" class="mt-5" validate-on="lazy blur" required />
 				<v-checkbox v-model="formState.agree" :rules="validations.agree" class="mt-5" validate-on="lazy blur" required>
 					<template #label>
 						<p>{{ t('agree_with').charAt(0).toUpperCase() + t('agree_with').slice(1) + ' ' }}<a target="_blank"
-								href="https://old.uinp.gov.ua/publication/derzhavnii-gimn-ukraini">{{ t('rules') }}</a>
+								href="https://old.uinp.gov.ua/publication/derzhavnii-gimn-ukraini">{{ t('app_rules') }}</a>
 						</p>
 					</template>
 				</v-checkbox>
@@ -72,7 +72,7 @@ const submitHandler = async () => {
 }
 </script>
 
-<style scoped></style>
+
 
 <route lang="yaml">
 meta:

@@ -17,7 +17,7 @@
 		</div>
 
 		<section v-else class="mt-6">
-			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage" />
+			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage" @sort="field => sortProp = field" />
 
 			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
 				:total-visible="4" class="mt-4" density="comfortable" />
@@ -61,10 +61,15 @@ finally {
 	isLoading.value = false;
 }
 
-const recordsWithCategory = computed(() => records.value?.map(r => ({
+const sortProp = ref<keyof RecordWithCategory>();
+
+const recordsWithCategory = computed(() => records.value?.map(({ categoryId, ...r }) => ({
 	...r,
-	category: categories.value?.find(cat => cat.id === r.categoryId)?.title,
-}) as RecordWithCategory));
+	category: categories.value?.find(cat => cat.id === categoryId)?.title,
+}) as RecordWithCategory).toSorted(sortProp.value ? sortRecords(sortProp.value) : undefined));
+
+const sortRecords = <R extends RecordWithCategory, K extends keyof R>(prop: K) => (a: R, b: R) => typeof a[prop] === 'string' ? (a[prop] as string).localeCompare(b[prop] as string) :
+	+a[prop] - +b[prop];
 
 // Init Records table pagination
 const perPage = 5;

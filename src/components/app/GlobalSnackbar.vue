@@ -34,5 +34,3 @@ $onAction(({ name, store, after }) => {
 	})
 });
 </script>
-
-<style scoped></style>

@@ -11,7 +11,7 @@
 					{{ t('login') }}</v-btn>
 			</v-form>
 
-			<v-btn variant="elevated" @click="signInWithGoogle" class="mt-4" size="large" location="center bottom"
+			<v-btn variant="elevated" @click="signInWithGoogle" class="mt-4" size="large" location="bottom center"
 				rounded><v-img :src="googleProvider" aspect-ratio="1" max-width="32" /></v-btn>
 		</v-card-text>
 		<v-card-actions class="mt-3 justify-center">
@@ -65,7 +65,7 @@ const submitHandler = async () => {
 }
 </script>
 
-<style scoped></style>
+
 
 <route lang="yaml">
 meta:

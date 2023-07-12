@@ -24,9 +24,15 @@ const cssProps = computed(() => ({
 	position: relative;
 	width: 80px;
 	height: 80px;
+	@media(max-width:960px) {
+		transform: scale(0.7);
+	}
 	&._page {
 		left: 50%;
 		transform: translate(-50%);
+		@media(max-width:960px) {
+			transform: translate(-50%) scale(0.7);
+		}
 	}
 	& div {
 		animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
