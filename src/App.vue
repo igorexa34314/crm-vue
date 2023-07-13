@@ -24,5 +24,5 @@ const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 </script>
 
 <style lang="scss">
-@import "./assets/styles.scss";
+@import "./assets/styles/main.scss";
 </style>

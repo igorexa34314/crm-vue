@@ -11,25 +11,27 @@ const DEFAULT_CURRENCY = import.meta.env.VITE_APP_DEFAULT_CURRENCY as CurrencyRa
 export interface UserCredentials {
 	uid: string;
 	email: string;
-	displayName: string;
+	username: string;
+	displayName?: string;
 }
 
-export const createUser = async ({ uid, ...user }: UserCredentials) => {
-	const isUserExists = (await getUserById(uid)).exists();
-	if (!isUserExists) {
-		return setDoc(doc(col(db, 'users'), uid), {
+export const createUser = async ({ uid, displayName, ...user }: UserCredentials) => {
+	return setDoc(
+		doc(col(db, 'users'), uid),
+		{
 			info: {
 				bill: DEFAULT_BILL,
-				displayName: user.displayName,
-				firstName: '',
-				lastName: '',
+				firstName: displayName?.split(' ').at(0) || '',
+				lastName: displayName?.split(' ').at(1) || '',
 				bio: '',
 				gender: 'unknown',
 				locale: 'ru-RU',
-				currency: DEFAULT_CURRENCY
+				currency: DEFAULT_CURRENCY,
+				...user
 			} as UserInfo
-		});
-	}
+		},
+		{ merge: true }
+	);
 };
 
 export const getUserById = async (uid: UserCredentials['uid']) => {
@@ -51,18 +53,25 @@ export const fetchInfo = async () => {
 		errorHandler(e);
 	}
 };
+
+export const updateUser = async (uid: UserCredentials['uid'], data: Partial<UserInfo>) => {
+	updateDoc(
+		doc(col(db, 'users'), uid),
+		Object.assign(
+			{},
+			...Object.keys(data).map(key => ({
+				[`info.${key}`]: data[key as keyof UserInfo]
+			}))
+		)
+	);
+};
+
 export const updateInfo = async (toUpdate: Partial<UserInfo>) => {
 	try {
 		const uid = await getUserId();
-		await updateDoc(
-			doc(col(db, 'users'), uid),
-			Object.assign(
-				{},
-				...Object.keys(toUpdate).map(key => ({
-					[`info.${key}`]: toUpdate[key as keyof UserInfo]
-				}))
-			)
-		);
+		if (uid) {
+			await updateUser(uid, toUpdate);
+		}
 	} catch (e) {
 		errorHandler(e);
 	}

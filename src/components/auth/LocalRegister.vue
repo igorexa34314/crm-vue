@@ -4,8 +4,8 @@
 			required />
 		<LocalizedInput v-model="formState.password" :rules="validations.password" variant="underlined"
 			:label="t('password')" class="mt-5" validate-on="lazy blur" required />
-		<LocalizedInput v-model="formState.name" :rules="validations.displayName" variant="underlined" :counter="20"
-			:label="t('displayName')" class="mt-5" validate-on="lazy blur" required />
+		<LocalizedInput v-model="formState.username" :rules="validations.username" variant="underlined" :counter="20"
+			:label="t('username')" class="mt-5" validate-on="lazy blur" required />
 		<v-checkbox v-model="formState.agree" :rules="validations.agree" class="mt-5" validate-on="lazy blur" required>
 			<template #label>
 				<p>{{ t('agree_with').charAt(0).toUpperCase() + t('agree_with').slice(1) + ' ' }}<a target="_blank"
@@ -39,7 +39,7 @@ const form = ref<VForm>();
 const formState = ref({
 	email: '',
 	password: '',
-	name: '',
+	username: '',
 	agree: false,
 });
 

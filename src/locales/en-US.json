@@ -1,39 +1,6 @@
 {
 	"date": "Date",
 	"exceeding": "Exceeding",
-	"user": {
-		"firstName": "Firstname",
-		"lastName": "Lastname",
-		"bio": "Bio",
-		"gender": {
-			"label": "Gender",
-			"male": "Male",
-			"female": "Female",
-			"unknown": "Unknown"
-		}
-	},
-	"messages": {
-		"enter_email": "Enter email",
-		"enter_pass": "Enter password",
-		"enter_limit": "Enter limit",
-		"enter_category_name": "Enter category name",
-		"enter_amount": "Enter amount",
-		"enter_displayName": "Enter name"
-	},
-	"rules": {
-		"displayName": "Name must be between 3 and 32 characters",
-		"pass": "Password must be between 6 and 32 characters",
-		"category": "Category name must be between 3 and 20 characters",
-		"limit": "Limit must be greater than 100",
-		"amount": "The amount cannot be less than 1",
-		"description": "Description should contain less than 2056 characters",
-		"email": "Enter correct email",
-		"agree": "You must agree to the rules",
-		"firstName": "First name must be between 2 and 64 characters",
-		"lastName": "Last name must be between 2 and 64 characters",
-		"bio": "Bio should be less than 2056 characters"
-	},
-	"app_rules": "rules",
 	"type": "Type",
 	"create_record": "Create record",
 	"user_not_found": "No user found with given email",
@@ -45,6 +12,7 @@
 	"need_login": "Need to sign in",
 	"limit": "Limit",
 	"create": "Create",
+	"app_rules": "rules",
 	"sign_in": "Sign up",
 	"error_message": "Something went wrong",
 	"no_categories": "There are no categories yet",
@@ -54,10 +22,17 @@
 	"home_bookkeeping": "Home bookkeeping",
 	"login_success": "You have successfully logged in",
 	"no_account": "Don't have an account",
-	"login_error": "Invalid username or password",
+	"login_error": "Invalid email or password",
 	"currency_account": "Currency account",
 	"left": "Left",
-	"displayName": "Display name",
+	"messages": {
+		"enter_email": "Enter email",
+		"enter_username": "Enter name",
+		"enter_category_name": "Enter category name",
+		"enter_limit": "Enter limit",
+		"enter_amount": "Enter amount",
+		"enter_pass": "Enter password"
+	},
 	"agree_with": "agree with",
 	"guest": "Guest",
 	"create_category": "Create category",
@@ -169,5 +144,33 @@
 		"USD": "USA Dollar",
 		"UAH": "Ukrainian hryvnia",
 		"RUB": "Russian ruble"
+	},
+	"user": {
+		"firstName": "First name",
+		"lastName": "Last name",
+		"gender": {
+			"label": "Gender",
+			"female": "Female",
+			"male": "Male",
+			"unknown": "Unknown"
+		},
+		"bio": "Bio",
+		"username": "User name"
+	},
+	"rules": {
+		"firstName": "@:user.firstName must be between 2 and 64 characters",
+		"lastName": "@:user.lastName name must be between 2 and 64 characters",
+		"amount": "The @:amount cannot be less than 1",
+		"pass": "@:password must be between 6 and 32 characters",
+		"limit": "@:limit must be greater than 100",
+		"bio": "@:user.bio should be less than 2056 characters",
+		"description": "@:description should contain less than 2056 characters",
+		"agree": "You must agree to the rules",
+		"category": "@:category name must be between 3 and 20 characters",
+		"email": "Enter correct email",
+		"username": {
+			"latinic": "@:user.username must contain only latinic characters",
+			"limit": "@:user.username must contain at least 4 characters"
+		}
 	}
 }

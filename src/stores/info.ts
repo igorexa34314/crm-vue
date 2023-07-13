@@ -4,9 +4,10 @@ import { CurrencyRates } from '@/services/currency';
 import { Locales } from '@/plugins/i18n';
 
 export interface UserInfo {
+	email: string;
 	bill: number;
 	locale: Locales;
-	displayName: string;
+	username: string;
 	firstName?: string;
 	lastName?: string;
 	gender: 'male' | 'female' | 'unknown';

@@ -10,9 +10,10 @@ export const category = {
 };
 
 export const user = {
-	displayName: [
-		(v: string) => !!v || 'messages.enter_displayName',
-		(v: string) => (v && v.length >= 3 && v.length <= 32) || 'rules.displayName'
+	username: [
+		(v: string) => !!v || 'messages.enter_username',
+		(v: string) => (v && /^[a-zA-Z]+$/.test(v)) || 'rules.username.latinic',
+		(v: string) => (v && v.length >= 4) || 'rules.username.limit'
 	],
 	firstName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.firstName'],
 	lastName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.lastName'],
