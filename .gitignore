@@ -33,3 +33,7 @@ dist/
 !.yarn/versions
 
 coverage/
+
+**/.firebase
+**/.firebaserc
+**/firebase-debug.log

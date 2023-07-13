@@ -12,6 +12,14 @@
 			"unknown": "Unknown"
 		}
 	},
+	"messages": {
+		"enter_email": "Enter email",
+		"enter_pass": "Enter password",
+		"enter_limit": "Enter limit",
+		"enter_category_name": "Enter category name",
+		"enter_amount": "Enter amount",
+		"enter_displayName": "Enter name"
+	},
 	"rules": {
 		"displayName": "Name must be between 3 and 32 characters",
 		"pass": "Password must be between 6 and 32 characters",
@@ -161,13 +169,5 @@
 		"USD": "USA Dollar",
 		"UAH": "Ukrainian hryvnia",
 		"RUB": "Russian ruble"
-	},
-	"messages": {
-		"enter_email": "Enter email",
-		"enter_pass": "Enter password",
-		"enter_limit": "Enter limit",
-		"enter_category_name": "Enter category name",
-		"enter_amount": "Enter amount",
-		"enter_displayName": "Enter name"
 	}
 }

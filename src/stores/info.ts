@@ -7,8 +7,8 @@ export interface UserInfo {
 	bill: number;
 	locale: Locales;
 	displayName: string;
-	firstName: string;
-	lastName: string;
+	firstName?: string;
+	lastName?: string;
 	gender: 'male' | 'female' | 'unknown';
 	bio?: string;
 	currency: CurrencyRates;

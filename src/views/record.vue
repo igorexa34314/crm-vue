@@ -11,7 +11,7 @@
 			<router-link to="/categories">{{ t('create_category') }}</router-link>
 		</div>
 
-		<NewRecord v-else v-bind="{ categories, defaultAmount: 100 }" @create-record="create" />
+		<NewRecord v-else v-bind="{ categories, defaultAmount: 5 }" @create-record="create" />
 	</div>
 </template>
 

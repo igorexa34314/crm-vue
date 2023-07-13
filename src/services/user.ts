@@ -1,6 +1,6 @@
 import { errorHandler } from '@/utils/errorHandler';
 import { db } from '@/firebase';
-import { doc, collection as col, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, collection as col, onSnapshot, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { useInfoStore, UserInfo } from '@/stores/info';
 import { getUserId } from '@/services/auth';
 import { CurrencyRates } from '@/services/currency';
@@ -15,18 +15,25 @@ export interface UserCredentials {
 }
 
 export const createUser = async ({ uid, ...user }: UserCredentials) => {
-	return setDoc(doc(col(db, 'users'), uid), {
-		info: {
-			bill: DEFAULT_BILL,
-			displayName: user.displayName,
-			firstName: '',
-			lastName: '',
-			bio: '',
-			gender: 'unknown',
-			locale: 'ru-RU',
-			currency: DEFAULT_CURRENCY
-		} as UserInfo
-	});
+	const isUserExists = (await getUserById(uid)).exists();
+	if (!isUserExists) {
+		return setDoc(doc(col(db, 'users'), uid), {
+			info: {
+				bill: DEFAULT_BILL,
+				displayName: user.displayName,
+				firstName: '',
+				lastName: '',
+				bio: '',
+				gender: 'unknown',
+				locale: 'ru-RU',
+				currency: DEFAULT_CURRENCY
+			} as UserInfo
+		});
+	}
+};
+
+export const getUserById = async (uid: UserCredentials['uid']) => {
+	return getDoc(doc(col(db, 'users'), uid));
 };
 
 export const fetchInfo = async () => {

@@ -14,9 +14,9 @@ export const user = {
 		(v: string) => !!v || 'messages.enter_displayName',
 		(v: string) => (v && v.length >= 3 && v.length <= 32) || 'rules.displayName'
 	],
-	firstName: [(v: string) => (v && v.length >= 2 && v.length <= 64) || 'rules.firstName'],
-	lastName: [(v: string) => (v && v.length >= 2 && v.length <= 64) || 'rules.lastName'],
-	bio: [(v: string) => (v && v.length <= 2056) || 'rules.bio'],
+	firstName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.firstName'],
+	lastName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.lastName'],
+	bio: [(v: string) => !v || (v && v.length <= 2056) || 'rules.bio'],
 	email: [
 		(v: string) => !!v || 'messages.enter_email',
 		(v: string) =>

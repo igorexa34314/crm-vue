@@ -1,5 +1,5 @@
 <template>
-	<v-textarea v-bind="{ variant }">
+	<v-textarea v-bind="{ variant }" validate-on="blur lazy">
 		<template #message="{ message }">
 			{{ t(message) }}
 		</template>

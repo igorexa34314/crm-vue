@@ -5,6 +5,7 @@
 				<v-card-title class="mx-3 mt-3">{{ t('exchange_rate') }}</v-card-title>
 			</v-card-item>
 			<v-card-text>
+
 				<v-table class="bg-transparent" :density="xs ? 'comfortable' : 'default'">
 					<thead>
 						<tr>

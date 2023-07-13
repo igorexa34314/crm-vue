@@ -3,11 +3,14 @@
 		<div class="subtitle">
 			<h4 class="text-h5 mb-7">{{ t('create') }}</h4>
 		</div>
+
 		<v-form ref="form" @submit.prevent="submitHandler">
 			<LocalizedInput v-model="formState.title" :rules="validations.title" variant="underlined" :label="t('title')"
 				required />
+
 			<LocalizedInput v-model.number="formState.limit" :rules="validations.limit" variant="underlined" type="number"
 				:label="t('limit') + ` (${userCurrency})`" class="mt-6" required />
+
 			<v-btn color="green-darken-3" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
 				{{ t('create') }}
 				<v-icon :icon="mdiSend" class="ml-3" />

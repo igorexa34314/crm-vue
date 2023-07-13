@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<{
 	defaultAmount?: number,
 	defaultType?: Record['type'],
 }>(), {
-	defaultAmount: 100,
+	defaultAmount: 5,
 	defaultType: 'outcome'
 });
 

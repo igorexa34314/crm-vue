@@ -39,11 +39,15 @@ export const getUserId = async () => {
 	}
 	return;
 };
-export const signInWithGoogle = async () => {
+export const signInWithGooglePopup = async () => {
 	try {
 		const provider = new GoogleAuthProvider();
 		const user = (await signInWithPopup(auth, provider)).user;
-		await createUser({ uid: user.uid, email: user.email || '', displayName: user.displayName || '' });
+		await createUser({
+			uid: user.uid,
+			email: user.email || '',
+			displayName: user.displayName || ''
+		});
 	} catch (e) {
 		errorHandler(e);
 	}

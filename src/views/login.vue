@@ -1,19 +1,15 @@
 <template>
 	<v-card max-width="450" width="100%" class="pa-4">
 		<v-card-title class="text-center">{{ t('home_bookkeeping') }}</v-card-title>
-		<v-card-text>
-			<v-form @submit.prevent="submitHandler" ref="form">
-				<LocalizedInput v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email"
-					class="mt-4" required validate-on="lazy blur" />
-				<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined"
-					label="Пароль" class="mt-6" required validate-on="lazy blur" />
-				<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" :append-icon="mdiSend">
-					{{ t('login') }}</v-btn>
-			</v-form>
 
-			<v-btn variant="elevated" @click="signInWithGoogle" class="mt-4" size="large" location="bottom center"
-				rounded><v-img :src="googleProvider" aspect-ratio="1" max-width="32" /></v-btn>
+		<v-card-text>
+			<LocalLogin @success="onLoginSuccess" @error="onLoginError" />
+
+			<div class="providers d-flex align-center mt-6 justify-center">
+				<GoogleProvider @success="onLoginSuccess" @error="onLoginError" />
+			</div>
 		</v-card-text>
+
 		<v-card-actions class="mt-3 justify-center">
 			<div class="text-center text-subtitle-1">
 				{{ t('no_account') + '? ' }}
@@ -25,18 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import googleProvider from '@/assets/img/google-provider.png'
-import LocalizedInput from '@/components/UI/LocalizedInput.vue';
+import LocalLogin from '@/components/auth/LocalLogin.vue';
+import GoogleProvider from '@/components/auth/providers/GoogleProvider.vue';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
 import { useMeta } from 'vue-meta';
-import { mdiSend } from '@mdi/js';
-import { login, signInWithGoogle } from '@/services/auth';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
-import { user as validations } from '@/utils/validations';
 import messages from '@/utils/fbMessages.json';
-import { VForm } from 'vuetify/components';
 
 useMeta({ title: 'login' });
 
@@ -44,28 +35,14 @@ const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { push } = useRouter();
 const { showMessage } = useSnackbarStore();
 
-const form = ref<VForm>();
-
-const formState = ref({
-	email: '',
-	password: ''
-});
-
-const submitHandler = async () => {
-	const valid = (await form.value?.validate())?.valid;
-	if (valid) {
-		try {
-			await login(formState.value);
-			showMessage(t('login_success'));
-			push('/');
-		} catch (e) {
-			showMessage(messages[e as keyof typeof messages] || t('login_error'));
-		}
-	}
+const onLoginSuccess = () => {
+	showMessage(t('login_success'));
+	push('/');
+}
+const onLoginError = (e: unknown) => {
+	showMessage(messages[e as keyof typeof messages] || t('login_error'));
 }
 </script>
-
-
 
 <route lang="yaml">
 meta:
