@@ -17,7 +17,8 @@
 		</div>
 
 		<section v-else class="mt-6">
-			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage" @sort="field => sortProp = field" />
+			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage"
+				@sort="(field, type) => { sortProp = field; sortType = type }" />
 
 			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
 				:total-visible="4" class="mt-4" density="comfortable" />
@@ -66,10 +67,11 @@ const sortProp = ref<keyof RecordWithCategory>();
 const recordsWithCategory = computed(() => records.value?.map(({ categoryId, ...r }) => ({
 	...r,
 	category: categories.value?.find(cat => cat.id === categoryId)?.title,
-}) as RecordWithCategory).toSorted(sortProp.value ? sortRecords(sortProp.value) : undefined));
+}) as RecordWithCategory).toSorted(sortProp.value ? sortRecords(sortProp.value, sortType.value) : undefined));
+const sortType = ref<'acs' | 'desc'>('acs');
 
-const sortRecords = <R extends RecordWithCategory, K extends keyof R>(prop: K) => (a: R, b: R) => typeof a[prop] === 'string' ? (a[prop] as string).localeCompare(b[prop] as string) :
-	+a[prop] - +b[prop];
+const sortRecords = <R extends RecordWithCategory, K extends keyof R>(prop: K, type: 'desc' | 'acs' = 'acs') => (a: R, b: R) => typeof a[prop] === 'string' ? ((type === 'acs' ? a[prop] : b[prop]) as string).localeCompare((type === 'acs' ? b[prop] : a[prop]) as string) :
+	(type === 'acs' ? +a[prop] - +b[prop] : +b[prop] - +a[prop]);
 
 // Init Records table pagination
 const perPage = 5;

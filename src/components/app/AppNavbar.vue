@@ -11,8 +11,8 @@
 			<template #activator="{ props }">
 				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="mr-7"
 					:append-icon="mdiTriangleSmallDown">
-					<div v-if="displayName" class="text-capitalize text-subtitle-1 font-weight-bold">{{ displayName }}</div>
-					<div v-else class="text-capitalize text-subtitle-1">{{ t('guest') }}</div>
+					<div class="text-subtitle-1 font-weight-bold">{{ username }}
+					</div>
 				</v-btn>
 			</template>
 			<v-list density="comfortable">
@@ -49,7 +49,9 @@ const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { push } = useRouter();
 const infoStore = useInfoStore();
 
-const displayName = computed(() => infoStore.info?.displayName);
+const username = computed(() => infoStore.info ?
+	`${infoStore.info?.username}`
+	: t('guest'));
 const date = ref(new Date());
 
 let dateInterval: NodeJS.Timer;

@@ -4,11 +4,14 @@
 			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.profile') }}</h3>
 		</div>
 		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
+			<LocalizedInput v-model="formState.username" :rules="user.username" variant="underlined"
+				:label="t('user.username')" class="mb-5" required />
+
 			<div class="d-flex flex-column items-center mb-4 flex-sm-row">
 				<LocalizedInput v-model="formState.firstName" :rules="user.firstName" variant="underlined"
-					:label="t('user.firstName')" class="mr-sm-3" required />
+					:label="t('user.firstName')" class="mr-sm-3" />
 				<LocalizedInput v-model="formState.lastName" :rules="user.lastName" variant="underlined"
-					:label="t('user.lastName')" class="ml-sm-3" required />
+					:label="t('user.lastName')" class="ml-sm-3" />
 			</div>
 
 			<v-radio-group v-model="formState.gender" :label="t('user.gender.label')">
@@ -68,8 +71,8 @@ const info = computed(() => infoStore.info);
 
 const form = ref<VForm>();
 
-const formState = ref<Omit<UserInfo, 'bill'>>({
-	displayName: '',
+const formState = ref<Omit<UserInfo, 'bill' | 'email'>>({
+	username: '',
 	firstName: '',
 	lastName: '',
 	bio: '',

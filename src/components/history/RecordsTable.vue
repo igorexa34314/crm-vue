@@ -4,7 +4,7 @@
 			<tr>
 				<th>#</th>
 				<th v-for="h in tableHeaders" :key="h"
-					@click="Object.keys(records[0]).includes(h) ? emit('sort', h as keyof RecordWithCategory) : null">{{
+					@click="Object.keys(records[0]).includes(h) ? emit('sort', h as keyof RecordWithCategory, 'acs') : null">{{
 						t(h) }}</th>
 			</tr>
 		</thead>
@@ -58,7 +58,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	(e: 'sort', field: keyof RecordWithCategory): void;
+	(e: 'sort', field: keyof RecordWithCategory, sortType: 'acs' | 'desc'): void;
 }>();
 
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
