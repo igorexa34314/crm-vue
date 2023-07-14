@@ -3,9 +3,11 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th v-for="h in tableHeaders" :key="h"
-					@click="Object.keys(records[0]).includes(h) ? emit('sort', h as keyof RecordWithCategory, 'acs') : null">{{
-						t(h) }}</th>
+				<th v-for="h in tableHeaders" :key="h" @click="triggerSort(h as keyof RecordWithCategory)" class="">
+					<span>{{ t(h) }}</span>
+					<v-icon v-if="sort.prop === h" :icon="sort.type === 'asc' ? mdiMenuUp : mdiMenuDown" size="small"
+						class="ml-1" />
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -40,25 +42,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { mdiOpenInNew, mdiTrendingUp, mdiTrendingDown } from '@mdi/js';
+import { mdiOpenInNew, mdiTrendingUp, mdiTrendingDown, mdiMenuUp, mdiMenuDown } from '@mdi/js';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useInfoStore } from '@/stores/info';
 import { RecordWithCategory } from '@/views/history.vue';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { useDisplay } from 'vuetify';
+import { toRef } from 'vue';
 
 const props = withDefaults(defineProps<{
 	records: RecordWithCategory[],
 	startIndex?: number,
+	sort?: { prop: keyof RecordWithCategory; type: 'asc' | 'desc' }
 }>(), {
-	startIndex: 1
+	startIndex: 1,
+	sort: () => ({ prop: 'date', type: 'desc' })
 });
 
 const emit = defineEmits<{
-	(e: 'sort', field: keyof RecordWithCategory, sortType: 'acs' | 'desc'): void;
+	(e: 'update:sort', val: { prop: keyof RecordWithCategory; type: 'asc' | 'desc' }): void;
 }>();
 
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -67,7 +72,17 @@ const { smAndDown, xs } = useDisplay();
 const { currencyFilter: cf } = useCurrencyFilter();
 const { userCurrency } = storeToRefs(useInfoStore());
 
-
+const triggerSort = (prop: keyof RecordWithCategory) => {
+	if (Object.keys(props.records[0]).includes(prop)) {
+		if (prop === props.sort.prop) {
+			const type = props.sort.type === 'asc' ? 'desc' : 'asc';
+			emit('update:sort', { prop, type });
+		}
+		else {
+			emit('update:sort', { prop, type: 'desc' });
+		}
+	}
+};
 const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAndDown.value ? '' : 'open'].filter(Boolean)));
 </script>
 
@@ -84,7 +99,7 @@ const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAn
 	}
 	& .record {
 		&-category {
-			max-width: 420px;
+			max-width: 400px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			@media(max-width: 1600px) {

@@ -17,8 +17,7 @@
 		</div>
 
 		<section v-else class="mt-6">
-			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage"
-				@sort="(field, type) => { sortProp = field; sortType = type }" />
+			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage" v-model:sort="sortState" />
 
 			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
 				:total-visible="4" class="mt-4" density="comfortable" />
@@ -39,8 +38,9 @@ import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useChart } from '@/composables/useChart';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
+import { orderBy } from 'lodash';
 
-export type RecordWithCategory = Record & { category: Category['title'] };
+export type RecordWithCategory = Omit<Record, 'categoryId'> & { category: Category['title'] };
 
 useMeta({ title: 'pageTitles.history' });
 
@@ -62,16 +62,15 @@ finally {
 	isLoading.value = false;
 }
 
-const sortProp = ref<keyof RecordWithCategory>();
+const sortState = ref<{ prop: keyof RecordWithCategory; type: 'asc' | 'desc' }>({
+	prop: 'date',
+	type: 'desc'
+});
 
-const recordsWithCategory = computed(() => records.value?.map(({ categoryId, ...r }) => ({
+const recordsWithCategory = computed(() => orderBy(records.value?.map<RecordWithCategory>(({ categoryId, ...r }) => ({
 	...r,
-	category: categories.value?.find(cat => cat.id === categoryId)?.title,
-}) as RecordWithCategory).sort(sortProp.value ? sortRecords(sortProp.value, sortType.value) : undefined));
-const sortType = ref<'acs' | 'desc'>('acs');
-
-const sortRecords = <R extends RecordWithCategory, K extends keyof R>(prop: K, type: 'desc' | 'acs' = 'acs') => (a: R, b: R) => typeof a[prop] === 'string' ? ((type === 'acs' ? a[prop] : b[prop]) as string).localeCompare((type === 'acs' ? b[prop] : a[prop]) as string) :
-	(type === 'acs' ? +a[prop] - +b[prop] : +b[prop] - +a[prop]);
+	category: categories.value?.find(cat => cat.id === categoryId)?.title || '',
+})), [sortState.value.prop], sortState.value.type));
 
 // Init Records table pagination
 const perPage = 5;
@@ -85,9 +84,9 @@ const catsAmount = computed(() => {
 				acc += +r.amount;
 			}
 			return acc;
-		}, 0) as number;
-		return cf.value(amount);
-	}) as number[];
+		}, 0);
+		return cf.value(amount || 0);
+	});
 });
 
 const { chartData, chartOptions } = useChart(catsTitle, catsAmount);

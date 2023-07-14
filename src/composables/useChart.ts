@@ -6,8 +6,8 @@ import { useI18n } from 'vue-i18n';
 import { randomColor } from 'randomcolor';
 
 export const useChart = <T extends ChartType = 'pie'>(
-	labels: MaybeRef<ChartData<T>['labels']>,
-	data: MaybeRef<ChartData<T>['datasets'][number]['data']>
+	labels: MaybeRef<ChartData<T>['labels'] | undefined>,
+	data: MaybeRef<ChartData<T>['datasets'][number]['data'] | undefined>
 ) => {
 	ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
@@ -42,11 +42,11 @@ export const useChart = <T extends ChartType = 'pie'>(
 	const chartData = computed<ChartData>(
 		() =>
 			({
-				labels: unref(labels),
+				labels: unref(labels) || [],
 				datasets: [
 					{
-						data: unref(data),
-						backgroundColor: randomColor({ count: unref(data).length || 1 }),
+						data: unref(data || []),
+						backgroundColor: randomColor({ count: unref(data)?.length || 1 }),
 						borderColor: '#8D6E63'
 					}
 				]
