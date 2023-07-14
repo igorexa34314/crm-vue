@@ -1,59 +1,29 @@
 {
-	"en-US": {
-		"shortdate": {
-			"year": "numeric",
-			"month": "2-digit",
-			"day": "2-digit"
-		},
-		"short": {
-			"year": "numeric",
-			"month": "long",
-			"day": "2-digit"
-		},
-		"long": {
-			"year": "2-digit",
-			"month": "2-digit",
-			"weekday": "long",
-			"hour": "2-digit",
-			"minute": "2-digit"
-		}
+	"shortdate": {
+		"year": "numeric",
+		"month": "2-digit",
+		"day": "2-digit"
 	},
-	"ru-RU": {
-		"shortdate": {
-			"year": "numeric",
-			"month": "2-digit",
-			"day": "2-digit"
-		},
-		"short": {
-			"year": "numeric",
-			"month": "long",
-			"day": "2-digit"
-		},
-		"long": {
-			"year": "2-digit",
-			"month": "2-digit",
-			"weekday": "long",
-			"hour": "2-digit",
-			"minute": "2-digit"
-		}
+	"short": {
+		"year": "numeric",
+		"month": "long",
+		"day": "2-digit"
 	},
-	"uk-UA": {
-		"shortdate": {
-			"year": "numeric",
-			"month": "2-digit",
-			"day": "2-digit"
-		},
-		"short": {
-			"year": "numeric",
-			"month": "long",
-			"day": "2-digit"
-		},
-		"long": {
-			"year": "2-digit",
-			"month": "2-digit",
-			"weekday": "long",
-			"hour": "2-digit",
-			"minute": "2-digit"
-		}
+	"long": {
+		"day": "2-digit",
+		"year": "2-digit",
+		"month": "2-digit",
+		"weekday": "long",
+		"hour": "2-digit",
+		"minute": "2-digit"
+	},
+	"daytime": {
+		"weekday": "long",
+		"hour": "2-digit",
+		"minute": "2-digit"
+	},
+	"time": {
+		"hour": "2-digit",
+		"minute": "2-digit"
 	}
 }

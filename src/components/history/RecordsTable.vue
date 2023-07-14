@@ -5,7 +5,7 @@
 				<th>#</th>
 				<th v-for="h in tableHeaders" :key="h" @click="triggerSort(h as keyof RecordWithCategory)" class="">
 					<span>{{ t(h) }}</span>
-					<v-icon v-if="sort.prop === h" :icon="sort.type === 'asc' ? mdiMenuUp : mdiMenuDown" size="small"
+					<v-icon v-if="sortProp === h" :icon="sortType === 'asc' ? mdiMenuUp : mdiMenuDown" size="small"
 						class="ml-1" />
 				</th>
 			</tr>
@@ -19,8 +19,8 @@
 				<td>
 					<span :class="rec.type === 'outcome' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
 						class="py-2 px-3 text-white text-center">
-						<v-icon :icon="rec.type === 'outcome' ? mdiTrendingDown : mdiTrendingUp"
-							:class="{ 'mr-2': !smAndDown }" />
+						<v-icon :icon="rec.type === 'outcome' ? mdiTrendingDown : mdiTrendingUp" :class="{ 'mr-2': !smAndDown }"
+							:size="xs ? 'small' : 'default'" />
 						{{ smAndDown ? '' :
 							rec.type === 'income' ? t('income').toLowerCase() :
 								t('outcome').toLowerCase()
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { mdiOpenInNew, mdiTrendingUp, mdiTrendingDown, mdiMenuUp, mdiMenuDown } from '@mdi/js';
 import { useI18n } from 'vue-i18n';
@@ -51,19 +51,18 @@ import { useInfoStore } from '@/stores/info';
 import { RecordWithCategory } from '@/views/history.vue';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { useDisplay } from 'vuetify';
-import { toRef } from 'vue';
 
 const props = withDefaults(defineProps<{
 	records: RecordWithCategory[],
 	startIndex?: number,
-	sort?: { prop: keyof RecordWithCategory; type: 'asc' | 'desc' }
+	sortProp?: keyof RecordWithCategory,
+	sortType?: 'asc' | 'desc',
 }>(), {
 	startIndex: 1,
-	sort: () => ({ prop: 'date', type: 'desc' })
 });
 
 const emit = defineEmits<{
-	(e: 'update:sort', val: { prop: keyof RecordWithCategory; type: 'asc' | 'desc' }): void;
+	(e: 'sort', prop: keyof RecordWithCategory): void;
 }>();
 
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -74,13 +73,7 @@ const { userCurrency } = storeToRefs(useInfoStore());
 
 const triggerSort = (prop: keyof RecordWithCategory) => {
 	if (Object.keys(props.records[0]).includes(prop)) {
-		if (prop === props.sort.prop) {
-			const type = props.sort.type === 'asc' ? 'desc' : 'asc';
-			emit('update:sort', { prop, type });
-		}
-		else {
-			emit('update:sort', { prop, type: 'desc' });
-		}
+		emit('sort', prop);
 	}
 };
 const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAndDown.value ? '' : 'open'].filter(Boolean)));
@@ -93,6 +86,7 @@ const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAn
 	}
 	& tbody tr {
 		cursor: pointer;
+		transition: all 0.2s ease-in 0s;
 		&:hover {
 			background-color: #E1F5FE;
 		}
@@ -111,8 +105,11 @@ const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAn
 			@media(max-width: 960px) {
 				max-width: 260px;
 			}
-			@media(max-width: 640px) {
+			@media(max-width: 760px) {
 				max-width: 200px;
+			}
+			@media(max-width: 640px) {
+				max-width: 150px;
 			}
 		}
 	}

@@ -9,7 +9,7 @@
 			</v-breadcrumbs>
 
 			<v-row class="mt-4">
-				<v-col cols="6" md="6" sm="12">
+				<v-col cols="6" md="6" sm="10" class="v-col-xs-12">
 					<v-card class="pa-3"
 						:color="recordWithCategory.type === 'outcome' ? 'orange-darken-4' : 'light-green-darken-2'">
 						<v-card-text class="text-subtitle-1">

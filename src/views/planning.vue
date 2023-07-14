@@ -9,13 +9,14 @@
 		<div v-else-if="catStats && !catStats.length" class="mt-10 text-center text-h6">{{
 			t('pageTitles.plan')
 		}}<router-link to="/categories">{{ t('no_categories') + '. ' }}</router-link></div>
+
 		<section v-else class="mt-10 px-4">
 			<div v-for="(cat, index) of catStats" :key="cat.id || index" class="mt-8">
 				<p class="d-flex flex-row align-center justify-space-between mb-3">
 					<strong class="font-weight-bold mr-4">{{ cat.title }}:</strong>
 					<span class="mr-4">
 						{{
-							n(cf(cat.spend), 'currency', userCurrency) + ' ' + t('out_of') + ' ' +
+							n(cf(cat.spend), 'currency', userCurrency) + ' ' + (xs ? '/' : t('out_of')) + ' ' +
 							n(cf(cat.limit), 'currency', userCurrency)
 						}}
 					</span>
@@ -42,11 +43,13 @@ import { useMeta } from 'vue-meta';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
+import { useDisplay } from 'vuetify';
 import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'pageTitles.plan' });
 
 const { t, n } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 const infoStore = useInfoStore();
 
 const { userCurrency } = storeToRefs(infoStore);

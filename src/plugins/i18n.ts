@@ -13,8 +13,13 @@ const i18n = createI18n({
 	locale: import.meta.env.VITE_APP_DEFAULT_LOCALE || 'en-US',
 	fallbackLocale: import.meta.env.VITE_APP_DEFAULT_LOCALE || 'en-US',
 	messages,
-	datetimeFormats: datetimeFormats as I18nOptions['datetimeFormats'],
-	numberFormats: numberFormats as I18nOptions['numberFormats']
+	numberFormats: numberFormats as I18nOptions['numberFormats'],
+	datetimeFormats: Object.assign(
+		{},
+		...availableLocales.map(locale => ({
+			[locale]: datetimeFormats
+		}))
+	)
 });
 
 export const setI18nLanguage = async (

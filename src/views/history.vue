@@ -16,11 +16,12 @@
 			<router-link to="/record">{{ t('create_record') }}</router-link>
 		</div>
 
-		<section v-else class="mt-6">
-			<RecordsTable :records="pagedRecords" :start-index="(page - 1) * perPage" v-model:sort="sortState" />
+		<section v-else class="mt-lg-6">
+			<RecordsTable :records="pagedRecords" v-bind="{ sortProp, sortType, startIndex: (page - 1) * perPage }"
+				@sort="sort" />
 
 			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
-				:total-visible="4" class="mt-4" density="comfortable" />
+				:total-visible="xs ? 3 : 4" class="mt-4" density="comfortable" :size="xs ? 'small' : 'default'" />
 		</section>
 	</div>
 </template>
@@ -38,13 +39,15 @@ import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useChart } from '@/composables/useChart';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
-import { orderBy } from 'lodash';
+import { useSort } from '@/composables/useSort';
+import { useDisplay } from 'vuetify';
 
 export type RecordWithCategory = Omit<Record, 'categoryId'> & { category: Category['title'] };
 
 useMeta({ title: 'pageTitles.history' });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 const { currencyFilter: cf } = useCurrencyFilter();
 const records = ref<Record[]>();
 const categories = ref<Category[]>();
@@ -62,19 +65,17 @@ finally {
 	isLoading.value = false;
 }
 
-const sortState = ref<{ prop: keyof RecordWithCategory; type: 'asc' | 'desc' }>({
-	prop: 'date',
-	type: 'desc'
-});
-
-const recordsWithCategory = computed(() => orderBy(records.value?.map<RecordWithCategory>(({ categoryId, ...r }) => ({
+const recordsWithCategory = computed(() => records.value?.map<RecordWithCategory>(({ categoryId, ...r }) => ({
 	...r,
 	category: categories.value?.find(cat => cat.id === categoryId)?.title || '',
-})), [sortState.value.prop], sortState.value.type));
+})));
+
+// Sort records
+const { sortedRecords, sortProp, sortType, sort } = useSort(recordsWithCategory, 'date');
 
 // Init Records table pagination
 const perPage = 5;
-const { page, pageCount, pageChangeHandler, items: pagedRecords } = usePagination(recordsWithCategory, perPage);
+const { page, pageCount, pageChangeHandler, items: pagedRecords } = usePagination(sortedRecords, perPage);
 
 const catsTitle = computed(() => categories.value?.map(c => c.title));
 const catsAmount = computed(() => {

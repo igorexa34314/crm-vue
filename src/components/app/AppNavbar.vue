@@ -4,7 +4,7 @@
 			<v-app-bar-nav-icon color="blue-grey-darken-3" @click.stop="emit('click')" />
 		</template>
 		<v-app-bar-title class="mt-1 text-blue-grey-darken-3">
-			{{ d(date, 'long') }}
+			{{ d(date, xs ? 'time' : smAndDown ? 'daytime' : 'long') }}
 		</v-app-bar-title>
 		<v-spacer />
 		<v-menu>
@@ -39,6 +39,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
 const emit = defineEmits<{
 	(e: 'logout'): void;
@@ -46,6 +47,7 @@ const emit = defineEmits<{
 }>();
 
 const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs, smAndDown } = useDisplay();
 const { push } = useRouter();
 const infoStore = useInfoStore();
 

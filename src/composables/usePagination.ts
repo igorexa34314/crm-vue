@@ -1,12 +1,12 @@
-import { MaybeRef, ref, watchEffect, unref } from 'vue';
+import { MaybeRef, ref, watchEffect, unref, onUnmounted } from 'vue';
 import { chunk, size } from 'lodash';
 import { useRouter, useRoute } from 'vue-router';
 
 export const usePagination = <T>(initialItems: MaybeRef<T[] | undefined>, perPage = 5) => {
 	const { push } = useRouter();
-	const { query } = useRoute();
+	const route = useRoute();
 
-	const page = ref(+(query.page || 1));
+	const page = ref(+(route.query.page || 1));
 	const pageCount = ref(0);
 	const items = ref<T[]>();
 	const allItems = ref<T[][]>();
@@ -17,7 +17,7 @@ export const usePagination = <T>(initialItems: MaybeRef<T[] | undefined>, perPag
 		items.value = allItems.value[page.value - 1] || allItems.value[0];
 	};
 	const pageChangeHandler = (page: number) => {
-		push({ query: { page } });
+		push({ query: { ...route.query, page } });
 		items.value = allItems.value?.[page - 1] || allItems.value?.[0];
 	};
 	watchEffect(() => {
@@ -25,6 +25,9 @@ export const usePagination = <T>(initialItems: MaybeRef<T[] | undefined>, perPag
 			initPagination();
 		}
 	});
+
+	onUnmounted(() => push({ query: undefined }));
+
 	return {
 		items,
 		page,
