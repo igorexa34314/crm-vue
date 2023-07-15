@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="subtitle">
-			<h4 class="text-h5 mb-7">{{ t('edit') }}</h4>
+			<h4 class="text-h5 mb-7 text-subtitle">{{ t('edit') }}</h4>
 		</div>
 
 		<v-form ref="form" @submit.prevent="submitHandler">
@@ -14,7 +14,7 @@
 			<LocalizedInput v-model="currentCategory.limit" :rules="validations.limit" variant="underlined" type="number"
 				:label="t('limit') + ` (${userCurrency})`" class="mt-6" required />
 
-			<v-btn color="light-green-darken-4" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
+			<v-btn color="success" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
 				{{ t('update') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>

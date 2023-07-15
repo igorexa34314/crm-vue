@@ -1,7 +1,8 @@
-import { computed, unref, MaybeRef } from 'vue';
+import { computed, unref, MaybeRef, toRef } from 'vue';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { useI18n } from 'vue-i18n';
+import { useTheme } from 'vuetify';
 // @ts-ignore
 import { randomColor } from 'randomcolor';
 
@@ -12,6 +13,7 @@ export const useChart = <T extends ChartType = 'pie'>(
 	ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 	const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+	const theme = useTheme();
 
 	const chartOptions = computed<ChartOptions>(() => ({
 		responsive: true,
@@ -30,7 +32,7 @@ export const useChart = <T extends ChartType = 'pie'>(
 			title: {
 				display: true,
 				text: t('chart_title'),
-				color: '#D50000',
+				color: theme.global.current.value.dark ? '#B8C7D3' : '#D50000',
 				font: {
 					size: 22,
 					lineHeight: '1.5'
@@ -46,8 +48,12 @@ export const useChart = <T extends ChartType = 'pie'>(
 				datasets: [
 					{
 						data: unref(data || []),
-						backgroundColor: randomColor({ count: unref(data)?.length || 1 }),
-						borderColor: '#8D6E63'
+						backgroundColor: randomColor({
+							count: unref(data)?.length || 1,
+							hue: theme.global.current.value.dark ? '#0E5578' : 'random',
+							luminosity: theme.global.current.value.dark ? 'light' : 'bright'
+						}),
+						borderColor: theme.global.current.value.dark ? '#143c53' : '#8D6E63'
 					}
 				]
 			} as unknown as ChartData<T>)

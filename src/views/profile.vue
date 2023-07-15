@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="title">
+		<div class="title text-title">
 			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.profile') }}</h3>
 		</div>
 		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
@@ -29,7 +29,7 @@
 					item-value="value" variant="underlined" class="ml-sm-4" />
 			</div>
 
-			<v-btn type="submit" color="teal-darken-2" :class="xs ? 'mt-3' : 'mt-5'">
+			<v-btn type="submit" color="success" :class="xs ? 'mt-3' : 'mt-5'">
 				{{ t('update') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>

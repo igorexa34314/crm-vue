@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.history') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2 text-title">{{ t('pageTitles.history') }}</h3>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
@@ -21,7 +21,8 @@
 				@sort="sort" />
 
 			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
-				:total-visible="xs ? 3 : 4" class="mt-4" density="comfortable" :size="xs ? 'small' : 'default'" />
+				:total-visible="xs ? 3 : 4" class="mt-4" density="comfortable" :size="xs ? 'small' : 'default'"
+				color="primary" />
 		</section>
 	</div>
 </template>

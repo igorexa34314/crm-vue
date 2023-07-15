@@ -15,7 +15,7 @@
 		<LocalizedTextarea v-model="formState.description" :rules="validations.description" variant="underlined"
 			:label="t('description')" class="mt-2" rows="1" auto-grow />
 
-		<v-btn type="submit" color="light-blue-darken-4" :class="xs ? 'mt-4' : 'mt-7'">
+		<v-btn type="submit" color="success" :class="xs ? 'mt-4' : 'mt-7'">
 			{{ t('create') }}
 			<v-icon :icon="mdiSend" class="ml-3" />
 		</v-btn>

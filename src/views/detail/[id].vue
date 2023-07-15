@@ -11,8 +11,8 @@
 			<v-row class="mt-4">
 				<v-col cols="6" md="6" sm="10" class="v-col-xs-12">
 					<v-card class="pa-3"
-						:color="recordWithCategory.type === 'outcome' ? 'orange-darken-4' : 'light-green-darken-2'">
-						<v-card-text class="text-subtitle-1">
+						:color="recordWithCategory.type === 'outcome' ? 'red-lighten-1' : 'light-green-darken-2'">
+						<v-card-text class="text-subtitle-1 text-primary">
 							<p>{{ t('description') + ': ' + recordWithCategory.description }}</p>
 							<p class="mt-3">{{ t('amount') + ': ' + n(cf(recordWithCategory.amount), 'currency', userCurrency)
 							}}
@@ -25,7 +25,7 @@
 				</v-col>
 			</v-row>
 		</div>
-		<div v-else class="mt-7 text-center text-deep-purple-darken-4 text-h6">
+		<div v-else class="mt-7 text-center text-primary text-h6">
 			<strong>
 				Записи с id: <span class="text-decoration-underline font-italic">
 					{{ route.params.id }}</span>

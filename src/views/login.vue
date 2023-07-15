@@ -1,6 +1,6 @@
 <template>
-	<v-card max-width="450" width="100%" class="pa-4">
-		<v-card-title class="text-center">{{ t('home_bookkeeping') }}</v-card-title>
+	<v-card max-width="450" width="100%" class="pa-4" color="background">
+		<v-card-title class="text-center text-title">{{ t('home_bookkeeping') }}</v-card-title>
 
 		<v-card-text>
 			<LocalLogin @success="onLoginSuccess" @error="onLoginError" />
@@ -11,7 +11,7 @@
 		</v-card-text>
 
 		<v-card-actions class="mt-3 justify-center">
-			<div class="text-center text-subtitle-1">
+			<div class="text-center text-subtitle-1 text-primary">
 				{{ t('no_account') + '? ' }}
 				<router-link to="/register" tag="a">
 					{{ t('sign_in') }}</router-link>

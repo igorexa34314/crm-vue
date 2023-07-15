@@ -1,20 +1,20 @@
 <template>
 	<app-loader v-if="loading" class="main-loader" />
-	<v-layout v-else class="app-main-layout">
+	<v-layout v-else class="app-main-layout" full-height>
 		<AppNavbar @click="drawer = !drawer" @logout="logout" />
 		<AppSidebar v-model="drawer" />
 
-		<v-main class="app">
+		<v-main class="app bg-background" style="min-height: 100vh">
 			<div class="app-content pa-5">
 				<router-view />
 			</div>
 		</v-main>
 
 		<v-tooltip activator=".fixed-action-btn" :text="t('create_record')"
-			content-class="bg-indigo-lighten-3 font-weight-medium">
+			content-class="bg-fixed text-primary font-weight-medium">
 			<template #activator="{ props }">
-				<v-btn color="indigo-lighten-1" :size="xs ? 'default' : mdAndDown ? 'large' : 'x-large'"
-					class="fixed-action-btn" to="/record" position="fixed" :icon="mdiPlus" v-bind="props" />
+				<v-btn color="fixed" :size="xs ? 'default' : mdAndDown ? 'large' : 'x-large'" class="fixed-action-btn"
+					to="/record" position="fixed" :icon="mdiPlus" v-bind="props" />
 			</template>
 		</v-tooltip>
 	</v-layout>

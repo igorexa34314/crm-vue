@@ -1,13 +1,13 @@
 <template>
 	<v-card width="100%" max-width="450" class="pa-3">
-		<v-card-title class="mb-2 text-center">{{ t('home_bookkeeping') }}</v-card-title>
+		<v-card-title class="mb-2 text-center text-title">{{ t('home_bookkeeping') }}</v-card-title>
 
 		<v-card-text>
 			<LocalRegister @success="onRegisterSuccess" @error="onRegisterError" />
 		</v-card-text>
 
 		<v-card-actions class="justify-center text-subtitle-1">
-			<p class="text-center">
+			<p class="text-center text-primary">
 				{{ t('have_account') + '? ' }}
 				<router-link to="/login" tag="a">{{ t('login') + '!' }}</router-link>
 			</p>

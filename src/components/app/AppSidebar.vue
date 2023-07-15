@@ -1,9 +1,9 @@
 <template>
-	<v-navigation-drawer v-model="drawer" location="left" width="300">
+	<v-navigation-drawer v-model="drawer" location="left" width="300" color="sidebar">
 		<v-list>
 			<v-list-item v-for="link in links" :key="link.url" :to="link.url" active-class="active" link :exact="link.exact"
-				color="light-blue-darken-3" class="px-5">
-				<span class="font-weight-bold">{{ t('menu.' + link.title) }}</span>
+				color="primary" class="px-5">
+				<span class="font-weight-bold text-primary">{{ t('menu.' + link.title) }}</span>
 			</v-list-item>
 		</v-list>
 	</v-navigation-drawer>

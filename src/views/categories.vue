@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title mb-7">
-			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.categories') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2 text-title">{{ t('pageTitles.categories') }}</h3>
 		</div>
 		<section class="mt-10">
 			<app-loader v-if="isLoading" page />

@@ -22,29 +22,5 @@
 			"useGrouping": true,
 			"currencyDisplay": "symbol"
 		}
-	},
-	"USD": {
-		"currency": {
-			"style": "currency",
-			"currency": "USD",
-			"useGrouping": true,
-			"notation": "standard"
-		}
-	},
-	"RUB": {
-		"currency": {
-			"style": "currency",
-			"currency": "RUB",
-			"useGrouping": true,
-			"currencyDisplay": "symbol"
-		}
-	},
-	"UAH": {
-		"currency": {
-			"style": "currency",
-			"currency": "UAH",
-			"useGrouping": true,
-			"currencyDisplay": "symbol"
-		}
 	}
 }

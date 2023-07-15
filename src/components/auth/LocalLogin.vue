@@ -6,7 +6,7 @@
 		<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined" label="Пароль"
 			class="mt-6" required />
 
-		<v-btn type="submit" width="100%" color="teal-darken-2" class="mt-8" :append-icon="mdiSend">
+		<v-btn type="submit" width="100%" color="success" class="mt-8" :append-icon="mdiSend">
 			{{ t('login') }}</v-btn>
 	</v-form>
 </template>

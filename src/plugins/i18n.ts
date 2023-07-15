@@ -13,11 +13,21 @@ const i18n = createI18n({
 	locale: import.meta.env.VITE_APP_DEFAULT_LOCALE || 'en-US',
 	fallbackLocale: import.meta.env.VITE_APP_DEFAULT_LOCALE || 'en-US',
 	messages,
-	numberFormats: numberFormats as I18nOptions['numberFormats'],
+
+	// Using same number formats for each locale
+	numberFormats: Object.assign(
+		{},
+		numberFormats,
+		...availableLocales.map(locale => ({
+			[numberFormats[locale]['currency']['currency']]: numberFormats[locale]
+		}))
+	) as I18nOptions['numberFormats'],
+
+	// Using same datetime formats for each locale
 	datetimeFormats: Object.assign(
 		{},
 		...availableLocales.map(locale => ({
-			[locale]: datetimeFormats
+			[locale]: datetimeFormats['en-US']
 		}))
 	)
 });

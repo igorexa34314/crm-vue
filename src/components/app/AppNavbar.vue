@@ -1,16 +1,16 @@
 <template>
-	<v-app-bar :elevation="2" color="orange-lighten-1">
+	<v-app-bar :elevation="2" color="navbar">
 		<template #prepend>
-			<v-app-bar-nav-icon color="blue-grey-darken-3" @click.stop="emit('click')" />
+			<v-app-bar-nav-icon color="primary" @click.stop="emit('click')" />
 		</template>
-		<v-app-bar-title class="mt-1 text-blue-grey-darken-3">
+		<v-app-bar-title class="mt-1 text-primary">
 			{{ d(date, xs ? 'time' : smAndDown ? 'daytime' : 'long') }}
 		</v-app-bar-title>
 		<v-spacer />
+		<DarkmodeToggle />
 		<v-menu>
 			<template #activator="{ props }">
-				<v-btn color="blue-grey-darken-4" variant="text" v-bind="props" class="mr-7"
-					:append-icon="mdiTriangleSmallDown">
+				<v-btn color="profile" variant="text" v-bind="props" class="mr-7" :append-icon="mdiTriangleSmallDown">
 					<div class="text-subtitle-1 font-weight-bold">{{ username }}
 					</div>
 				</v-btn>
@@ -20,13 +20,13 @@
 					<template #prepend>
 						<v-icon :icon="mdiAccountCircleOutline" class="mr-3"></v-icon>
 					</template>
-					<v-list-item-title>{{ t('pageTitles.profile') }}</v-list-item-title>
+					<v-list-item-title class="text-primary">{{ t('pageTitles.profile') }}</v-list-item-title>
 				</v-list-item>
 				<v-list-item @click="emit('logout')">
 					<template #prepend>
 						<v-icon :icon="mdiLogout" class="mr-3"></v-icon>
 					</template>
-					<v-list-item-title>{{ t('logout') }}</v-list-item-title>
+					<v-list-item-title class="text-primary">{{ t('logout') }}</v-list-item-title>
 				</v-list-item>
 			</v-list>
 		</v-menu>
@@ -34,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import DarkmodeToggle from '@/components/app/DarkmodeToggle.vue';
 import { mdiTriangleSmallDown, mdiAccountCircleOutline, mdiLogout } from '@mdi/js';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useInfoStore } from '@/stores/info';

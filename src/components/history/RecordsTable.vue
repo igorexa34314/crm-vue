@@ -1,42 +1,46 @@
 <template>
 	<v-table class="records-table" :density="xs ? 'comfortable' : 'default'">
-		<thead>
+		<thead class="text-title">
 			<tr>
 				<th>#</th>
-				<th v-for="h in tableHeaders" :key="h" @click="triggerSort(h as keyof RecordWithCategory)" class="">
-					<span>{{ t(h) }}</span>
-					<v-icon v-if="sortProp === h" :icon="sortType === 'asc' ? mdiMenuUp : mdiMenuDown" size="small"
-						class="ml-1" />
+				<th v-for="h in tableHeaders" :key="h">
+					<span @click="triggerSort(h as keyof RecordWithCategory)">{{ t(h) }}</span>
+					<v-icon v-if="sortProp === h" :icon="sortType === 'asc' ? mdiMenuUp : mdiMenuDown" size="small" class="ml-1"
+						@click="triggerSort(h as keyof RecordWithCategory)" />
 				</th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr v-for="(rec, index) in records" :key="rec.id" @click="push('/detail/' + rec.id)" class="record">
-				<td>{{ startIndex + (index + 1) }}</td>
-				<td>{{ n(cf(rec.amount), 'currency', userCurrency) }}</td>
-				<td>{{ d(rec.date, smAndDown ? 'shortdate' : 'short') }}</td>
-				<td class="record-category">{{ rec.category }}</td>
-				<td>
-					<span :class="rec.type === 'outcome' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
-						class="py-2 px-3 text-white text-center">
-						<v-icon :icon="rec.type === 'outcome' ? mdiTrendingDown : mdiTrendingUp" :class="{ 'mr-2': !smAndDown }"
-							:size="xs ? 'small' : 'default'" />
-						{{ smAndDown ? '' :
-							rec.type === 'income' ? t('income').toLowerCase() :
-								t('outcome').toLowerCase()
-						}}</span>
-				</td>
-				<td v-if="!smAndDown">
-					<v-tooltip :activator="`#rec-${rec.id}`" text="Посмотреть запись" location="bottom"
-						content-class="bg-teal-lighten-2 font-weight-medium">
-						<template #activator="{ props }">
-							<v-btn :id="`rec-${rec.id}`" color="teal-darken-1" @click="push('/detail/' + rec.id)">
-								<v-icon v-bind="props" :icon="mdiOpenInNew" />
-							</v-btn>
-						</template>
-					</v-tooltip>
-				</td>
-			</tr>
+		<tbody class="text-primary">
+			<template v-for="(rec, index) in records" :key="rec.id">
+				<v-hover v-slot="{ isHovering, props }">
+					<tr @click="push('/detail/' + rec.id)" class="record" v-bind="props" :class="isHovering ? 'bg-hover' : ''">
+						<td>{{ startIndex + (index + 1) }}</td>
+						<td>{{ n(cf(rec.amount), 'currency', userCurrency) }}</td>
+						<td>{{ d(rec.date, smAndDown ? 'shortdate' : 'short') }}</td>
+						<td class="record-category">{{ rec.category }}</td>
+						<td>
+							<span :class="rec.type === 'outcome' ? 'bg-red-darken-4' : 'bg-green-darken-2'"
+								class="py-2 px-3 text-center text-trend">
+								<v-icon :icon="rec.type === 'outcome' ? mdiTrendingDown : mdiTrendingUp"
+									:class="{ 'mr-2': !smAndDown }" :size="xs ? 'small' : 'default'" />
+								{{ smAndDown ? '' :
+									rec.type === 'income' ? t('income').toLowerCase() :
+										t('outcome').toLowerCase()
+								}}</span>
+						</td>
+						<td v-if="!smAndDown">
+							<v-tooltip :activator="`#rec-${rec.id}`" text="Посмотреть запись" location="bottom"
+								content-class="bg-tooltip font-weight-medium text-primary">
+								<template #activator="{ props }">
+									<v-btn :id="`rec-${rec.id}`" color="success" @click="push('/detail/' + rec.id)">
+										<v-icon v-bind="props" :icon="mdiOpenInNew" />
+									</v-btn>
+								</template>
+							</v-tooltip>
+						</td>
+					</tr>
+				</v-hover>
+			</template>
 		</tbody>
 	</v-table>
 </template>
@@ -87,9 +91,6 @@ const tableHeaders = computed(() => (['amount', 'date', 'category', 'type', smAn
 	& tbody tr {
 		cursor: pointer;
 		transition: all 0.2s ease-in 0s;
-		&:hover {
-			background-color: #E1F5FE;
-		}
 	}
 	& .record {
 		&-category {

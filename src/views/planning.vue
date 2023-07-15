@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="title d-flex flex-row align-center mb-3">
+		<div class="title d-flex flex-row align-center mb-3 text-title">
 			<h3 class="text-h4 mt-4 ml-2 flex-grow-1">{{ t('pageTitles.plan') }}</h3>
 			<h4 class="text-h4">{{ n(cf(bill!), 'currency', userCurrency) }}</h4>
 		</div>
@@ -13,8 +13,8 @@
 		<section v-else class="mt-10 px-4">
 			<div v-for="(cat, index) of catStats" :key="cat.id || index" class="mt-8">
 				<p class="d-flex flex-row align-center justify-space-between mb-3">
-					<strong class="font-weight-bold mr-4">{{ cat.title }}:</strong>
-					<span class="mr-4">
+					<strong class="font-weight-bold mr-4 text-primary">{{ cat.title }}:</strong>
+					<span class="mr-4 text-primary">
 						{{
 							n(cf(cat.spend), 'currency', userCurrency) + ' ' + (xs ? '/' : t('out_of')) + ' ' +
 							n(cf(cat.limit), 'currency', userCurrency)
@@ -23,7 +23,7 @@
 				</p>
 				<v-progress-linear :model-value="cat.percent" :id="`progress-${cat.id}`"
 					:color="cat.percent >= 90 ? 'red' : cat.percent >= 60 ? 'yellow' : 'green'" style="cursor: pointer;" rounded
-					rounded-bar />
+					rounded-bar bg-color="progress" />
 				<v-tooltip :activator="`#progress-${cat.id}`" location="bottom"
 					:content-class="(cat.limit - cat.spend) < 0 ? 'bg-deep-orange-darken-3' : 'bg-light-green-darken-1'">
 					{{ ((cat.limit - cat.spend) < 0 ? t('exceeding') : t('left')) + ' ' + n(Math.abs(cf(cat.limit) -

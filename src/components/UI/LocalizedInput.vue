@@ -1,5 +1,5 @@
 <template>
-	<v-text-field v-bind="{ variant }" validate-on="blur lazy">
+	<v-text-field v-bind="{ variant }" validate-on="blur lazy" class="text-primary">
 		<template #message="{ message }">
 			{{ t(message) }}
 		</template>

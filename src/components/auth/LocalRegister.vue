@@ -13,7 +13,7 @@
 				</p>
 			</template>
 		</v-checkbox>
-		<v-btn type="submit" :append-icon="mdiSend" color="teal-lighten-1" width="100%" class="mt-7">
+		<v-btn type="submit" :append-icon="mdiSend" color="success" width="100%" class="mt-7">
 			{{ t('sign_in') }}
 		</v-btn>
 	</v-form>

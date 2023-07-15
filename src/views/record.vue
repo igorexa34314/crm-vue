@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.newRecord') }}</h3>
+			<h3 class="text-h4 mt-4 ml-2 text-title">{{ t('pageTitles.newRecord') }}</h3>
 		</div>
 
 		<app-loader v-if="isLoading" class="mt-10" page />
