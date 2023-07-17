@@ -7,6 +7,10 @@
 
 			<div class="providers d-flex align-center mt-6 justify-center">
 				<GoogleProvider @success="onLoginSuccess" @error="onLoginError" />
+
+				<FacebookProvider @success="onLoginSuccess" @error="onLoginError" />
+
+				<GithubProvider @success="onLoginSuccess" @error="onLoginError" />
 			</div>
 		</v-card-text>
 
@@ -22,6 +26,8 @@
 
 <script setup lang="ts">
 import LocalLogin from '@/components/auth/LocalLogin.vue';
+import GithubProvider from '@/components/auth/providers/GithubProvider.vue';
+import FacebookProvider from '@/components/auth/providers/FacebookProvider.vue';
 import GoogleProvider from '@/components/auth/providers/GoogleProvider.vue';
 import { useRouter } from 'vue-router';
 import { useMeta } from 'vue-meta';

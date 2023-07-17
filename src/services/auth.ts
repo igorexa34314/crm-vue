@@ -5,11 +5,14 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	GoogleAuthProvider,
-	signInWithPopup
+	signInWithPopup as callAuthPopup,
+	FacebookAuthProvider,
+	GithubAuthProvider
 } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { getCurrentUser } from 'vuefire';
-import { createUser, getUserById, updateInfo, updateUser } from './user';
+import { createUser, getUserById } from './user';
+import { FirebaseError } from 'firebase/app';
 
 export interface UserCredentials {
 	email: string;
@@ -41,22 +44,53 @@ export const getUserId = async () => {
 	}
 };
 
-export const signInWithGooglePopup = async () => {
+export const signInWithPopup = async (provider: any) => {
+	const { uid, email, displayName } = (await callAuthPopup(auth, provider)).user;
+
+	const isUserExists = (await getUserById(uid)).exists();
+	if (!isUserExists) {
+		await createUser({
+			uid: uid,
+			email: email || '',
+			displayName: displayName || '',
+			username: email?.split('@')[0] || `user-${uid}`
+		});
+	}
+};
+
+export const signInWithGoogle = async () => {
 	try {
 		const provider = new GoogleAuthProvider();
-		const { uid, email, displayName } = (await signInWithPopup(auth, provider)).user;
-
-		const isUserExists = (await getUserById(uid)).exists();
-		if (!isUserExists) {
-			await createUser({
-				uid: uid,
-				email: email || '',
-				displayName: displayName || '',
-				username: email?.split('@')[0] || `user-${uid}`
-			});
-		}
+		await signInWithPopup(provider);
 	} catch (e) {
 		errorHandler(e);
+	}
+};
+
+export const signInWithFacebook = async () => {
+	try {
+		const provider = new FacebookAuthProvider();
+		provider.addScope('user_birthday');
+		provider.addScope('user_gender');
+
+		await signInWithPopup(provider);
+	} catch (e) {
+		errorHandler(e);
+	}
+};
+
+export const signInWithGithub = async () => {
+	try {
+		const provider = new GithubAuthProvider();
+		provider.addScope('user_birthday');
+		provider.addScope('user_gender');
+
+		await signInWithPopup(provider);
+	} catch (err) {
+		if (err instanceof FirebaseError) {
+			const credential = GithubAuthProvider.credentialFromError(err);
+			errorHandler(err, '', credential);
+		}
 	}
 };
 
