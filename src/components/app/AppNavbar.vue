@@ -3,14 +3,15 @@
 		<template #prepend>
 			<v-app-bar-nav-icon color="primary" @click.stop="emit('click')" />
 		</template>
-		<v-app-bar-title class="mt-1 text-primary">
+		<v-app-bar-title class="app-title mt-1 text-primary">
 			{{ d(date, xs ? 'time' : smAndDown ? 'daytime' : 'long') }}
 		</v-app-bar-title>
 		<v-spacer />
-		<DarkmodeToggle />
+		<DarkmodeToggle class="mr-sm-5 mr-2" />
 		<v-menu>
 			<template #activator="{ props }">
-				<v-btn color="profile" variant="text" v-bind="props" class="mr-7" :append-icon="mdiTriangleSmallDown">
+				<v-btn color="profile" variant="text" v-bind="props" class="px-sm-3 px-1 mr-md-7"
+					:append-icon="mdiTriangleSmallDown">
 					<div class="text-subtitle-1 font-weight-bold">{{ username }}
 					</div>
 				</v-btn>
@@ -63,3 +64,11 @@ onMounted(() => {
 });
 onUnmounted(() => clearInterval(dateInterval));
 </script>
+
+<style lang="scss" scoped>
+.app-title {
+	@media(max-width: 380px) {
+		display: none;
+	}
+}
+</style>

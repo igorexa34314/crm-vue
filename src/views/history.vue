@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2 text-title">{{ t('pageTitles.history') }}</h3>
+			<h3 class="text-h5 text-sm-h4 mt-2 mt-sm-4 ml-2 text-title">{{ t('pageTitles.history') }}</h3>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
@@ -33,8 +33,8 @@ import { ref, computed } from 'vue';
 import { useMeta } from 'vue-meta';
 import { ChartData } from 'chart.js';
 import { Pie } from 'vue-chartjs';
-import { Category, fetchCategories } from '@/services/category';
-import { Record, fetchRecords } from '@/services/record';
+import { Category, CategoryService } from '@/services/category';
+import { Record, RecordService } from '@/services/record';
 import { usePagination } from '@/composables/usePagination';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
@@ -56,8 +56,8 @@ const isLoading = ref(false);
 
 try {
 	isLoading.value = true;
-	records.value = await fetchRecords();
-	categories.value = await fetchCategories();
+	records.value = await RecordService.fetchRecords();
+	categories.value = await CategoryService.fetchCategories();
 } catch (e) {
 	const { showMessage } = useSnackbarStore();
 	showMessage('error_loading_records_or_categories');

@@ -13,7 +13,7 @@ export const user = {
 	username: [
 		(v: string) => !!v || 'messages.enter_username',
 		(v: string) => (v && /^[a-zA-Z]+$/.test(v)) || 'rules.username.latinic',
-		(v: string) => (v && v.length >= 4) || 'rules.username.limit'
+		(v: string) => (v && v.length >= 4 && v.length >= 64) || 'rules.username.limit'
 	],
 	firstName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.firstName'],
 	lastName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.lastName'],

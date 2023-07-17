@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="title text-title">
-			<h3 class="text-h4 mt-4 ml-2">{{ t('pageTitles.profile') }}</h3>
+			<h3 class="text-h5 text-sm-h4 mt-2 mt-sm-4 ml-2">{{ t('pageTitles.profile') }}</h3>
 		</div>
-		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-8 px-4">
+		<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-6 mt-sm-8 px-2 px-sm-4">
 			<LocalizedInput v-model="formState.username" :rules="user.username" variant="underlined"
 				:label="t('user.username')" class="mb-5" required />
 
@@ -43,7 +43,7 @@ import LocalizedTextarea from '@/components/UI/LocalizedTextarea.vue';
 import { ref, computed, watchEffect, inject } from 'vue';
 import { useMeta } from 'vue-meta';
 import { mdiSend } from '@mdi/js';
-import { updateInfo } from '@/services/user';
+import { UserService } from '@/services/user';
 import { UserInfo, useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
@@ -105,7 +105,7 @@ const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
-			await updateInfo(formState.value);
+			await UserService.updateInfo(formState.value);
 			showMessage(t('updateProfile_message'));
 		} catch (e) {
 			showMessage(t(e as string) || e as string);

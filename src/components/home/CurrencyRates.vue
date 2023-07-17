@@ -2,7 +2,7 @@
 	<v-col cols="8" lg="8" md="6" sm="12" class="v-col-xs-12">
 		<v-card color="card-1" elevation="3" min-height="300">
 			<v-card-item>
-				<v-card-title class="mx-3 mt-3 text-subtitle">{{ t('exchange_rate') }}</v-card-title>
+				<v-card-title class="mx-3 mt-3 text-h6 text-sm-h5">{{ t('exchange_rate') }}</v-card-title>
 			</v-card-item>
 			<v-card-text>
 

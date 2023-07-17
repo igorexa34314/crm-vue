@@ -1,12 +1,12 @@
 <template>
-	<v-form @submit.prevent="submitHandler" ref="form">
+	<v-form @submit.prevent="submitLogin" ref="form">
 		<LocalizedInput v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email"
 			class="mt-4" required />
 
 		<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined" label="Пароль"
 			class="mt-6" required />
 
-		<v-btn type="submit" width="100%" color="success" class="mt-8" :append-icon="mdiSend">
+		<v-btn type="submit" width="100%" color="success" class="mt-4 mt-sm-8" :append-icon="mdiSend">
 			{{ t('login') }}</v-btn>
 	</v-form>
 </template>
@@ -15,7 +15,7 @@
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { ref } from 'vue';
 import { mdiSend } from '@mdi/js';
-import { login } from '@/services/auth';
+import { AuthService } from '@/services/auth';
 import { useI18n } from 'vue-i18n';
 import { user as validations } from '@/utils/validations';
 import { VForm } from 'vuetify/components';
@@ -33,11 +33,11 @@ const formState = ref({
 	password: ''
 });
 
-const submitHandler = async () => {
+const submitLogin = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
-			await login(formState.value);
+			await AuthService.login(formState.value);
 			emit('success');
 		} catch (e) {
 			console.error(e);

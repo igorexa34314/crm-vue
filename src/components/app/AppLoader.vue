@@ -6,15 +6,19 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useTheme } from 'vuetify';
+
+const theme = useTheme();
+
 const props = withDefaults(defineProps<{
 	page?: boolean;
 	color?: string;
 }>(), {
 	page: false,
-	color: '#000000',
 });
+
 const cssProps = computed(() => ({
-	'--app-loader-color': props.color
+	'--app-loader-color': props.color || (theme.global.current.value.dark ? '#FFFFFF' : '#000000')
 }))
 </script>
 

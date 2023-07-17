@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div class="title d-flex flex-row align-center mb-3 text-title">
-			<h3 class="text-h4 mt-4 ml-2 flex-grow-1">{{ t('pageTitles.plan') }}</h3>
-			<h4 class="text-h4">{{ n(cf(bill!), 'currency', userCurrency) }}</h4>
+		<div class="title mt-2 mt-sm-4 d-flex flex-column flex-sm-row align-sm-center mb-3 text-title">
+			<h3 class="text-h5 text-sm-h4 ml-2 flex-grow-1 mb-3 mb-sm-0">{{ t('pageTitles.plan') }}</h3>
+			<h4 class="text-h5 text-sm-h4 text-end">{{ n(cf(bill!), 'currency', userCurrency) }}</h4>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mb-8" />
 		<app-loader v-if="isLoading" class="mt-10" page />
@@ -13,11 +13,12 @@
 		<section v-else class="mt-10 px-4">
 			<div v-for="(cat, index) of catStats" :key="cat.id || index" class="mt-8">
 				<p class="d-flex flex-row align-center justify-space-between mb-3">
-					<strong class="font-weight-bold mr-4 text-primary">{{ cat.title }}:</strong>
-					<span class="mr-4 text-primary">
+					<strong class="category-title font-weight-bold mr-4 text-primary flex-fill">{{ cat.title }}:</strong>
+					<span class="category-spent mr-sm-4 text-primary text-end">
 						{{
-							n(cf(cat.spend), 'currency', userCurrency) + ' ' + (xs ? '/' : t('out_of')) + ' ' +
-							n(cf(cat.limit), 'currency', userCurrency)
+							n(cf(cat.spend), { key: 'currency', currencyDisplay: xs ? 'narrowSymbol' : 'symbol' }, userCurrency) +
+							' ' + (xs ? '/' : t('out_of')) + ' ' +
+							n(cf(cat.limit), { key: 'currency', currencyDisplay: xs ? 'narrowSymbol' : 'symbol' }, userCurrency)
 						}}
 					</span>
 				</p>
@@ -35,8 +36,8 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { fetchCategories, Category } from '@/services/category';
-import { fetchRecords } from '@/services/record';
+import { CategoryService, Category } from '@/services/category';
+import { RecordService } from '@/services/record';
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMeta } from 'vue-meta';
@@ -65,8 +66,8 @@ interface CategoryStats extends Category {
 const catStats = ref<CategoryStats[]>();
 try {
 	isLoading.value = true;
-	const records = await fetchRecords();
-	const cats = await fetchCategories();
+	const records = await RecordService.fetchRecords();
+	const cats = await CategoryService.fetchCategories();
 	if (cats && records) {
 		catStats.value = cats.map(cat => {
 			const spend = records.filter(r => r.categoryId === cat.id)
@@ -87,3 +88,18 @@ try {
 	isLoading.value = false;
 }
 </script>
+
+<style lang="scss" scoped>
+.category {
+	&-title {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		@media(max-width: 320px) {}
+	}
+	&-spent {
+		@media(max-width: 360px) {
+			flex-basis: 130px;
+		}
+	}
+}
+</style>

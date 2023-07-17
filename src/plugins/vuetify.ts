@@ -13,7 +13,7 @@ import i18n from './i18n';
 export const vuetifyThemeNames = {
 	dark: 'customDark',
 	light: 'customLight'
-};
+} as const;
 
 export default createVuetify({
 	components,
@@ -29,13 +29,18 @@ export default createVuetify({
 		}
 	},
 	theme: {
-		defaultTheme: 'customLight',
+		defaultTheme:
+			vuetifyThemeNames[
+				import.meta.env.VITE_APP_DEFAULT_THEME as keyof typeof vuetifyThemeNames
+			] || vuetifyThemeNames.light,
+
 		themes: {
 			[vuetifyThemeNames.dark]: {
 				dark: true,
 				colors: {
 					'card-1': '#5e5a66',
 					'card-2': '#575757',
+					switch: '#ffffff',
 					progress: '#ffffff',
 					tooltip: '#46424f',
 					fixed: '#8b79ee',
@@ -60,6 +65,7 @@ export default createVuetify({
 					'card-1': '#99DBF5',
 					'card-2': '#FFEEBB',
 					title: '#2C3333',
+					switch: '#000000',
 					progress: '#000000',
 					subtitle: '#393646',
 					sidebar: '#DEF5E5',

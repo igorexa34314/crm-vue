@@ -10,11 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVModel } from '@vueuse/core';
 
-type NavLink = { title: string, url: string, exact?: boolean };
 const emit = defineEmits<{
 	(e: 'update:modelValue', val: boolean): void;
 }>();
@@ -28,11 +26,11 @@ const props = withDefaults(defineProps<{
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const drawer = useVModel(props, 'modelValue', emit);
 
-const links = ref<NavLink[]>([
+const links: { title: string, url: string, exact?: boolean }[] = [
 	{ title: 'bill', url: '/', exact: true, },
 	{ title: 'history', url: '/history' },
 	{ title: 'plan', url: '/planning' },
 	{ title: 'newRecord', url: '/record' },
 	{ title: 'categories', url: '/categories' },
-]);
+];
 </script>

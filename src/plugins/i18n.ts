@@ -3,7 +3,7 @@ import { nextTick } from 'vue';
 import messages from '@intlify/unplugin-vue-i18n/messages';
 import datetimeFormats from '@/utils/datetimeFormats.json';
 import numberFormats from '@/utils/numberFormats.json';
-import { fetchLocale } from '@/services/locale';
+import { LocaleService } from '@/services/locale';
 
 const availableLocales = ['ru-RU', 'uk-UA', 'en-US'] as const;
 export type Locales = (typeof availableLocales)[number];
@@ -37,7 +37,7 @@ export const setI18nLanguage = async (
 ) => {
 	// Load locale if not available yet.
 	if (!i18n.global.availableLocales.includes(locale)) {
-		const messages = await fetchLocale(locale);
+		const messages = await LocaleService.fetchLocale(locale);
 
 		if (!messages) {
 			return;

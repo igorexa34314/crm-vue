@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="title">
-			<h3 class="text-h4 mt-4 ml-2 text-title">{{ t('pageTitles.newRecord') }}</h3>
+			<h3 class="text-h5 text-sm-h4 mt-2 mt-sm-4 ml-2 text-title">{{ t('pageTitles.newRecord') }}</h3>
 		</div>
 
 		<app-loader v-if="isLoading" class="mt-10" page />
@@ -22,10 +22,10 @@ import { useAsyncState } from '@vueuse/core';
 import { useMeta } from 'vue-meta';
 import { useI18n } from 'vue-i18n';
 import { useInfoStore } from '@/stores/info';
-import { updateInfo } from '@/services/user';
+import { UserService } from '@/services/user';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { fetchCategories } from '@/services/category';
-import { createRecord, Record } from '@/services/record';
+import { CategoryService } from '@/services/category';
+import { RecordService, Record } from '@/services/record';
 import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'pageTitles.newRecord' });
@@ -36,7 +36,7 @@ const infoStore = useInfoStore();
 
 const info = computed(() => infoStore.info);
 
-const { state: categories, isLoading } = useAsyncState(fetchCategories, [], {
+const { state: categories, isLoading } = useAsyncState(CategoryService.fetchCategories, [], {
 	onError: (e) => {
 		showMessage(messages[e as keyof typeof messages] || t('error_load_categories'))
 	}
@@ -44,13 +44,13 @@ const { state: categories, isLoading } = useAsyncState(fetchCategories, [], {
 
 const create = async (formData: Omit<Record, 'date'>) => {
 	try {
-		await createRecord(formData as Record);
+		await RecordService.createRecord(formData as Record);
 
 		const { type, amount } = formData;
 		const newBill = type === 'income' ?
 			info.value!.bill + amount : info.value!.bill - amount;
 
-		await updateInfo({ bill: +newBill.toFixed(2) });
+		await UserService.updateInfo({ bill: +newBill.toFixed(2) });
 		showMessage(t('createRecord_success'));
 	} catch (e) {
 		showMessage(messages[e as keyof typeof messages] || e as string);

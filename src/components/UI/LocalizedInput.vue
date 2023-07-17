@@ -1,5 +1,5 @@
 <template>
-	<v-text-field v-bind="{ variant }" validate-on="blur lazy" class="text-primary">
+	<v-text-field v-bind="{ variant }" validate-on="blur lazy" class="text-primary" :density="xs ? 'compact' : 'default'">
 		<template #message="{ message }">
 			{{ t(message) }}
 		</template>
@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { VTextField } from 'vuetify/components';
+import { useDisplay } from 'vuetify';
 
 const props = withDefaults(defineProps<{
 	variant?: VTextField['variant']
@@ -17,4 +18,5 @@ const props = withDefaults(defineProps<{
 });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 </script>

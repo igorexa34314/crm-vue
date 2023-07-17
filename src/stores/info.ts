@@ -31,7 +31,7 @@ export const useInfoStore = defineStore('info', () => {
 	const setLocale = () => {
 		(info.value as Partial<UserInfo>) = {
 			locale:
-				JSON.parse(localStorage.getItem('lang') || '{}') ||
+				JSON.parse(localStorage.getItem('lang') || 'null') ||
 				import.meta.env.VITE_APP_DEFAULT_LOCALE ||
 				'en-US'
 		};

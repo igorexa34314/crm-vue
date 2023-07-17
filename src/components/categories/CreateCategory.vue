@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="subtitle">
-			<h4 class="text-h5 mb-7 text-subtitle">{{ t('create') }}</h4>
+			<h4 class="text-h6 text-sm-h5 mb-3 mb-sm-7 text-subtitle">{{ t('create') }}</h4>
 		</div>
 
 		<v-form ref="form" @submit.prevent="submitHandler">
@@ -23,7 +23,7 @@
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { mdiSend } from '@mdi/js';
 import { ref, watchEffect } from 'vue';
-import { createCategory, Category } from '@/services/category';
+import { CategoryService, Category } from '@/services/category';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { category as validations } from '@/utils/validations';
@@ -63,7 +63,7 @@ const submitHandler = async () => {
 	if (valid) {
 		try {
 			const { limit, ...data } = formState.value
-			const category = await createCategory({ ...data, limit: cf.value(limit, undefined, 'reverse') });
+			const category = await CategoryService.createCategory({ ...data, limit: cf.value(limit, undefined, 'reverse') });
 			if (category) {
 				emit('created', category);
 				form.value?.reset();

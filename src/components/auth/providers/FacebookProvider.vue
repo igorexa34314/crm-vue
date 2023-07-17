@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import facebookProvider from '@/assets/img/facebook-provider.png'
-import { signInWithFacebook } from '@/services/auth';
+import { AuthService } from '@/services/auth';
 
 const emit = defineEmits<{
 	(e: 'success'): void;
@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>();
 
 const signInWithFacebookProvider = () => {
-	signInWithFacebook().then(() => emit('success')).catch(e => {
+	AuthService.signInWithFacebook().then(() => emit('success')).catch(e => {
 		console.error(e);
 		emit('error', e);
 	});

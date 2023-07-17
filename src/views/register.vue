@@ -1,5 +1,5 @@
 <template>
-	<v-card width="100%" max-width="450" class="pa-3">
+	<v-card width="100%" :max-width="xs ? 400 : 450" class="pa-3 pa-sm-4">
 		<v-card-title class="mb-2 text-center text-title">{{ t('home_bookkeeping') }}</v-card-title>
 
 		<v-card-text>
@@ -21,11 +21,13 @@ import { useRouter } from 'vue-router';
 import { useMeta } from 'vue-meta';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
+import { useDisplay } from 'vuetify';
 import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'sign_in' });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 const { push } = useRouter();
 const { showMessage } = useSnackbarStore();
 

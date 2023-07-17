@@ -42,8 +42,8 @@ import { computedAsync } from '@vueuse/core';
 import { useRoute } from 'vue-router';
 import { useMeta } from 'vue-meta';
 import { mdiChevronRight } from '@mdi/js';
-import { fetchCategoryById } from '@/services/category';
-import { fetchRecordById, Record } from '@/services/record';
+import { CategoryService } from '@/services/category';
+import { RecordService, Record } from '@/services/record';
 import { useI18n } from 'vue-i18n';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
@@ -72,8 +72,8 @@ const breadcrumbs = computed<Breadcrumbs[]>(() => ([
 
 const recordWithCategory = computedAsync(async () => {
 	if (route.params.id) {
-		const recById = await fetchRecordById(route.params.id as string);
-		const category = await fetchCategoryById(recById?.categoryId);
+		const recById = await RecordService.fetchRecordById(route.params.id as string);
+		const category = await CategoryService.fetchCategoryById(recById?.categoryId);
 		return { ...recById, category: category?.title || '' } as RecordWithCategoryName;
 	}
 }, undefined, {

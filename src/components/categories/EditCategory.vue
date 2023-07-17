@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="subtitle">
-			<h4 class="text-h5 mb-7 text-subtitle">{{ t('edit') }}</h4>
+			<h4 class="text-h6 text-sm-h6 mb-5 mb-sm-7 text-subtitle">{{ t('edit') }}</h4>
 		</div>
 
 		<v-form ref="form" @submit.prevent="submitHandler">
@@ -26,7 +26,7 @@
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { ref, watchEffect } from 'vue';
 import { mdiSend } from '@mdi/js';
-import { updateCategory, Category } from '@/services/category';
+import { CategoryService, Category } from '@/services/category';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { category as validations } from '@/utils/validations';
@@ -74,7 +74,7 @@ const submitHandler = async () => {
 	if (valid && id) {
 		try {
 			const convertedLimit = cf.value(limit, undefined, 'reverse');
-			await updateCategory(id, { ...categoryData, limit: convertedLimit });
+			await CategoryService.updateCategory(id, { ...categoryData, limit: convertedLimit });
 			showMessage('Категория успешно обновлена');
 			emit('updated', { ...categoryData, id, limit: convertedLimit });
 		} catch (e) {

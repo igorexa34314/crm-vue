@@ -2,7 +2,7 @@ import { errorHandler } from '@/utils/errorHandler';
 import { db } from '@/firebase';
 import { doc, collection as col, onSnapshot, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { useInfoStore, UserInfo } from '@/stores/info';
-import { getUserId } from '@/services/auth';
+import { AuthService } from '@/services/auth';
 import { CurrencyRates } from '@/services/currency';
 
 const DEFAULT_BILL = import.meta.env.VITE_APP_DEFAULT_BILL;
@@ -15,64 +15,66 @@ export interface UserCredentials {
 	displayName?: string;
 }
 
-export const createUser = async ({ uid, displayName, ...user }: UserCredentials) => {
-	return setDoc(
-		doc(col(db, 'users'), uid),
-		{
-			info: {
-				bill: DEFAULT_BILL,
-				firstName: displayName?.split(' ').at(0) || '',
-				lastName: displayName?.split(' ').at(1) || '',
-				bio: '',
-				gender: 'unknown',
-				locale: 'ru-RU',
-				currency: DEFAULT_CURRENCY,
-				...user
-			} as UserInfo
-		},
-		{ merge: true }
-	);
-};
-
-export const getUserById = async (uid: UserCredentials['uid']) => {
-	return getDoc(doc(col(db, 'users'), uid));
-};
-
-export const fetchInfo = async () => {
-	try {
-		const { setInfo } = useInfoStore();
-		const uid = await getUserId();
-		if (uid) {
-			return onSnapshot(doc(col(db, 'users'), uid), snapshot => {
-				if (snapshot.exists() && Object.keys(snapshot.data()?.info).length) {
-					setInfo(snapshot.data().info);
-				}
-			});
-		}
-	} catch (e) {
-		errorHandler(e);
+export class UserService {
+	static async createUser({ uid, displayName, ...user }: UserCredentials) {
+		return setDoc(
+			doc(col(db, 'users'), uid),
+			{
+				info: {
+					bill: DEFAULT_BILL,
+					firstName: displayName?.split(' ').at(0) || '',
+					lastName: displayName?.split(' ').at(1) || '',
+					bio: '',
+					gender: 'unknown',
+					locale: 'ru-RU',
+					currency: DEFAULT_CURRENCY,
+					...user
+				} as UserInfo
+			},
+			{ merge: true }
+		);
 	}
-};
 
-export const updateUser = async (uid: UserCredentials['uid'], data: Partial<UserInfo>) => {
-	updateDoc(
-		doc(col(db, 'users'), uid),
-		Object.assign(
-			{},
-			...Object.keys(data).map(key => ({
-				[`info.${key}`]: data[key as keyof UserInfo]
-			}))
-		)
-	);
-};
-
-export const updateInfo = async (toUpdate: Partial<UserInfo>) => {
-	try {
-		const uid = await getUserId();
-		if (uid) {
-			await updateUser(uid, toUpdate);
-		}
-	} catch (e) {
-		errorHandler(e);
+	static async getUserById(uid: UserCredentials['uid']) {
+		return getDoc(doc(col(db, 'users'), uid));
 	}
-};
+
+	static async fetchInfo() {
+		try {
+			const { setInfo } = useInfoStore();
+			const uid = await AuthService.getUserId();
+			if (uid) {
+				return onSnapshot(doc(col(db, 'users'), uid), snapshot => {
+					if (snapshot.exists() && Object.keys(snapshot.data()?.info).length) {
+						setInfo(snapshot.data().info);
+					}
+				});
+			}
+		} catch (e) {
+			errorHandler(e);
+		}
+	}
+
+	static async updateUser(uid: UserCredentials['uid'], data: Partial<UserInfo>) {
+		updateDoc(
+			doc(col(db, 'users'), uid),
+			Object.assign(
+				{},
+				...Object.keys(data).map(key => ({
+					[`info.${key}`]: data[key as keyof UserInfo]
+				}))
+			)
+		);
+	}
+
+	static async updateInfo(toUpdate: Partial<UserInfo>) {
+		try {
+			const uid = await AuthService.getUserId();
+			if (uid) {
+				await this.updateUser(uid, toUpdate);
+			}
+		} catch (e) {
+			errorHandler(e);
+		}
+	}
+}

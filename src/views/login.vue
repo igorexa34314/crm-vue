@@ -1,5 +1,5 @@
 <template>
-	<v-card max-width="450" width="100%" class="pa-4" color="background">
+	<v-card :max-width="xs ? 400 : 450" width="100%" class="pa-3 pa-sm-4" color="background">
 		<v-card-title class="text-center text-title">{{ t('home_bookkeeping') }}</v-card-title>
 
 		<v-card-text>
@@ -14,7 +14,7 @@
 			</div>
 		</v-card-text>
 
-		<v-card-actions class="mt-3 justify-center">
+		<v-card-actions class="mt-1 mt-sm-3 justify-center pa-2 pa-sm-4">
 			<div class="text-center text-subtitle-1 text-primary">
 				{{ t('no_account') + '? ' }}
 				<router-link to="/register" tag="a">
@@ -33,11 +33,13 @@ import { useRouter } from 'vue-router';
 import { useMeta } from 'vue-meta';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
+import { useDisplay } from 'vuetify';
 import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'login' });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 const { push } = useRouter();
 const { showMessage } = useSnackbarStore();
 
