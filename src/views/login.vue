@@ -34,11 +34,10 @@ import { useMeta } from 'vue-meta';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { useDisplay } from 'vuetify';
-import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'login' });
 
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
 const { push } = useRouter();
 const { showMessage } = useSnackbarStore();
@@ -48,7 +47,7 @@ const onLoginSuccess = () => {
 	push('/');
 }
 const onLoginError = (e: unknown) => {
-	showMessage(messages[e as keyof typeof messages] || t('login_error'));
+	showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : t('login_error'));
 }
 </script>
 

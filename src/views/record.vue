@@ -26,11 +26,10 @@ import { UserService } from '@/services/user';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { CategoryService } from '@/services/category';
 import { RecordService, Record } from '@/services/record';
-import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'pageTitles.newRecord' });
 
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 const infoStore = useInfoStore();
 
@@ -38,7 +37,7 @@ const info = computed(() => infoStore.info);
 
 const { state: categories, isLoading } = useAsyncState(CategoryService.fetchCategories, [], {
 	onError: (e) => {
-		showMessage(messages[e as keyof typeof messages] || t('error_load_categories'))
+		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : t('error_load_categories'))
 	}
 });
 
@@ -53,7 +52,7 @@ const create = async (formData: Omit<Record, 'date'>) => {
 		await UserService.updateInfo({ bill: +newBill.toFixed(2) });
 		showMessage(t('createRecord_success'));
 	} catch (e) {
-		showMessage(messages[e as keyof typeof messages] || e as string);
+		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e as string)
 	}
 }
 </script>

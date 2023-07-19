@@ -14,15 +14,23 @@ Try it on:\
 [Firebase](https://crm-vue-f0e4a.web.app "CRM Vue")\
 Or:\
 [Netlify](https://crm-vue-igorexa34314.netlify.app "CRM Vue")\
-[Github Pages](https://igorexa34314.github.io/crm-vue/ "CRM Vue")
+[Vercel](https://crm-vue2023.vercel.app "CRM Vue")\
+[Github Pages](https://igorexa34314.github.io/crm-vue "CRM Vue")
 
 
-Copy repo code and setup it (with yarn package manager):
+Copy repo code and setup it with yarn package manager (Yarn PnP recommended):
 ```
 git clone https://github.com/igorexa34314/crm-vue.git
 cd ./crm-vue
 ```
 ```
+yarn
+yarn dev
+```  
+
+if you are not using PnP mode
+```
+yarn set version berry
 yarn
 yarn dev
 ```  

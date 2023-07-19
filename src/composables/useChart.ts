@@ -3,8 +3,7 @@ import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { useI18n } from 'vue-i18n';
 import { useTheme } from 'vuetify';
-// @ts-ignore
-import { randomColor } from 'randomcolor';
+import randomColor from 'randomcolor';
 
 export const useChart = <T extends ChartType = 'pie'>(
 	labels: MaybeRef<ChartData<T>['labels'] | undefined>,

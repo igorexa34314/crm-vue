@@ -49,7 +49,7 @@ useMeta({ title: 'pageTitles.history' });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 const records = ref<Record[]>();
 const categories = ref<Category[]>();
 const isLoading = ref(false);

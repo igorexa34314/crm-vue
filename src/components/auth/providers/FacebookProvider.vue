@@ -1,6 +1,6 @@
 <template>
 	<v-btn @click="signInWithFacebookProvider" flat variant="text">
-		<v-img :src="facebookProvider" aspect-ratio="1" max-width="30" />
+		<img :src="facebookProvider" aspect-ratio="1" width="32" alt="Facebook" />
 	</v-btn>
 </template>
 

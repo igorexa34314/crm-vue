@@ -13,7 +13,6 @@ const i18n = createI18n({
 	locale: import.meta.env.VITE_APP_DEFAULT_LOCALE || 'en-US',
 	fallbackLocale: import.meta.env.VITE_APP_DEFAULT_LOCALE || 'en-US',
 	messages,
-
 	// Using same number formats for each locale
 	numberFormats: Object.assign(
 		{},

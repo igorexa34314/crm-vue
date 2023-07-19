@@ -2,11 +2,11 @@
 	<v-form ref="form" v-if="formState.categoryId" @submit.prevent="submitHandler" class="record-form mt-8"
 		:class="xs ? 'px-2' : 'px-4'">
 		<v-select v-model="formState.categoryId" :items="categories" item-title="title" item-value="id"
-			:label="t('select_category')" variant="underlined" />
+			:label="t('select_category')" variant="underlined" class="text-input" />
 
-		<v-radio-group class="mt-3" v-model="formState.type">
-			<v-radio :label="t('income')" value="income" density="comfortable" color="orange-accent-3" />
-			<v-radio :label="t('outcome')" value="outcome" density="comfortable" color="orange-accent-3" />
+		<v-radio-group v-model="formState.type" class="mt-3 text-input">
+			<v-radio v-for="tp in ['income', 'outcome']" :key="tp" :label="t(tp)" :value="tp" density="comfortable"
+				color="radio" />
 		</v-radio-group>
 
 		<LocalizedInput v-model.number="formState.amount" :rules="validations.amount" type="number" variant="underlined"
@@ -51,7 +51,7 @@ const emit = defineEmits<{
 }>();
 const { showMessage } = useSnackbarStore();
 const { t, n } = useI18n({ inheritLocale: true, useScope: 'global' });
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 const infoStore = useInfoStore();
 const { xs } = useDisplay();
 

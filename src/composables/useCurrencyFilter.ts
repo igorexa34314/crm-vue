@@ -25,5 +25,5 @@ export const useCurrencyFilter = () => {
 			}
 	);
 
-	return { currencyFilter };
+	return { cf: currencyFilter };
 };

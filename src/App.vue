@@ -1,8 +1,6 @@
 <template>
-  <metainfo>
-    <template #title="{ content }: any">
+  <metainfo v-slot:title="{ content }: any">
       {{ content ? `${ t(content) } | ${ AppTitle } ` : AppTitle }}
-    </template>
   </metainfo>
   <GlobalSnackbar />
   <Suspense>

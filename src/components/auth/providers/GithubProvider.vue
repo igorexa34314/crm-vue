@@ -1,6 +1,6 @@
 <template>
 	<v-btn @click="signInWithGithubProvider" flat variant="text">
-		<v-img :src="githubProvider" aspect-ratio="1" max-width="32" />
+		<img :src="githubProvider" aspect-ratio="1" width="32" alt="Github" />
 	</v-btn>
 </template>
 

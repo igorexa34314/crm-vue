@@ -43,7 +43,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 const { showMessage } = useSnackbarStore();
 const { xs } = useDisplay();
 

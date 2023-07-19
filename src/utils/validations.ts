@@ -12,8 +12,8 @@ export const category = {
 export const user = {
 	username: [
 		(v: string) => !!v || 'messages.enter_username',
-		(v: string) => (v && /^[a-zA-Z]+$/.test(v)) || 'rules.username.latinic',
-		(v: string) => (v && v.length >= 4 && v.length >= 64) || 'rules.username.limit'
+		(v: string) => (v && /^[a-zA-Z0-9_.-]+$/.test(v)) || 'rules.username.latinic',
+		(v: string) => (v && v.length >= 4 && v.length <= 64) || 'rules.username.limit'
 	],
 	firstName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.firstName'],
 	lastName: [(v: string) => !v || (v && v.length >= 2 && v.length <= 64) || 'rules.lastName'],
@@ -28,7 +28,12 @@ export const user = {
 		(v: string) => !!v || 'messages.enter_pass',
 		(v: string) => (v && v.length >= 6 && v.length <= 32) || 'rules.pass'
 	],
-	agree: [(v: boolean) => !!v || 'rules.agree']
+	repeater: (pass: string) => [
+		(v: string) => !!v || 'messages.repeat_pass',
+		(v: string) => (v && v === pass) || 'rules.repeater'
+	],
+	agree: [(v: boolean) => !!v || 'rules.agree'],
+	file: [(val: File[]) => val.every(v => v.size <= 1024 * 1024 * 2) || 'rules.file']
 };
 
 export const record = {
@@ -38,3 +43,5 @@ export const record = {
 	],
 	description: [(v: string) => v.length <= 2056 || 'rules.description']
 };
+
+export default { category, user, record };

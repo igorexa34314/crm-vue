@@ -6,7 +6,7 @@
 
 		<v-form ref="form" @submit.prevent="submitHandler">
 			<v-select v-model="currentCategory.id" :items="categories" item-title="title" item-value="id"
-				:label="t('select_category')" variant="underlined" />
+				:label="t('select_category')" variant="underlined" class="text-input" />
 
 			<LocalizedInput v-model="currentCategory.title" :rules="validations.title" variant="underlined"
 				:label="t('title')" class="mt-6" required />
@@ -49,7 +49,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 const { xs } = useDisplay();
 const { userCurrency } = storeToRefs(useInfoStore());
 

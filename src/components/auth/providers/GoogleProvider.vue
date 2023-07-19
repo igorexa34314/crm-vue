@@ -1,17 +1,21 @@
 <template>
 	<v-btn @click="signInWithGoogleProvider" flat variant="text">
-		<v-img :src="googleProvider" aspect-ratio="1" max-width="30" />
+		<img :src="googleProvider" aspect-ratio="1" width="32" alt="Google" />
+		<slot name="ez" />
 	</v-btn>
 </template>
 
 <script setup lang="ts">
 import googleProvider from '@/assets/img/google-provider.png';
 import { AuthService } from '@/services/auth';
+import { useSlots } from 'vue';
 
 const emit = defineEmits<{
 	(e: 'success'): void;
 	(e: 'error', err: unknown): void;
 }>();
+const slot = useSlots()
+
 
 const signInWithGoogleProvider = () => {
 	AuthService.signInWithGoogle().then(() => emit('success')).catch(e => {

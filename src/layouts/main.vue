@@ -11,11 +11,9 @@
 		</v-main>
 
 		<v-tooltip activator=".fixed-action-btn" :text="t('create_record')"
-			content-class="bg-fixed text-primary font-weight-medium">
-			<template #activator="{ props }">
-				<v-btn color="fixed" :size="xs ? 'default' : mdAndDown ? 'large' : 'x-large'" class="fixed-action-btn"
-					to="/record" position="fixed" :icon="mdiPlus" v-bind="props" />
-			</template>
+			content-class="bg-fixed text-primary font-weight-medium" v-slot:activator="{ props }">
+			<v-btn color="fixed" :size="xs ? 'default' : mdAndDown ? 'large' : 'x-large'" class="fixed-action-btn"
+				to="/record" position="fixed" :icon="mdiPlus" v-bind="props" />
 		</v-tooltip>
 	</v-layout>
 </template>
@@ -32,7 +30,6 @@ import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useAsyncState } from '@vueuse/core';
 import { currencyKey } from '@/injection-keys';
-import messages from '@/utils/fbMessages.json';
 import { Unsubscribe } from 'firebase/firestore';
 import { useRouter } from 'vue-router';
 import { AuthService } from '@/services/auth';
@@ -43,7 +40,7 @@ const { state: currency, isLoading, isReady, execute: refresh } = useAsyncState(
 provide(currencyKey, { currency, isLoading, isReady, refresh });
 
 const { push } = useRouter();
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 const infoStore = useInfoStore();
 const drawer = ref(true);
@@ -57,7 +54,7 @@ onMounted(async () => {
 		}
 		await CurrencyService.fetchCurrency();
 	} catch (e) {
-		showMessage(messages[e as keyof typeof messages] || e as string);
+		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e as string);
 	} finally {
 		loading.value = false;
 	}
@@ -78,7 +75,7 @@ const logout = async () => {
 			}
 		})
 	} catch (e) {
-		showMessage(messages[e as keyof typeof messages] || e as string);
+		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e as string);
 	}
 }
 

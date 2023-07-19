@@ -45,16 +45,15 @@ import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { useDisplay } from 'vuetify';
-import messages from '@/utils/fbMessages.json';
 
 useMeta({ title: 'pageTitles.plan' });
 
-const { t, n } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, n, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
 const infoStore = useInfoStore();
 
 const { userCurrency } = storeToRefs(infoStore);
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 
 const bill = computed(() => infoStore.info?.bill || 1000);
 const isLoading = ref(false);
@@ -83,7 +82,7 @@ try {
 	}
 } catch (e) {
 	const { showMessage } = useSnackbarStore();
-	showMessage(messages[e as keyof typeof messages] || e as string);
+	showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e as string);
 } finally {
 	isLoading.value = false;
 }

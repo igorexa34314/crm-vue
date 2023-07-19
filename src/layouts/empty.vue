@@ -1,5 +1,5 @@
 <template>
-	<v-layout class="app bg-grey-darken-2">
+	<v-layout class="app bg-grey-darken-2 d-flex justify-center align-center">
 		<router-view />
 	</v-layout>
 </template>
@@ -10,9 +10,8 @@ import { useRoute } from 'vue-router';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
-import messages from '@/utils/fbMessages.json';
 
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const infoStore = useInfoStore();
 const { setLocale, $reset } = infoStore;
 const info = computed(() => infoStore.info);
@@ -23,8 +22,8 @@ if (!info.value?.locale) {
 	setLocale();
 }
 watch(() => query.message, () => {
-	if (messages[query.message as keyof typeof messages]) {
-		showMessage(t(messages[query.message as keyof typeof messages]));
+	if (te(`firebase.messages.${query.message}`)) {
+		showMessage(t(`firebase.messages.${query.message}`));
 	}
 }, { deep: true, immediate: true });
 
@@ -37,8 +36,5 @@ onUnmounted(() => {
 .app {
 	min-height: 100vh;
 	overflow: hidden;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 </style>

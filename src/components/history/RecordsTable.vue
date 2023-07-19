@@ -30,12 +30,10 @@
 						</td>
 						<td v-if="!smAndDown">
 							<v-tooltip :activator="`#rec-${rec.id}`" text="Посмотреть запись" location="bottom"
-								content-class="bg-tooltip font-weight-medium text-primary">
-								<template #activator="{ props }">
-									<v-btn :id="`rec-${rec.id}`" color="success" @click="push('/detail/' + rec.id)">
-										<v-icon v-bind="props" :icon="mdiOpenInNew" />
-									</v-btn>
-								</template>
+								content-class="bg-tooltip font-weight-medium text-primary" v-slot:activator="{ props }">
+								<v-btn :id="`rec-${rec.id}`" color="success" @click="push('/detail/' + rec.id)">
+									<v-icon v-bind="props" :icon="mdiOpenInNew" />
+								</v-btn>
 							</v-tooltip>
 						</td>
 					</tr>
@@ -72,7 +70,7 @@ const emit = defineEmits<{
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { push } = useRouter();
 const { smAndDown, xs } = useDisplay();
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 const { userCurrency } = storeToRefs(useInfoStore());
 
 const triggerSort = (prop: keyof RecordWithCategory) => {

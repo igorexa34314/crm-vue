@@ -2,10 +2,8 @@
 	<div>
 		<app-loader v-if="isLoading" page />
 		<div v-else-if="recordWithCategory">
-			<v-breadcrumbs :items="breadcrumbs">
-				<template #divider>
-					<v-icon :icon="mdiChevronRight" />
-				</template>
+			<v-breadcrumbs :items="breadcrumbs" v-slot:divider>
+				<v-icon :icon="mdiChevronRight" />
 			</v-breadcrumbs>
 
 			<v-row class="mt-4">
@@ -60,7 +58,7 @@ interface RecordWithCategoryName extends Record {
 
 const route = useRoute();
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
-const { currencyFilter: cf } = useCurrencyFilter();
+const { cf } = useCurrencyFilter();
 useMeta({ title: 'pageTitles.details' });
 
 const { userCurrency } = storeToRefs(useInfoStore());

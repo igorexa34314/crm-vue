@@ -9,7 +9,9 @@ import {
 	FacebookAuthProvider,
 	GithubAuthProvider,
 	fetchSignInMethodsForEmail,
-	linkWithCredential
+	linkWithCredential,
+	EmailAuthProvider,
+	User
 } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { getCurrentUser } from 'vuefire';
@@ -22,29 +24,11 @@ export interface UserCredentials {
 	username?: string;
 }
 
-function getProvider(providerId: (typeof supportedPopupSignInMethods)[number]) {
-	switch (providerId) {
-		case supportedPopupSignInMethods[0]:
-			return new GoogleAuthProvider();
-		case supportedPopupSignInMethods[1]:
-			return new FacebookAuthProvider();
-		case supportedPopupSignInMethods[2]:
-			return new GithubAuthProvider();
-		default:
-			throw new Error(`No provider implemented for ${providerId}`);
-	}
-}
-
-const supportedPopupSignInMethods = [
-	GoogleAuthProvider.PROVIDER_ID,
-	FacebookAuthProvider.PROVIDER_ID,
-	GithubAuthProvider.PROVIDER_ID
-] as const;
-
 export class AuthService {
 	static async login({ email, password }: UserCredentials) {
 		try {
-			await signInWithEmailAndPassword(auth, email, password);
+			const { user } = await signInWithEmailAndPassword(auth, email, password);
+			return user;
 		} catch (e) {
 			errorHandler(e);
 		}
@@ -68,14 +52,15 @@ export class AuthService {
 
 	private static async signInWithPopup(provider: any) {
 		const { user } = await callAuthPopup(auth, provider);
-		const { uid, email, displayName } = user;
+		const { uid, email, displayName, photoURL } = user;
 		const isUserExists = (await UserService.getUserById(uid)).exists();
 		if (!isUserExists) {
 			await UserService.createUser({
 				uid: uid,
 				email: email || '',
+				photoURL: photoURL || '',
 				displayName: displayName || '',
-				username: email?.split('@')[0] || `user-${uid}`
+				username: email?.split('@').at(0) || `user-${uid}`
 			});
 		}
 		return user;
@@ -85,8 +70,9 @@ export class AuthService {
 		try {
 			const provider = new GoogleAuthProvider();
 			await this.signInWithPopup(provider);
-		} catch (e) {
-			errorHandler(e);
+		} catch (err) {
+			this.handleAccountExistsError(err);
+			errorHandler(err);
 		}
 	}
 
@@ -97,8 +83,54 @@ export class AuthService {
 			provider.addScope('user_gender');
 
 			await this.signInWithPopup(provider);
-		} catch (e) {
-			errorHandler(e);
+		} catch (err) {
+			this.handleAccountExistsError(err);
+			errorHandler(err);
+		}
+	}
+
+	private static async handleAccountExistsError(err: unknown) {
+		if (
+			err instanceof FirebaseError &&
+			err.code === 'auth/account-exists-with-different-credential'
+		) {
+			const email = err.customData?.email;
+			if (email && typeof email === 'string') {
+				const credential = GithubAuthProvider.credentialFromError(err);
+
+				if (!credential) {
+					throw new Error(`Your account credentials are invalid`);
+				}
+
+				const providers = await fetchSignInMethodsForEmail(auth, email);
+
+				let user: User | undefined;
+
+				const firstPopupProviderMethod = providers.find(p =>
+					Object.values(supportedPopupSignInMethods).includes(
+						p as (typeof supportedPopupSignInMethods)[keyof typeof supportedPopupSignInMethods]
+					)
+				) as (typeof supportedPopupSignInMethods)[keyof typeof supportedPopupSignInMethods];
+
+				if (firstPopupProviderMethod === supportedPopupSignInMethods.email) {
+					const password = prompt('Please provide the password for ' + email);
+					user = await this.login({
+						email: email,
+						password: password || ''
+					});
+				} else {
+					const provider = getProvider(firstPopupProviderMethod);
+					// Sign in user to Google with same account.
+					provider.setCustomParameters({
+						'login_hint': email
+					});
+					user = await this.signInWithPopup(provider);
+				}
+
+				if (user) {
+					return linkWithCredential(user, credential);
+				}
+			}
 		}
 	}
 
@@ -108,71 +140,38 @@ export class AuthService {
 			provider.addScope('user_birthday');
 			provider.addScope('user_gender');
 
-			const user = await this.signInWithPopup(provider);
+			await this.signInWithPopup(provider);
 		} catch (err) {
-			if (
-				err instanceof FirebaseError &&
-				(err.customData?.email as string) &&
-				err.code === 'auth/account-exists-with-different-credential'
-			) {
-				const credential = GithubAuthProvider.credentialFromError(err);
-
-				if (!credential) {
-					throw new Error(`Your account credentials are invalid`);
-				}
-
-				const providers = await fetchSignInMethodsForEmail(
-					auth,
-					err.customData?.email as string
-				);
-
-				const linkedProvider = new GithubAuthProvider();
-
-				linkedProvider.setCustomParameters({ login_hint: err.customData?.email as string });
-
-				const result = await callAuthPopup(auth, linkedProvider);
-				linkWithCredential(result.user, credential);
-			}
-
-			// Handle errors...
-			// toast.error(err.message || err.toString());
+			this.handleAccountExistsError(err);
+			errorHandler(err);
 		}
 	}
-	// async oauthLogin(provider: any) {
-	// 	try {
-	// 		await AuthService.signInWithPopup(provider);
-	// 	} catch (err) {
-	// 		if (
-	// 			err instanceof FirebaseError &&
-	// 			err.email &&
-	// 			err.credential &&
-	// 			err.code === 'auth/account-exists-with-different-credential'
-	// 		) {
-	// 			const providers = await fetchSignInMethodsForEmail(auth, err.email);
-	// 			const firstPopupProviderMethod = providers.find(p =>
-	// 				supportedPopupSignInMethods.includes(p)
-	// 			);
-
-	// 			// Test: Could this happen with email link then trying social provider?
-	// 			if (!firstPopupProviderMethod) {
-	// 				throw new Error(`Your account is linked to a provider that isn't supported.`);
-	// 			}
-
-	// 			const linkedProvider = getProvider(firstPopupProviderMethod);
-	// 			linkedProvider.setCustomParameters({ login_hint: err.email });
-
-	// 			const result = await firebase.auth().signInWithPopup(linkedProvider);
-	// 			result.user.linkWithCredential(err.credential);
-	// 		}
-
-	// 		// Handle errors...
-	// 		// toast.error(err.message || err.toString());
-	// 	}
-	// }
 
 	static async logout() {
 		const { $reset } = useInfoStore();
 		await signOut(auth);
 		$reset();
+	}
+}
+
+const supportedPopupSignInMethods = {
+	email: EmailAuthProvider.PROVIDER_ID,
+	google: GoogleAuthProvider.PROVIDER_ID,
+	fb: FacebookAuthProvider.PROVIDER_ID,
+	gh: GithubAuthProvider.PROVIDER_ID
+} as const;
+
+function getProvider(
+	providerId: (typeof supportedPopupSignInMethods)[keyof typeof supportedPopupSignInMethods]
+) {
+	switch (providerId) {
+		case supportedPopupSignInMethods.google:
+			return new GoogleAuthProvider();
+		case supportedPopupSignInMethods.fb:
+			return new FacebookAuthProvider();
+		case supportedPopupSignInMethods.gh:
+			return new GithubAuthProvider();
+		default:
+			throw new Error(`No provider implemented for ${providerId}`);
 	}
 }

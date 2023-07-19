@@ -1,11 +1,5 @@
 import { db } from '@/firebase';
-import {
-	doc,
-	collection as col,
-	getDoc,
-	getDocs,
-	addDoc
-} from 'firebase/firestore';
+import { doc, collection as col, getDoc, getDocs, addDoc } from 'firebase/firestore';
 import { AuthService } from '@/services/auth';
 import { errorHandler } from '@/utils/errorHandler';
 import { Timestamp } from 'firebase/firestore';
@@ -43,7 +37,7 @@ export class RecordService {
 				recordDocs.forEach(doc => {
 					records.push({
 						...doc.data(),
-						date: this.TimestampToDate(doc.data().date),
+						date: TimestampToDate(doc.data().date),
 						id: doc.id
 					} as Record);
 				});
@@ -64,15 +58,15 @@ export class RecordService {
 			}
 			return {
 				...recordDoc.data(),
-				date: this.TimestampToDate(recordDoc.data().date),
+				date: TimestampToDate(recordDoc.data().date),
 				id
 			} as Record;
 		} catch (e) {
 			errorHandler(e);
 		}
 	}
+}
 
-	private static TimestampToDate({ seconds, nanoseconds }: Timestamp) {
-		return new Timestamp(seconds, nanoseconds).toDate();
-	}
+export function TimestampToDate({ seconds, nanoseconds }: Timestamp) {
+	return new Timestamp(seconds, nanoseconds).toDate();
 }

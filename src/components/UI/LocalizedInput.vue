@@ -1,7 +1,10 @@
 <template>
-	<v-text-field v-bind="{ variant }" validate-on="blur lazy" class="text-primary" :density="xs ? 'compact' : 'default'">
+	<v-text-field v-bind="{ variant }" validate-on="blur lazy" class="text-input" :density="xs ? 'compact' : 'default'">
 		<template #message="{ message }">
 			{{ t(message) }}
+		</template>
+		<template #append-inner>
+			<slot name="append-inner" />
 		</template>
 	</v-text-field>
 </template>
@@ -12,9 +15,9 @@ import { VTextField } from 'vuetify/components';
 import { useDisplay } from 'vuetify';
 
 const props = withDefaults(defineProps<{
-	variant?: VTextField['variant']
+	variant?: VTextField['variant'],
 }>(), {
-	variant: 'underlined'
+	variant: 'underlined',
 });
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });

@@ -7,25 +7,28 @@
 			{{ d(date, xs ? 'time' : smAndDown ? 'daytime' : 'long') }}
 		</v-app-bar-title>
 		<v-spacer />
-		<DarkmodeToggle class="mr-sm-5 mr-2" />
+		<DarkmodeToggle class="mr-7" />
 		<v-menu>
 			<template #activator="{ props }">
-				<v-btn color="profile" variant="text" v-bind="props" class="px-sm-3 px-1 mr-md-7"
-					:append-icon="mdiTriangleSmallDown">
-					<div class="text-subtitle-1 font-weight-bold">{{ username }}
+				<v-btn color="profile" variant="text" v-bind="props" class="py-1 d-flex px-sm-3 px-1 mr-md-7"
+					:append-icon="mdiTriangleSmallDown" flat>
+					<div class="text-subtitle-1 font-weight-bold d-flex align-center">
+						<v-img :src="photoURL || avatarPlaceholder" :lazy-src="avatarPlaceholder" aspect-ratio="1"
+							:width="xs ? 32 : 36" alt="User avatar" class="mr-2 mr-md-3" />
+						<span>{{ username }}</span>
 					</div>
 				</v-btn>
 			</template>
 			<v-list density="comfortable">
 				<v-list-item @click="push('/profile')">
 					<template #prepend>
-						<v-icon :icon="mdiAccountCircleOutline" class="mr-3"></v-icon>
+						<v-icon :icon="mdiAccountCircleOutline" class="mr-3" />
 					</template>
 					<v-list-item-title class="text-primary">{{ t('pageTitles.profile') }}</v-list-item-title>
 				</v-list-item>
 				<v-list-item @click="emit('logout')">
 					<template #prepend>
-						<v-icon :icon="mdiLogout" class="mr-3"></v-icon>
+						<v-icon :icon="mdiLogout" class="mr-3" />
 					</template>
 					<v-list-item-title class="text-primary">{{ t('logout') }}</v-list-item-title>
 				</v-list-item>
@@ -35,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import avatarPlaceholder from '@/assets/img/avatar-placeholder.jpg';
 import DarkmodeToggle from '@/components/app/DarkmodeToggle.vue';
 import { mdiTriangleSmallDown, mdiAccountCircleOutline, mdiLogout } from '@mdi/js';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
@@ -56,6 +60,8 @@ const infoStore = useInfoStore();
 const username = computed(() => infoStore.info ?
 	`${infoStore.info?.username}`
 	: t('guest'));
+const photoURL = computed(() => infoStore.info?.photoURL);
+
 const date = ref(new Date());
 
 let dateInterval: NodeJS.Timer;
@@ -67,7 +73,7 @@ onUnmounted(() => clearInterval(dateInterval));
 
 <style lang="scss" scoped>
 .app-title {
-	@media(max-width: 380px) {
+	@media(max-width: 420px) {
 		display: none;
 	}
 }

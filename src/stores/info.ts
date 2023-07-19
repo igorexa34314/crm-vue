@@ -9,7 +9,9 @@ export interface UserInfo {
 	locale: Locales;
 	username: string;
 	firstName?: string;
+	photoURL?: string;
 	lastName?: string;
+	birthdayDate?: Date;
 	gender: 'male' | 'female' | 'unknown';
 	bio?: string;
 	currency: CurrencyRates;
