@@ -1,6 +1,6 @@
 <template>
   <metainfo v-slot:title="{ content }: any">
-      {{ content ? `${ t(content) } | ${ AppTitle } ` : AppTitle }}
+    {{ content ? `${ t(content) } | ${ AppTitle } ` : AppTitle }}
   </metainfo>
   <GlobalSnackbar />
   <Suspense>
@@ -15,10 +15,12 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { useThemeStore } from '@/stores/theme';
 import GlobalSnackbar from '@/components/app/GlobalSnackbar.vue';
 
 const AppTitle = import.meta.env.VITE_APP_TITLE || 'CRM VUE';
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const theme = useThemeStore();
 </script>
 
 <style lang="scss">

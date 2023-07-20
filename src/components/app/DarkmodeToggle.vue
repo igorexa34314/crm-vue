@@ -7,10 +7,15 @@
 <script setup lang="ts">
 import { mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 import { computed } from 'vue';
-import { useDarkTheme } from '@/composables/useDarkTheme';
+import { useThemeStore } from '@/stores/theme';
 
-const { darkMode } = useDarkTheme();
-const switchToggleStyle = computed(() => darkMode.value ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)');
+const themeStore = useThemeStore();
+
+const darkMode = computed({
+	get: () => themeStore.darkMode,
+	set: (val: boolean) => themeStore.$patch({ darkMode: val })
+});
+const switchToggleStyle = computed(() => themeStore.darkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)');
 </script>
 
 <style lang="scss" scoped>

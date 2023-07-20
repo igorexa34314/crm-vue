@@ -9,13 +9,23 @@
 			<v-row class="mt-4">
 				<v-col cols="6" md="6" sm="10" class="v-col-xs-12">
 					<v-card class="pa-3"
-						:color="recordWithCategory.type === 'outcome' ? 'red-lighten-1' : 'light-green-darken-2'">
+						:color="recordWithCategory.type === 'outcome' ? 'red-lighten-1' : 'light-green-lighten-1'">
 						<v-card-text class="text-subtitle-1 text-primary">
 							<p>{{ t('description') + ': ' + recordWithCategory.description }}</p>
-							<p class="mt-3">{{ t('amount') + ': ' + n(cf(recordWithCategory.amount), 'currency', userCurrency)
+							<p class="mt-3">{{ t('amount') + ': ' + n(cf((recordWithCategory.amount)), 'currency', userCurrency)
 							}}
 							</p>
+
 							<p class="mt-3 mb-5">{{ t('category') + ': ' + recordWithCategory.category }}</p>
+
+							<div v-if="recordWithCategory.details?.length" class="record__details mt-4">
+								<p class="mb-4">{{ t('record_details') }}</p>
+								<p v-for="detail in recordWithCategory.details" class="record__detail mb-2 text-fixed">
+									<span @click="downloadDetail(detail)" class="record__detail-download">{{ detail.fullname
+									}}</span>
+								</p>
+							</div>
+							<a hidden ref="linkEl" v-bind="{ href: downloadState.href, download: downloadState.download }"></a>
 							<small class="text-right d-block mr-1">{{ d(recordWithCategory.date, 'short')
 							}}</small>
 						</v-card-text>
@@ -46,6 +56,7 @@ import { useI18n } from 'vue-i18n';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
+import { RecordDetail } from '@/services/record';
 
 interface Breadcrumbs {
 	title: string;
@@ -82,4 +93,25 @@ const recordWithCategory = computedAsync(async () => {
 		showMessage('no_record_found');
 	}
 });
+const linkEl = ref<HTMLLinkElement>();
+const downloadState = ref({
+	href: '',
+	download: ''
+});
+const downloadDetail = async (detail: RecordDetail) => {
+	await RecordService.downloadRecordDetail(detail);
+	downloadState.value = { href: detail.url || detail.downloadURL, download: detail.fullname };
+	linkEl.value?.click();
+}
 </script>
+
+<style lang="scss" scoped>
+.record__detail-download {
+	cursor: pointer;
+	transition: all 0.2s ease-in-out 0s;
+	&:hover {
+		color: blue;
+		text-decoration: underline;
+	}
+}
+</style>

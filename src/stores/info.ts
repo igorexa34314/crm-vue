@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { CurrencyRates } from '@/services/currency';
 import { Locales } from '@/plugins/i18n';
+import { DEFAULT_LOCALE } from '@/services/user';
 
 export interface UserInfo {
 	email: string;
@@ -32,10 +33,8 @@ export const useInfoStore = defineStore('info', () => {
 
 	const setLocale = () => {
 		(info.value as Partial<UserInfo>) = {
-			locale:
-				JSON.parse(localStorage.getItem('lang') || 'null') ||
-				import.meta.env.VITE_APP_DEFAULT_LOCALE ||
-				'en-US'
+			locale: JSON.parse(localStorage.getItem('lang') || 'null') || DEFAULT_LOCALE,
+			...info.value
 		};
 	};
 
@@ -50,6 +49,7 @@ export const useInfoStore = defineStore('info', () => {
 			{ deep: true, immediate: true }
 		);
 	};
+
 	return {
 		info,
 		userCurrency,

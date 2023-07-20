@@ -15,6 +15,12 @@
 		<LocalizedTextarea v-model="formState.description" :rules="validations.description" variant="underlined"
 			:label="t('description')" class="mt-2" rows="1" auto-grow />
 
+		<div class="mt-4">
+			<div class="mb-3 text-subtitle">{{ t('record_details') }}</div>
+			<LocalizedFileInput v-model="formState.details" :label="t('upload_details')" :rules="validations.details"
+				variant="outlined" :placeholder="t('upload_details')" density="compact" style="max-width: 550px;" multiple />
+		</div>
+
 		<v-btn type="submit" color="success" :class="xs ? 'mt-4' : 'mt-7'">
 			{{ t('create') }}
 			<v-icon :icon="mdiSend" class="ml-3" />
@@ -23,11 +29,12 @@
 </template>
 
 <script setup lang="ts">
+import LocalizedFileInput from '@/components/UI/LocalizedFileInput.vue';
 import LocalizedTextarea from '@/components/UI/LocalizedTextarea.vue';
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { mdiSend } from '@mdi/js';
 import { ref, computed, watchEffect } from 'vue';
-import { Record } from '@/services/record';
+import { Record, RecordForm } from '@/services/record';
 import { VForm } from 'vuetify/components';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
@@ -47,7 +54,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	(e: 'createRecord', data: Omit<Record, 'date'>): void;
+	(e: 'createRecord', data: Omit<RecordForm, 'date'>): void;
 }>();
 const { showMessage } = useSnackbarStore();
 const { t, n } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -59,10 +66,11 @@ const info = computed(() => infoStore.info);
 
 const form = ref<VForm>();
 
-const formState = ref<Omit<Record, 'date'>>({
+const formState = ref<RecordForm>({
 	amount: Math.round(cf.value(props.defaultAmount) / 100) * 100,
 	description: '',
 	type: 'income',
+	details: [],
 	categoryId: props.categories[0].id
 });
 
@@ -91,5 +99,6 @@ const submitHandler = async () => {
 const resetForm = () => {
 	formState.value.description = '';
 	formState.value.amount = Math.round(cf.value(props.defaultAmount) / 100) * 100;
+	formState.value.details = [];
 }
 </script>

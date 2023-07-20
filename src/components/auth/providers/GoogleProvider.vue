@@ -8,14 +8,11 @@
 <script setup lang="ts">
 import googleProvider from '@/assets/img/google-provider.png';
 import { AuthService } from '@/services/auth';
-import { useSlots } from 'vue';
 
 const emit = defineEmits<{
 	(e: 'success'): void;
 	(e: 'error', err: unknown): void;
 }>();
-const slot = useSlots()
-
 
 const signInWithGoogleProvider = () => {
 	AuthService.signInWithGoogle().then(() => emit('success')).catch(e => {

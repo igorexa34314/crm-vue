@@ -1,39 +1,10 @@
 {
 	"date": "Date",
 	"exceeding": "Exceeding",
-	"rules": {
-		"firstName": "@:user.firstName must be between 2 and 64 characters",
-		"lastName": "@:user.lastName name must be between 2 and 64 characters",
-		"amount": "The @:amount cannot be less than 1",
-		"pass": "@:password must be between 6 and 32 characters",
-		"limit": "@:limit must be greater than 100",
-		"bio": "@:user.bio should be less than 2056 characters",
-		"description": "@:description should contain less than 2056 characters",
-		"agree": "You must agree to the rules",
-		"category": "@:category name must be between 3 and 20 characters",
-		"email": "Enter correct email",
-		"repeater": "Password mismatch",
-		"username": {
-			"latinic": "@:user.username must contain only latinic characters, numbers or underlines",
-			"limit": "@:user.username must be between 4 and 64 characters"
-		}
-	},
-	"firebase": {
-		"messages": {
-			"login": "Need to sign in",
-			"needToLogout": "You need to logout before",
-			"logout": "You have successfully logged out",
-			"auth/user-not-found": "No user found with given email",
-			"auth/wrong-password": "Incorrect password",
-			"auth/email-already-in-use": "User with this email already exists"
-		}
-	},
 	"type": "Type",
 	"create_record": "Create record",
 	"logout": "Logout",
 	"password": "Password",
-	"password_repeat": "Password repeat",
-	"repeat_password": "Repeat your password",
 	"sign_in_success": "You have successfully signed up",
 	"no_records": "There are no records yet",
 	"limit": "Limit",
@@ -42,6 +13,7 @@
 	"sign_in": "Sign up",
 	"error_message": "Something went wrong",
 	"no_categories": "There are no categories yet",
+	"upload_avatar": "Upload your avatar",
 	"exchange_rate": "Exchange rate",
 	"edit": "Edit",
 	"updateProfile_message": "Data updated successfully",
@@ -53,17 +25,19 @@
 	"left": "Left",
 	"messages": {
 		"enter_email": "Enter email",
+		"repeat_pass": "Repeat your password",
 		"enter_username": "Enter name",
 		"enter_category_name": "Enter category name",
 		"enter_limit": "Enter limit",
 		"enter_amount": "Enter amount",
-		"enter_pass": "Enter password",
-		"repeat_pass": "Repeat your password"
+		"enter_pass": "Enter password"
 	},
 	"agree_with": "agree with",
 	"guest": "Guest",
+	"password_repeat": "Password repeat",
 	"create_category": "Create category",
 	"income": "Income",
+	"repeat_password": "Repeat your password",
 	"have_account": "Have an account",
 	"chart_title": "Your spending schedule",
 	"description": "Description",
@@ -152,6 +126,16 @@
 	"amount": "Amount",
 	"error_load_categories": "Error loading categories",
 	"createRecord_success": "Record created successfully",
+	"firebase": {
+		"messages": {
+			"logout": "You have successfully logged out",
+			"auth/email-already-in-use": "User with this email already exists",
+			"auth/user-not-found": "No user found with given email",
+			"auth/wrong-password": "Incorrect password",
+			"login": "Need to sign in",
+			"needToLogout": "You need to logout before"
+		}
+	},
 	"menu": {
 		"bill": "Your bill",
 		"categories": "Categories",
@@ -163,6 +147,7 @@
 	"out_of": "out of",
 	"category": "Category",
 	"user": {
+		"birthday": "Birthday date",
 		"firstName": "First name",
 		"lastName": "Last name",
 		"gender": {
@@ -172,7 +157,7 @@
 			"unknown": "Unknown"
 		},
 		"bio": "Bio",
-		"birthday": "Birthday date",
+		"avatar": "Profile avatar",
 		"username": "User name"
 	},
 	"open": "Open",
@@ -181,6 +166,27 @@
 		"USD": "USA Dollar",
 		"UAH": "Ukrainian hryvnia",
 		"RUB": "Russian ruble"
+	},
+	"record_details": "Record details in files",
+	"upload_details": "Upload record details",
+	"rules": {
+		"lastName": "@:user.lastName name must be between 2 and 64 characters",
+		"amount": "The @:amount cannot be less than 1",
+		"pass": "@:password must be between 6 and 32 characters",
+		"bio": "@:user.bio should be less than 2056 characters",
+		"description": "@:description should contain less than 2056 characters",
+		"agree": "You must agree to the rules",
+		"firstName": "@:user.firstName must be between 2 and 64 characters",
+		"file": "File size must be less than 2 megabytes",
+		"limit": "@:limit must be greater than 100",
+		"category": "@:category name must be between 3 and 20 characters",
+		"email": "Enter correct email",
+		"repeater": "Password mismatch",
+		"username": {
+			"latinic": "@:user.username must contain only latinic characters, numbers or underlines",
+			"limit": "@:user.username must be between 4 and 64 characters"
+		},
+		"details": "Maximum 5 files"
 	},
 	"__collections__": {}
 }

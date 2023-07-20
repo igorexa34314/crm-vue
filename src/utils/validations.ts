@@ -41,7 +41,11 @@ export const record = {
 		(v: number) => !!v || 'messages.enter_amount',
 		(v: number) => (v && v >= 1) || 'rules.amount'
 	],
-	description: [(v: string) => v.length <= 2056 || 'rules.description']
+	description: [(v: string) => v.length <= 2056 || 'rules.description'],
+	details: [
+		(v: File[]) => v.length <= 5 || 'rules.details',
+		(val: File[]) => val.every(v => v.size <= 1024 * 1024 * 2) || 'rules.file'
+	]
 };
 
 export default { category, user, record };

@@ -1,20 +1,21 @@
 import { ref, watch } from 'vue';
 import { useTheme } from 'vuetify';
 import { vuetifyThemeNames } from '@/plugins/vuetify';
+import { defineStore } from 'pinia';
 
-export const useDarkTheme = () => {
+export const useThemeStore = defineStore('theme', () => {
 	const theme = useTheme();
 	const darkMode = ref<boolean>(true);
 
-	const setDarkMode = () => {
-		return (
+	const setDarkMode = (value?: boolean) => {
+		darkMode.value =
+			value ??
 			(JSON.parse(localStorage.getItem('darkMode') || 'null') as boolean) ??
 			theme.global.current.value.dark ??
-			true
-		);
+			true;
 	};
 
-	darkMode.value = setDarkMode();
+	setDarkMode();
 
 	watch(
 		darkMode,
@@ -26,4 +27,4 @@ export const useDarkTheme = () => {
 	);
 
 	return { darkMode };
-};
+});

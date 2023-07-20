@@ -25,7 +25,7 @@ import { useInfoStore } from '@/stores/info';
 import { UserService } from '@/services/user';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { CategoryService } from '@/services/category';
-import { RecordService, Record } from '@/services/record';
+import { RecordService, RecordForm } from '@/services/record';
 
 useMeta({ title: 'pageTitles.newRecord' });
 
@@ -41,9 +41,9 @@ const { state: categories, isLoading } = useAsyncState(CategoryService.fetchCate
 	}
 });
 
-const create = async (formData: Omit<Record, 'date'>) => {
+const create = async (formData: RecordForm) => {
 	try {
-		await RecordService.createRecord(formData as Record);
+		await RecordService.createRecord(formData);
 
 		const { type, amount } = formData;
 		const newBill = type === 'income' ?
@@ -52,6 +52,7 @@ const create = async (formData: Omit<Record, 'date'>) => {
 		await UserService.updateInfo({ bill: +newBill.toFixed(2) });
 		showMessage(t('createRecord_success'));
 	} catch (e) {
+		console.log(e);
 		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e as string)
 	}
 }
