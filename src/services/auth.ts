@@ -64,6 +64,14 @@ export class AuthService {
 		}
 	}
 
+	static async isEmailVerified() {
+		const user = await getCurrentUser();
+		if (!user || !user.uid) {
+			throw new Error('User unauthenticated');
+		}
+		return user.emailVerified;
+	}
+
 	private static async signInWithPopup(provider: any) {
 		const { user } = await callAuthPopup(auth, provider);
 		const { uid, email, displayName, photoURL } = user;

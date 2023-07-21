@@ -7,7 +7,7 @@
 [![crm2.png](https://i.postimg.cc/SxsC1sZX/crm1.png)](https://postimg.cc/Yh5vhpBk)
 [![crm3.png](https://i.postimg.cc/s2GSyLCs/crm2.png)](https://postimg.cc/Jymt5Ph2)
 
-This CRM system allows you to calculate expenses by created categories, as well as view expenses statistics. There is a built-in support for languages: English Russian, Ukrainian
+This CRM system allows you to calculate expenses by created categories, as well as view expenses statistics. You can convert watch your bill and history on different currency rates - automatic conversion enabled. There is a built-in support for languages: English Russian, Ukrainian.
 The application contains pages: Your Account, History, Planning, New Entry, Category.
 
 Try it on:\

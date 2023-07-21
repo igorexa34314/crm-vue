@@ -52,8 +52,12 @@ const create = async (formData: RecordForm) => {
 		await UserService.updateInfo({ bill: +newBill.toFixed(2) });
 		showMessage(t('createRecord_success'));
 	} catch (e) {
-		console.log(e);
-		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e as string)
+		if (typeof e === 'string') {
+			showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
+		}
+		else { 
+			showMessage(t('error_create_record'), 'red-darken-3');
+		}
 	}
 }
 </script>

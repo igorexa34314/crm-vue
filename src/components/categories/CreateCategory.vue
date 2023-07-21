@@ -42,7 +42,7 @@ const emit = defineEmits<{
 	(e: 'created', category: Category): void;
 }>();
 
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { cf } = useCurrencyFilter();
 const { showMessage } = useSnackbarStore();
 const { xs } = useDisplay();
@@ -68,13 +68,18 @@ const submitHandler = async () => {
 				emit('created', category);
 				form.value?.reset();
 				formState.value.limit = Math.floor(cf.value(props.defaultLimit) / 100) * 100;
-				showMessage('Категория создана');
+				showMessage(t('category_created'));
 			}
 			else {
-				throw new Error('category undefined');
+				throw new Error('category_undefined');
 			}
 		} catch (e) {
-			showMessage('error_create_category');
+			if (typeof e === 'string') {
+				showMessage(te(e) ? t(e) : e, 'red-darken-3');
+			}
+			else {
+				showMessage('error_create_category', 'red-darken-3');
+			}
 		}
 	}
 }

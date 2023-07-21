@@ -27,6 +27,10 @@ export class CategoryService {
 	static async createCategory(categoryData: Category) {
 		try {
 			const uid = await AuthService.getUserId();
+			const isEmailVerified = await AuthService.isEmailVerified();
+			if (!isEmailVerified) {
+				throw new Error('verify_error');
+			}
 			const newCategoryRef = await addDoc(
 				col(doc(col(db, 'users'), uid), 'categories'),
 				categoryData
@@ -40,6 +44,10 @@ export class CategoryService {
 	static async updateCategory(categoryId: string, categoryData: Partial<Category>) {
 		try {
 			const uid = await AuthService.getUserId();
+			const isEmailVerified = await AuthService.isEmailVerified();
+			if (!isEmailVerified) {
+				throw new Error('verify_error');
+			}
 			const categoryRef = doc(col(doc(col(db, 'users'), uid), 'categories'), categoryId);
 			await updateDoc(categoryRef, categoryData);
 		} catch (e) {

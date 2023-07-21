@@ -47,7 +47,7 @@ const emit = defineEmits<{
 	(e: 'updated', cat: Category): void;
 }>();
 
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t , te} = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 const { cf } = useCurrencyFilter();
 const { xs } = useDisplay();
@@ -75,10 +75,15 @@ const submitHandler = async () => {
 		try {
 			const convertedLimit = cf.value(limit, undefined, 'reverse');
 			await CategoryService.updateCategory(id, { ...categoryData, limit: convertedLimit });
-			showMessage('Категория успешно обновлена');
+			showMessage(t('category_updated'));
 			emit('updated', { ...categoryData, id, limit: convertedLimit });
 		} catch (e) {
-			showMessage('error_update_category');
+			if (typeof e === 'string') {
+				showMessage(te(e) ? t(e) : e, 'red-darken-3');
+			}
+			else {
+				showMessage('error_update_category', 'red-darken-3');
+			}
 		}
 	}
 }

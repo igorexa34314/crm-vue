@@ -33,6 +33,10 @@ export class RecordService {
 	static async createRecord({ details, ...record }: RecordForm) {
 		try {
 			const uid = await AuthService.getUserId();
+			const isEmailVerified = await AuthService.isEmailVerified();
+			if (!isEmailVerified) {
+				throw new Error('verify_error');
+			}
 			const recordDoc = await addDoc(col(doc(col(db, 'users'), uid), 'records'), {
 				...record,
 				date: Timestamp.now()

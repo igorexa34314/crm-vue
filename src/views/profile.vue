@@ -17,7 +17,7 @@ import { UserInfo } from '@/stores/info';
 
 useMeta({ title: 'pageTitles.profile' });
 
-const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 
 const updateInfo = async (userdata: Partial<UserInfo>) => {
@@ -25,14 +25,24 @@ const updateInfo = async (userdata: Partial<UserInfo>) => {
 		await UserService.updateInfo(userdata);
 		showMessage(t('updateProfile_message'));
 	} catch (e) {
-		showMessage(t(e as string));
+		if (typeof e === 'string') {
+			showMessage(te(e) ? t(e) : e, 'red-darken-3');
+		}
+		else {
+			showMessage('error_update_profile', 'red-darken-3');
+		}
 	}
 }
 const updateAvatar = async (avatar: File[]) => {
 	try {
 		await UserService.updateUserAvatar(avatar);
 	} catch (e) {
-		showMessage(t(e as string));
+		if (typeof e === 'string') {
+			showMessage(te(e) ? t(e) : e, 'red-darken-3');
+		}
+		else {
+			showMessage(t('error_update_avatar'), 'red-darken-3');
+		}
 	}
 }
 </script>

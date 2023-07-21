@@ -22,6 +22,16 @@
 	"no_account": "Don't have an account",
 	"login_error": "Invalid email or password",
 	"currency_account": "Currency account",
+	"category_created": "Category successfully created",
+	"error_create_category": "Error when creating category",
+	"category_updated": "Category successfully updated",
+	"error_update_category": "Error occurred when updating category",
+	"error_create_record": "Cant create this record",
+	"category_undefined": "Category is undefined",
+	"error_register": "Sorry, we cant register you",
+	"verify_error": "You must verify your email before",
+	"error_update_profile": "Error when updating your profile",
+	"error_update_avatar": "Something was wrong after updating your avatar",
 	"left": "Left",
 	"messages": {
 		"enter_email": "Enter email",
@@ -187,6 +197,5 @@
 			"limit": "@:user.username must be between 4 and 64 characters"
 		},
 		"details": "Maximum 5 files"
-	},
-	"__collections__": {}
+	}
 }

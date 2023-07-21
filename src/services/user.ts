@@ -79,6 +79,10 @@ export class UserService {
 	static async updateInfo(toUpdate: Partial<UserInfo>) {
 		try {
 			const uid = await AuthService.getUserId();
+			const isEmailVerified = await AuthService.isEmailVerified();
+			if (!isEmailVerified) {
+				throw new Error('verify_error');
+			}
 			if (uid) {
 				await this.updateUser(uid, toUpdate);
 				await AuthService.updateUserProfile(toUpdate);

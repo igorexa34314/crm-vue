@@ -8,9 +8,10 @@ export const errorHandler = (err: unknown, msg?: string, errData?: any) => {
 		const email = err.customData?.email;
 
 		console.error(errorCode, errorMessage, email, errData);
-		throw err.code;
-	} else {
+		throw errorCode;
+	} else if (err instanceof Error) {
 		console.error(err, msg, errData);
-		throw err;
+		throw err.message.toString().split(' ').join('_');
 	}
+	throw err;
 };
