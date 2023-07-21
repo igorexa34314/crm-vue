@@ -1,13 +1,6 @@
 import { errorHandler } from '@/utils/errorHandler';
 import { db, storage } from '@/firebase';
-import {
-	doc,
-	collection as col,
-	onSnapshot,
-	setDoc,
-	updateDoc,
-	getDoc,
-} from 'firebase/firestore';
+import { doc, collection as col, onSnapshot, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useInfoStore, UserInfo } from '@/stores/info';
 import { AuthService } from '@/services/auth';
@@ -17,7 +10,8 @@ import { Locales } from '@/plugins/i18n';
 import { v4 as uuidv4 } from 'uuid';
 
 export const DEFAULT_BILL = import.meta.env.VITE_APP_DEFAULT_BILL || 1000;
-export const DEFAULT_CURRENCY = import.meta.env.VITE_APP_DEFAULT_CURRENCY || ('USD' as CurrencyRates);
+export const DEFAULT_CURRENCY =
+	import.meta.env.VITE_APP_DEFAULT_CURRENCY || ('USD' as CurrencyRates);
 export const DEFAULT_LOCALE = import.meta.env.VITE_APP_DEFAULT_LOCALE || ('uk-UA' as Locales);
 
 export interface UserCredentials {
@@ -87,6 +81,7 @@ export class UserService {
 			const uid = await AuthService.getUserId();
 			if (uid) {
 				await this.updateUser(uid, toUpdate);
+				await AuthService.updateUserProfile(toUpdate);
 			}
 		} catch (e) {
 			errorHandler(e);

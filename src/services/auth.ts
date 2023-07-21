@@ -11,7 +11,9 @@ import {
 	fetchSignInMethodsForEmail,
 	linkWithCredential,
 	EmailAuthProvider,
-	User
+	User,
+	updateProfile,
+	sendEmailVerification
 } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { getCurrentUser } from 'vuefire';
@@ -37,16 +39,28 @@ export class AuthService {
 	static async register({ email, password, username }: UserCredentials) {
 		try {
 			const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
-			await UserService.createUser({ uid: user.uid, email, username: username || '' });
+			if (user) {
+				await updateProfile(user, { displayName: username });
+				await sendEmailVerification(user);
+				await UserService.createUser({ uid: user.uid, email, username: username || '' });
+			}
 		} catch (e) {
 			errorHandler(e);
 		}
 	}
 
 	static async getUserId() {
-		const currentUser = await getCurrentUser();
-		if (currentUser && currentUser.uid) {
-			return currentUser.uid;
+		const user = await getCurrentUser();
+		if (!user || !user.uid) {
+			throw new Error('User unauthenticated');
+		}
+		return user.uid;
+	}
+
+	static async updateUserProfile(userdata: { displayName?: string; photoURL?: string }) {
+		const user = await getCurrentUser();
+		if (user) {
+			updateProfile(user, userdata);
 		}
 	}
 
@@ -55,6 +69,7 @@ export class AuthService {
 		const { uid, email, displayName, photoURL } = user;
 		const isUserExists = (await UserService.getUserById(uid)).exists();
 		if (!isUserExists) {
+			await sendEmailVerification(user);
 			await UserService.createUser({
 				uid: uid,
 				email: email || '',
