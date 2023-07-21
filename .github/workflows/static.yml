@@ -21,7 +21,7 @@ concurrency:
    cancel-in-progress: true
 
 env:
-   VITE_BASE: /${{ github.repository }}/
+   VITE_BASE: /${{ github.event.repository.name }}/
    VITE_PORT: 3000
    VITE_APP_TITLE: CRM VUE
    VITE_APP_DEFAULT_CURRENCY: USD
