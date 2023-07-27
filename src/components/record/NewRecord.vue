@@ -21,7 +21,7 @@
 				variant="outlined" :placeholder="t('upload_details')" density="compact" style="max-width: 550px;" multiple />
 		</div>
 
-		<v-btn type="submit" color="success" :class="xs ? 'mt-4' : 'mt-7'">
+		<v-btn type="submit" color="success" :loading="loading" :class="xs ? 'mt-4' : 'mt-7'">
 			{{ t('create') }}
 			<v-icon :icon="mdiSend" class="ml-3" />
 		</v-btn>
@@ -49,13 +49,15 @@ const props = withDefaults(defineProps<{
 	categories: Category[],
 	defaultAmount?: number,
 	defaultType?: Record['type'],
+	loading?: boolean
 }>(), {
 	defaultAmount: DEFAULT_RECORD_AMOUNT,
-	defaultType: 'outcome'
+	defaultType: 'outcome',
+	loading: false
 });
 
 const emit = defineEmits<{
-	(e: 'createRecord', data: Omit<RecordForm, 'date'>): void;
+	createRecord: [data: Omit<RecordForm, 'date'>]
 }>();
 const { showMessage } = useSnackbarStore();
 const { t, n } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -68,7 +70,7 @@ const info = computed(() => infoStore.info);
 const form = ref<VForm>();
 
 const formState = ref<RecordForm>({
-	amount: Math.round(cf.value(props.defaultAmount) / 100) * 100,
+	amount: Math.round(cf.value(props.defaultAmount) / 10) * 10,
 	description: '',
 	type: 'income',
 	details: [],
@@ -77,29 +79,27 @@ const formState = ref<RecordForm>({
 
 watchEffect(() => {
 	formState.value.categoryId = props.categories[0].id;
-	formState.value.amount = Math.round(cf.value(props.defaultAmount) / 100) * 100;
+	formState.value.amount = Math.round(cf.value(props.defaultAmount) / 10) * 10;
 });
 const canCreateRecord = computed(() => {
 	return formState.value.type === 'income' ? true : cf.value(info.value!.bill) >= formState.value.amount;
 });
 
 const submitHandler = async () => {
-	if (canCreateRecord.value) {
-		const valid = (await form.value?.validate())?.valid;
-		if (valid) {
-			const { amount, ...data } = formState.value;
-			emit('createRecord', { ...data, amount: cf.value(amount, undefined, 'reverse') })
-			resetForm();
-		}
-		else {
-			showMessage(t('lack_of_amount') +
-				` (${n(formState.value.amount - cf.value(info.value!.bill), 'currency', info.value?.currency || DEFAULT_CURRENCY)})`);
-		}
+	const valid = (await form.value?.validate())?.valid;
+	if (valid && canCreateRecord.value) {
+		const { amount, ...data } = formState.value;
+		emit('createRecord', { ...data, amount: cf.value(amount, undefined, 'reverse') })
+		resetForm();
+	}
+	else if (!canCreateRecord.value) {
+		showMessage(t('lack_of_amount') +
+			` (${n(formState.value.amount - cf.value(info.value!.bill), 'currency', info.value?.currency || DEFAULT_CURRENCY)})`);
 	}
 }
 const resetForm = () => {
 	formState.value.description = '';
-	formState.value.amount = Math.round(cf.value(props.defaultAmount) / 100) * 100;
+	formState.value.amount = Math.round(cf.value(props.defaultAmount) / 10) * 10;
 	formState.value.details = [];
 }
 </script>

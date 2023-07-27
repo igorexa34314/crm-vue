@@ -48,8 +48,8 @@ import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 
 const emit = defineEmits<{
-	(e: 'logout'): void;
-	(e: 'click'): void;
+	logout: [],
+	click: [],
 }>();
 
 const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });

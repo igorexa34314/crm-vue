@@ -22,4 +22,4 @@ export const DEFAULT_THEME =
 	vuetifyThemeNames.light;
 
 export const DEFAULT_CATEGORY_LIMIT = 100;
-export const DEFAULT_RECORD_AMOUNT = 5;
+export const DEFAULT_RECORD_AMOUNT = 20;

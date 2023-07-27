@@ -1,5 +1,3 @@
-///<reference types="vitest"/>
-
 import { defineConfig, loadEnv } from 'vite';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -47,14 +45,6 @@ export default ({ mode }) => {
 				defaultLayout: 'main'
 			}),
 			vuetify()
-		],
-		test: {
-			include: ['**/__tests__/**'],
-			globals: true,
-			environment: 'jsdom',
-			deps: {
-				inline: ['vuetify']
-			}
-		}
+		]
 	});
 };

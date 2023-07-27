@@ -64,7 +64,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	(e: 'sort', prop: keyof RecordWithCategory): void;
+	sort: [prop: keyof RecordWithCategory]
 }>();
 
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });

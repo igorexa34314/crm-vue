@@ -49,9 +49,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-	(e: 'update:modelValue', pass: string): void
+	'update:modelValue': [pass: string]
 }>();
-
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 

@@ -14,7 +14,7 @@ import { useI18n } from 'vue-i18n';
 import { useVModel } from '@vueuse/core';
 
 const emit = defineEmits<{
-	(e: 'update:modelValue', val: boolean): void;
+	'update:modelValue': [val: boolean]
 }>();
 
 const props = withDefaults(defineProps<{

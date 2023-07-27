@@ -15,8 +15,8 @@
 					href="https://old.uinp.gov.ua/publication/derzhavnii-gimn-ukraini">{{ t('app_rules') }}</a>
 			</p>
 		</v-checkbox>
-		
-		<v-btn type="submit" :append-icon="mdiSend" color="success" width="100%" class="mt-4 mt-sm-7">
+
+		<v-btn type="submit" v-bind="{ appendIcon: mdiSend, loading }" color="success" width="100%" class="mt-4 mt-sm-7">
 			{{ t('sign_in') }}
 		</v-btn>
 	</v-form>
@@ -34,14 +34,15 @@ import { VForm } from 'vuetify/components';
 import { useDisplay } from 'vuetify';
 
 const emit = defineEmits<{
-	(e: 'success'): void;
-	(e: 'error', err: unknown): void;
+	success: [],
+	error: [err: unknown],
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
 
 const form = ref<VForm>();
+const loading = ref(false);
 const formState = ref({
 	email: '',
 	password: '',
@@ -54,10 +55,14 @@ const submitRegister = async () => {
 	if (valid) {
 		const { agree, ...data } = formState.value;
 		try {
+			loading.value = true;
 			await AuthService.register(data);
 			emit('success');
 		} catch (e) {
 			emit('error', e);
+		}
+		finally {
+			loading.value = false;
 		}
 	}
 }

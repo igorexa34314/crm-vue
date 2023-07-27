@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<{
 	iconSize: 26
 });
 const emit = defineEmits<{
-	(e: 'cancel'): void
+	cancel: []
 }>();
 </script>
 

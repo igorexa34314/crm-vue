@@ -6,7 +6,7 @@
 		<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined" label="Пароль"
 			class="mt-6" required />
 
-		<v-btn type="submit" width="100%" color="success" class="mt-4 mt-sm-8" :append-icon="mdiSend">
+		<v-btn type="submit" width="100%" color="success" class="mt-4 mt-sm-8" v-bind="{ loading, appendIcon: mdiSend }">
 			{{ t('login') }}</v-btn>
 	</v-form>
 </template>
@@ -21,12 +21,13 @@ import { user as validations } from '@/utils/validations';
 import { VForm } from 'vuetify/components';
 
 const emit = defineEmits<{
-	(e: 'success'): void;
-	(e: 'error', err: unknown): void;
+	success: [],
+	error: [err: unknown],
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const form = ref<VForm>();
+const loading = ref(false);
 
 const formState = ref({
 	email: '',
@@ -37,11 +38,15 @@ const submitLogin = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
+			loading.value = true;
 			await AuthService.login(formState.value);
 			emit('success');
 		} catch (e) {
 			console.error(e);
 			emit('error', e);
+		}
+		finally {
+			loading.value = false;
 		}
 	}
 }

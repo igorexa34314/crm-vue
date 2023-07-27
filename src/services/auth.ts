@@ -12,6 +12,9 @@ import {
 	linkWithCredential,
 	EmailAuthProvider,
 	User,
+	reauthenticateWithCredential,
+	updateEmail,
+	updatePassword,
 	updateProfile,
 	sendEmailVerification
 } from 'firebase/auth';
@@ -57,10 +60,42 @@ export class AuthService {
 		return user.uid;
 	}
 
+	static async changeUserEmail(newEmail: string) {
+		try {
+			const user = await getCurrentUser();
+			if (user) {
+				await sendEmailVerification(user);
+				await updateEmail(user, newEmail);
+			}
+		} catch (e) {
+			errorHandler(e);
+		}
+	}
+
+	static async changeUserPassword(oldPass: string, newPass: string) {
+		try {
+			const user = await getCurrentUser();
+			if (!user) {
+				throw new Error('User unauthenticated');
+			}
+			const credential = EmailAuthProvider.credential(user.email || '', oldPass);
+			const userCreds = await reauthenticateWithCredential(user, credential);
+			if (userCreds.user) {
+				await updatePassword(userCreds.user, newPass);
+			}
+		} catch (e) {
+			errorHandler(e);
+		}
+	}
+
 	static async updateUserProfile(userdata: { displayName?: string; photoURL?: string }) {
-		const user = await getCurrentUser();
-		if (user) {
-			updateProfile(user, userdata);
+		try {
+			const user = await getCurrentUser();
+			if (user) {
+				updateProfile(user, userdata);
+			}
+		} catch (e) {
+			errorHandler(e);
 		}
 	}
 

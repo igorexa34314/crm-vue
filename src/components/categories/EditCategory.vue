@@ -14,7 +14,8 @@
 			<LocalizedInput v-model="currentCategory.limit" :rules="validations.limit" variant="underlined" type="number"
 				:label="t('limit') + ` (${userCurrency})`" class="mt-6" required />
 
-			<v-btn color="success" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
+			<v-btn color="success" type="submit" :class="xs ? 'mt-4' : 'mt-7'" :disabled="isNewCategoryEquals"
+				:loading="loading">
 				{{ t('update') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
@@ -35,7 +36,9 @@ import { useInfoStore } from '@/stores/info';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { storeToRefs } from 'pinia';
 import { useDisplay } from 'vuetify';
+import { isEqual } from 'lodash';
 import { DEFAULT_CATEGORY_LIMIT } from '@/globals';
+import { computed } from 'vue';
 
 const props = withDefaults(defineProps<{
 	categories: Category[];
@@ -45,16 +48,17 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	(e: 'updated', cat: Category): void;
+	updated: [cat: Category]
 }>();
 
-const { t , te} = useI18n({ inheritLocale: true, useScope: 'global' });
+const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { showMessage } = useSnackbarStore();
 const { cf } = useCurrencyFilter();
 const { xs } = useDisplay();
 const { userCurrency } = storeToRefs(useInfoStore());
 
 const form = ref<VForm>();
+const loading = ref(false);
 const currentCategory = ref<Category>({
 	id: props.categories[0].id,
 	title: '',
@@ -65,8 +69,14 @@ watchEffect(() => {
 	const category = props.categories.find(({ id }) => id === currentCategory.value.id);
 	if (category) {
 		currentCategory.value.title = category.title;
-		currentCategory.value.limit = Math.round(cf.value(category.limit));
+		currentCategory.value.limit = Math.round(cf.value(props.defaultLimit) / 100) * 100;
 	};
+});
+
+const isNewCategoryEquals = computed(() => {
+	const { id, ...newCategory } = currentCategory.value;
+	const { title, limit } = props.categories.find(cat => cat.id === id)!
+	return isEqual(newCategory, { title, limit: Math.round(cf.value(limit) / 100) * 100 });
 });
 
 const submitHandler = async () => {
@@ -75,6 +85,7 @@ const submitHandler = async () => {
 	if (valid && id) {
 		try {
 			const convertedLimit = cf.value(limit, undefined, 'reverse');
+			loading.value = true;
 			await CategoryService.updateCategory(id, { ...categoryData, limit: convertedLimit });
 			showMessage(t('category_updated'));
 			emit('updated', { ...categoryData, id, limit: convertedLimit });
@@ -85,6 +96,9 @@ const submitHandler = async () => {
 			else {
 				showMessage('error_update_category', 'red-darken-3');
 			}
+		}
+		finally {
+			loading.value = false;
 		}
 	}
 }

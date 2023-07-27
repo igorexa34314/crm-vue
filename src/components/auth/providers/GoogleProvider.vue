@@ -10,8 +10,8 @@ import googleProvider from '@/assets/img/google-provider.png';
 import { AuthService } from '@/services/auth';
 
 const emit = defineEmits<{
-	(e: 'success'): void;
-	(e: 'error', err: unknown): void;
+	success: [],
+	error: [err: unknown],
 }>();
 
 const signInWithGoogleProvider = () => {

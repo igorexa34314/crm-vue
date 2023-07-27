@@ -20,7 +20,6 @@
 			"vite-plugin-vue-layouts/client",
 			"vuetify",
 			"@intlify/unplugin-vue-i18n/messages",
-			"vitest/globals"
 		],
 		"paths": {
 			"@/*": ["src/*"]

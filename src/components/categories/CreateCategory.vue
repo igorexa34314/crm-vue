@@ -11,7 +11,7 @@
 			<LocalizedInput v-model.number="formState.limit" :rules="validations.limit" variant="underlined" type="number"
 				:label="t('limit') + ` (${userCurrency})`" class="mt-6" required />
 
-			<v-btn color="success" type="submit" :class="xs ? 'mt-4' : 'mt-7'">
+			<v-btn color="success" type="submit" :class="xs ? 'mt-4' : 'mt-7'" :loading="loading">
 				{{ t('create') }}
 				<v-icon :icon="mdiSend" class="ml-3" />
 			</v-btn>
@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<{
 	defaultLimit: DEFAULT_CATEGORY_LIMIT
 });
 const emit = defineEmits<{
-	(e: 'created', category: Category): void;
+	created: [category: Category]
 }>();
 
 const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -50,6 +50,7 @@ const { xs } = useDisplay();
 
 const { userCurrency } = storeToRefs(useInfoStore());
 const form = ref<VForm>();
+const loading = ref(false);
 const formState = ref<Category>({
 	title: '',
 	limit: Math.floor(cf.value(props.defaultLimit) / 100) * 100,
@@ -63,7 +64,8 @@ const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
 		try {
-			const { limit, ...data } = formState.value
+			const { limit, ...data } = formState.value;
+			loading.value = true;
 			const category = await CategoryService.createCategory({ ...data, limit: cf.value(limit, undefined, 'reverse') });
 			if (category) {
 				emit('created', category);
@@ -81,6 +83,9 @@ const submitHandler = async () => {
 			else {
 				showMessage('error_create_category', 'red-darken-3');
 			}
+		}
+		finally {
+			loading.value = false;
 		}
 	}
 }

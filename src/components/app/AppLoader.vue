@@ -1,5 +1,5 @@
 <template>
-	<div :class="{ '_page': page }" class="app-loader">
+	<div :class="{ '_page': page, '_screen': screen }" class="app-loader">
 		<div v-for="i in 8" :key="i" :style="cssProps"></div>
 	</div>
 </template>
@@ -12,8 +12,10 @@ const theme = useTheme();
 
 const props = withDefaults(defineProps<{
 	page?: boolean;
+	screen: boolean;
 	color?: string;
 }>(), {
+	screen: false,
 	page: false,
 });
 
@@ -30,6 +32,9 @@ const cssProps = computed(() => ({
 	height: 80px;
 	@media(max-width:960px) {
 		transform: scale(0.7);
+		&._screen {
+			transform: none;
+		}
 	}
 	&._page {
 		left: 50%;
@@ -37,6 +42,24 @@ const cssProps = computed(() => ({
 		@media(max-width:960px) {
 			transform: translate(-50%) scale(0.7);
 		}
+	}
+	&._screen {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		&::before {
+			content: "";
+			pointer-events: none;
+			position: fixed;
+			display: block;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 100;
+			background-color: rgba($color: #FFFFFF, $alpha: .35);
+		}
+
 	}
 	& div {
 		animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;

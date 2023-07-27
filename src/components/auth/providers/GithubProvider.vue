@@ -12,8 +12,8 @@ const theme = useTheme();
 const githubProvider = new URL(`/src/assets/img/github-provider${theme.global.current.value.dark ? '_light' : ''}.png`, import.meta.url).href;
 
 const emit = defineEmits<{
-	(e: 'success'): void;
-	(e: 'error', err: unknown): void;
+	success: [],
+	error: [err: unknown],
 }>();
 
 const signInWithGithubProvider = () => {

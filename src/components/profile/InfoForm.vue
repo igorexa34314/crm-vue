@@ -48,7 +48,8 @@
 				item-value="value" variant="underlined" class="ml-sm-4 text-input" />
 		</div>
 
-		<v-btn type="submit" color="success" :class="xs ? 'mt-3' : 'mt-5'">
+		<v-btn type="submit" color="success" :class="xs ? 'mt-3' : 'mt-5'" :loading="loading"
+			:disabled="isInfoEqualsToStore">
 			{{ t('update') }}
 			<v-icon :icon="mdiSend" class="ml-3" />
 		</v-btn>
@@ -71,11 +72,18 @@ import { VForm } from 'vuetify/components';
 import { CurrencyRates } from '@/services/currency';
 import { currencyKey } from '@/injection-keys';
 import { useDisplay } from 'vuetify';
-import { DEFAULT_CURRENCY } from '@/globals'
+import { DEFAULT_CURRENCY } from '@/globals';
+import { isEqual } from 'lodash';
+
+const props = withDefaults(defineProps<{
+	loading?: boolean;
+}>(), {
+	loading: false
+});
 
 const emit = defineEmits<{
-	(e: 'updateInfo', info: Partial<UserInfo>): void;
-	(e: 'updateAvatar', image: File[]): void;
+	updateInfo: [info: Partial<UserInfo>],
+	updateAvatar: [image: File[]]
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -124,6 +132,15 @@ watchEffect(() => {
 		formState.value = { ...formState.value, ...userdata };
 	}
 })
+
+const isInfoEqualsToStore = computed(() => {
+	const { avatar, ...formInfo } = formState.value;
+	if (!info.value || !Object.keys(info.value).length) {
+		return false;
+	}
+	const { bill, ...userdata } = info.value;
+	return isEqual(userdata, formInfo)
+});
 
 const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;

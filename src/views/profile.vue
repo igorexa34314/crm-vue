@@ -3,25 +3,47 @@
 		<div class="title text-title">
 			<h3 class="text-h5 text-sm-h4 mt-2 mt-sm-4 ml-2">{{ t('pageTitles.profile') }}</h3>
 		</div>
-		<ProfileForm class="mt-6 mt-sm-8 px-2 px-sm-4" @update-info="updateInfo" @update-avatar="updateAvatar" />
+		<v-tabs v-model="currentTab" density="comfortable" class="mt-6 mb-3 mb-sm-0" color="primary">
+			<v-tab v-for="tab in profileTabs" :key="tab.value" :value="tab.value" :size="xs ? 'small' : 'default'">
+				{{ t(`tabs.${tab.title}`) }}
+			</v-tab>
+		</v-tabs>
+		<v-window v-model="currentTab">
+			<v-window-item v-for="tab in profileTabs" :key="tab.value" :value="tab.value">
+				<component :is="tab.component" lass="mt-6 mt-sm-8 px-2 px-sm-4" @update-info="updateInfo"
+					@update-avatar="updateAvatar" :loading="loading" />
+			</v-window-item>
+		</v-window>
 	</div>
 </template>
 
 <script setup lang="ts">
-import ProfileForm from '@/components/profile/ProfileForm.vue';
+import InfoForm from '@/components/profile/InfoForm.vue';
+import SecurityForm from '@/components/profile/SecurityForm.vue';
+import { ref } from 'vue';
 import { useMeta } from 'vue-meta';
 import { useI18n } from 'vue-i18n';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { UserService } from '@/services/user';
 import { UserInfo } from '@/stores/info';
+import { useDisplay } from 'vuetify';
 
 useMeta({ title: 'pageTitles.profile' });
 
 const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
+const { xs } = useDisplay();
 const { showMessage } = useSnackbarStore();
+
+const profileTabs = [
+	{ title: 'info', value: 'info', component: InfoForm },
+	{ title: 'security', value: 'security', component: SecurityForm }
+]
+const currentTab = ref(profileTabs[0]);
+const loading = ref(false);
 
 const updateInfo = async (userdata: Partial<UserInfo>) => {
 	try {
+		loading.value = true;
 		await UserService.updateInfo(userdata);
 		showMessage(t('updateProfile_message'));
 	} catch (e) {
@@ -31,6 +53,9 @@ const updateInfo = async (userdata: Partial<UserInfo>) => {
 		else {
 			showMessage('error_update_profile', 'red-darken-3');
 		}
+	}
+	finally {
+		loading.value = false;
 	}
 }
 const updateAvatar = async (avatar: File[]) => {

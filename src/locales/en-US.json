@@ -16,6 +16,9 @@
 	"upload_avatar": "Upload your avatar",
 	"exchange_rate": "Exchange rate",
 	"edit": "Edit",
+	"change_password": "Change password",
+	"password_current": "Current password",
+	"password_new": "New password",
 	"updateProfile_message": "Data updated successfully",
 	"home_bookkeeping": "Home bookkeeping",
 	"login_success": "You have successfully logged in",
@@ -56,6 +59,10 @@
 	"title": "Title",
 	"lack_of_amount": "Insufficient funds on the account",
 	"rate": "Rate",
+	"tabs": {
+		"info": "Information",
+		"security": "Security"
+	},
 	"pageTitles": {
 		"profile": "Profile",
 		"bill": "Your bill",

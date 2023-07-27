@@ -4,20 +4,20 @@
 			<h3 class="text-h5 text-sm-h4 mt-2 mt-sm-4 ml-2 text-title">{{ t('pageTitles.newRecord') }}</h3>
 		</div>
 
-		<app-loader v-if="isLoading" class="mt-10" page />
+		<app-loader v-if="categoriesLoading" class="mt-10" page />
 
 		<div v-else-if="!categories?.length" class="mt-10 text-center text-h6">
 			{{ t('no_categories') + '. ' }}
 			<router-link to="/categories">{{ t('create_category') }}</router-link>
 		</div>
 
-		<NewRecord v-else v-bind="{ categories, defaultAmount }" @create-record="create" />
+		<NewRecord v-else v-bind="{ categories, defaultAmount, loading: createLoading }" @create-record="create" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import NewRecord from '@/components/record/NewRecord.vue';
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useAsyncState } from '@vueuse/core';
 import { useMeta } from 'vue-meta';
 import { useI18n } from 'vue-i18n';
@@ -36,14 +36,17 @@ const infoStore = useInfoStore();
 
 const info = computed(() => infoStore.info);
 
-const { state: categories, isLoading } = useAsyncState(CategoryService.fetchCategories, [], {
+const { state: categories, isLoading: categoriesLoading } = useAsyncState(CategoryService.fetchCategories, [], {
 	onError: (e) => {
 		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : t('error_load_categories'))
 	}
 });
 
+const createLoading = ref(false);
+
 const create = async (formData: RecordForm) => {
 	try {
+		createLoading.value = true;
 		await RecordService.createRecord(formData);
 
 		const { type, amount } = formData;
@@ -59,6 +62,9 @@ const create = async (formData: RecordForm) => {
 		else {
 			showMessage(t('error_create_record'), 'red-darken-3');
 		}
+	}
+	finally {
+		createLoading.value = false;
 	}
 }
 </script>
