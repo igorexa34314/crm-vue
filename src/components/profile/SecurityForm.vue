@@ -8,7 +8,7 @@
 			:label="t('password_current')" class="mb-5" required />
 
 		<PassField v-model="formState.newPass" :rules="validations.password" variant="underlined" :label="t('password_new')"
-			class="mb-5" required repeater :repeater-label="t('repeat_password')" />
+			class="mb-5" required repeater repeater-label="repeat_password" />
 
 		<v-btn type="submit" color="success" :class="xs ? 'mt-3' : 'mt-5'" :disabled="!formState.newPass" :loading="loading">
 			{{ t('update') }}
@@ -36,14 +36,14 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	changeCreds: [creds: Partial<UserCredentials>]
+	changeCreds: [creds: Partial<{ oldPass: string, newPass: string, email: string }>]
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
 const infoStore = useInfoStore();
 
-const email = computed(() => infoStore.info?.email);
+const currentEmail = computed(() => infoStore.info?.email);
 
 const form = ref<VForm>();
 
@@ -54,15 +54,15 @@ const formState = ref({
 });
 
 watchEffect(() => {
-	if (email.value) {
-		formState.value = { ...formState.value, email: email.value };
+	if (currentEmail.value) {
+		formState.value = { ...formState.value, email: currentEmail.value };
 	}
 })
 
 const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
-		emit('changeCreds', { email: formState.value.email });
+		emit('changeCreds', formState.value);
 	}
 }
 </script>

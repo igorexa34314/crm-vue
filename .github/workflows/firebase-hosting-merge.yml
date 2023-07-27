@@ -28,6 +28,7 @@ env:
    VITE_FB_APP_ID: ${{ vars.VITE_FB_APP_ID }}
    VITE_FB_MEASUREMENT_ID: ${{ vars.VITE_FB_MEASUREMENT_ID }}
    VITE_FB_DATABASE_URL: ${{ vars.VITE_FB_DATABASE_URL }}
+   VITE_FB_RECAPTCHA_PUBLIC_KEY: ${{ secrets.VITE_FB_RECAPTCHA_PUBLIC_KEY }}
 
 jobs:
    build_and_deploy:

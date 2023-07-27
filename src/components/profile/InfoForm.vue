@@ -49,7 +49,7 @@
 		</div>
 
 		<v-btn type="submit" color="success" :class="xs ? 'mt-3' : 'mt-5'" :loading="loading"
-			:disabled="isInfoEqualsToStore">
+			:disabled="isInfoEqualsToStore && !formState.avatar.length">
 			{{ t('update') }}
 			<v-icon :icon="mdiSend" class="ml-3" />
 		</v-btn>
@@ -82,8 +82,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	updateInfo: [info: Partial<UserInfo>],
-	updateAvatar: [image: File[]]
+	updateInfo: [info: Omit<UserInfo, 'bill' | 'email'> & { avatar: File[] }],
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -145,12 +144,8 @@ const isInfoEqualsToStore = computed(() => {
 const submitHandler = async () => {
 	const valid = (await form.value?.validate())?.valid;
 	if (valid) {
-		const { avatar, ...userdata } = formState.value;
-		emit('updateInfo', userdata);
-		if (avatar.length) {
-			emit('updateAvatar', avatar);
-			formState.value.avatar = [];
-		}
+		emit('updateInfo', formState.value);
+		formState.value.avatar = [];
 	}
 }
 </script>

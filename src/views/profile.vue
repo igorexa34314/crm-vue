@@ -10,8 +10,8 @@
 		</v-tabs>
 		<v-window v-model="currentTab">
 			<v-window-item v-for="tab in profileTabs" :key="tab.value" :value="tab.value">
-				<component :is="tab.component" lass="mt-6 mt-sm-8 px-2 px-sm-4" @update-info="updateInfo"
-					@update-avatar="updateAvatar" :loading="loading" />
+				<component :is="tab.component" lass="mt-6 mt-sm-8 px-2 px-sm-4" @update-info="updateInfo" :loading="loading"
+					@change-creds="updateCreds" />
 			</v-window-item>
 		</v-window>
 	</div>
@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import InfoForm from '@/components/profile/InfoForm.vue';
 import SecurityForm from '@/components/profile/SecurityForm.vue';
+import { AuthService } from '@/services/auth';
 import { ref } from 'vue';
 import { useMeta } from 'vue-meta';
 import { useI18n } from 'vue-i18n';
@@ -41,33 +42,47 @@ const profileTabs = [
 const currentTab = ref(profileTabs[0]);
 const loading = ref(false);
 
-const updateInfo = async (userdata: Partial<UserInfo>) => {
+const updateInfo = async ({ avatar, ...userdata }: Omit<UserInfo, 'bill' | 'email'> & { avatar: File[] }) => {
 	try {
 		loading.value = true;
 		await UserService.updateInfo(userdata);
+		if (avatar.length) {
+			await UserService.updateUserAvatar(avatar);
+		}
 		showMessage(t('updateProfile_message'));
 	} catch (e) {
 		if (typeof e === 'string') {
-			showMessage(te(e) ? t(e) : e, 'red-darken-3');
+			showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
 		}
 		else {
-			showMessage('error_update_profile', 'red-darken-3');
+			showMessage(t('error_update_profile'), 'red-darken-3');
 		}
 	}
 	finally {
 		loading.value = false;
 	}
 }
-const updateAvatar = async (avatar: File[]) => {
+
+const updateCreds = async ({ oldPass, newPass, email }: Partial<{ oldPass: string, newPass: string, email: string }>) => {
 	try {
-		await UserService.updateUserAvatar(avatar);
+		loading.value = true;
+		if (oldPass && newPass) {
+			await AuthService.changeUserPassword(oldPass, newPass);
+			showMessage(t('updatePass_message'));
+		}
+		// if (email && ) {
+		// 	await AuthService.changeUserEmail(email);
+		// }
 	} catch (e) {
 		if (typeof e === 'string') {
-			showMessage(te(e) ? t(e) : e, 'red-darken-3');
+			showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
 		}
 		else {
-			showMessage(t('error_update_avatar'), 'red-darken-3');
+			showMessage(t('error_update_profile'), 'red-darken-3');
 		}
+	}
+	finally {
+		loading.value = false;
 	}
 }
 </script>

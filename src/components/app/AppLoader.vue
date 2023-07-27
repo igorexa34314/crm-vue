@@ -12,7 +12,7 @@ const theme = useTheme();
 
 const props = withDefaults(defineProps<{
 	page?: boolean;
-	screen: boolean;
+	screen?: boolean;
 	color?: string;
 }>(), {
 	screen: false,
