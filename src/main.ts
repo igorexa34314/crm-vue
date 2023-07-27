@@ -4,8 +4,8 @@ import App from '@/App.vue';
 import router from '@/router';
 import { createMetaManager } from 'vue-meta';
 import vuetify from '@/plugins/vuetify';
-import i18n, { setI18nLanguage } from './plugins/i18n';
-import { createPinia } from 'pinia';
+import i18n, { setI18nLanguage } from '@/plugins/i18n';
+import pinia from '@/plugins/pinia';
 import { useInfoStore } from '@/stores/info';
 import { firebaseApp } from '@/firebase';
 import AppLoader from '@/components/app/AppLoader.vue';
@@ -17,7 +17,7 @@ app.use(VueFire, {
 	modules: [VueFireAuth()]
 });
 
-app.use(router).use(i18n).use(createPinia()).use(createMetaManager()).use(vuetify);
+app.use(router).use(i18n).use(pinia).use(createMetaManager()).use(vuetify);
 app.component('app-loader', AppLoader);
 app.mount('#app');
 

@@ -15,12 +15,12 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { useThemeStore } from '@/stores/theme';
+import { useDarkModeStore } from '@/stores/darkMode';
 import GlobalSnackbar from '@/components/app/GlobalSnackbar.vue';
+import { AppTitle } from '@/globals';
 
-const AppTitle = import.meta.env.VITE_APP_TITLE || 'CRM VUE';
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
-const theme = useThemeStore();
+const darkModSore = useDarkModeStore();
 </script>
 
 <style lang="scss">

@@ -4,15 +4,9 @@ import { doc, collection as col, onSnapshot, setDoc, updateDoc, getDoc } from 'f
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useInfoStore, UserInfo } from '@/stores/info';
 import { AuthService } from '@/services/auth';
-import { CurrencyRates } from '@/services/currency';
-import { TimestampToDate } from './record';
-import { Locales } from '@/plugins/i18n';
+import { TimestampToDate } from '@/services/record';
 import { v4 as uuidv4 } from 'uuid';
-
-export const DEFAULT_BILL = import.meta.env.VITE_APP_DEFAULT_BILL || 1000;
-export const DEFAULT_CURRENCY =
-	import.meta.env.VITE_APP_DEFAULT_CURRENCY || ('USD' as CurrencyRates);
-export const DEFAULT_LOCALE = import.meta.env.VITE_APP_DEFAULT_LOCALE || ('uk-UA' as Locales);
+import { DEFAULT_BILL, DEFAULT_CURRENCY, DEFAULT_LOCALE } from '@/globals';
 
 export interface UserCredentials {
 	uid: string;

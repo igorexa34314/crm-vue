@@ -35,12 +35,13 @@ import { useInfoStore } from '@/stores/info';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { storeToRefs } from 'pinia';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CATEGORY_LIMIT } from '@/globals';
 
 const props = withDefaults(defineProps<{
 	categories: Category[];
 	defaultLimit?: number
 }>(), {
-	defaultLimit: 100
+	defaultLimit: DEFAULT_CATEGORY_LIMIT
 });
 
 const emit = defineEmits<{

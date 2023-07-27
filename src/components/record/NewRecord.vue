@@ -43,13 +43,14 @@ import { record as validations } from '@/utils/validations';
 import { Category } from '@/services/category';
 import { useInfoStore } from '@/stores/info';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CURRENCY, DEFAULT_RECORD_AMOUNT } from '@/globals';
 
 const props = withDefaults(defineProps<{
 	categories: Category[],
 	defaultAmount?: number,
 	defaultType?: Record['type'],
 }>(), {
-	defaultAmount: 5,
+	defaultAmount: DEFAULT_RECORD_AMOUNT,
 	defaultType: 'outcome'
 });
 
@@ -92,7 +93,7 @@ const submitHandler = async () => {
 		}
 		else {
 			showMessage(t('lack_of_amount') +
-				` (${n(formState.value.amount - cf.value(info.value!.bill), 'currency', info.value?.currency || import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD')})`);
+				` (${n(formState.value.amount - cf.value(info.value!.bill), 'currency', info.value?.currency || DEFAULT_CURRENCY)})`);
 		}
 	}
 }

@@ -4,16 +4,12 @@ import { createVuetify } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { vuetifyThemeNames, DEFAULT_THEME } from '@/globals';
 
 // I18n
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n';
 import { useI18n } from 'vue-i18n';
-import i18n from './i18n';
-
-export const vuetifyThemeNames = {
-	dark: 'customDark',
-	light: 'customLight'
-} as const;
+import i18n from '@/plugins/i18n';
 
 export default createVuetify({
 	components,
@@ -29,10 +25,7 @@ export default createVuetify({
 		}
 	},
 	theme: {
-		defaultTheme:
-			vuetifyThemeNames[
-				import.meta.env.VITE_APP_DEFAULT_THEME as keyof typeof vuetifyThemeNames
-			] || vuetifyThemeNames.light,
+		defaultTheme: DEFAULT_THEME,
 
 		themes: {
 			[vuetifyThemeNames.dark]: {

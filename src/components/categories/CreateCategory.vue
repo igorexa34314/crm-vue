@@ -32,11 +32,12 @@ import { useInfoStore } from '@/stores/info';
 import { storeToRefs } from 'pinia';
 import { VForm } from 'vuetify/components';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CATEGORY_LIMIT } from '@/globals';
 
 const props = withDefaults(defineProps<{
 	defaultLimit?: number
 }>(), {
-	defaultLimit: 100
+	defaultLimit: DEFAULT_CATEGORY_LIMIT
 });
 const emit = defineEmits<{
 	(e: 'created', category: Category): void;

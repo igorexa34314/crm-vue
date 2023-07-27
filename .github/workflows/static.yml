@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy static app content to Github Pages
 
 on:
    # Runs on pushes targeting the default branch
@@ -28,6 +28,8 @@ env:
    VITE_APP_DEFAULT_BILL: 1000
    VITE_APP_DEFAULT_LOCALE: en-US
    VITE_APP_DEFAULT_THEME: dark
+   VITE_APP_LOCALE_KEY: lang
+   VITE_APP_DARK_MODE_KEY: darkMode
 
    VITE_EXCHANGER_API_URL: ${{ vars.VITE_EXCHANGER_API_URL }}
 

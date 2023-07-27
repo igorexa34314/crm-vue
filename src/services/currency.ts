@@ -1,4 +1,5 @@
 import { errorHandler } from '@/utils/errorHandler';
+import { DEFAULT_CURRENCY } from '@/globals';
 
 export type CurrencyRates = 'USD' | 'EUR' | 'UAH' | 'RUB';
 export interface Currency {
@@ -7,7 +8,7 @@ export interface Currency {
 }
 
 const DEFAULT_CURRENCY_RESPONSE = {
-	rates: { [import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD']: 1 },
+	rates: { [DEFAULT_CURRENCY]: 1 },
 	date: new Date()
 };
 
@@ -17,7 +18,7 @@ export class CurrencyService {
 			const res = await fetch(
 				import.meta.env.VITE_EXCHANGER_API_URL +
 					`?base=${
-						import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD'
+						DEFAULT_CURRENCY
 					}&symbols=EUR%2CUAH%2CUSD%2CRUB`,
 				{
 					method: 'GET',

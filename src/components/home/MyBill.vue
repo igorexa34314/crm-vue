@@ -19,6 +19,7 @@ import { computed } from 'vue';
 import { useInfoStore } from '@/stores/info';
 import { Currency, CurrencyRates } from '@/services/currency';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CURRENCY } from '@/globals';
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
@@ -33,7 +34,7 @@ const currencies = computed(() => Object.keys(props.rates || {}) as CurrencyRate
 const info = computed(() => infoStore.info);
 
 const getCurrency = computed(() => (currency: CurrencyRates) => {
-	const base = info.value?.bill ? info.value.bill / props.rates[(import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD') as CurrencyRates] : 0;
+	const base = info.value?.bill ? info.value.bill / props.rates[DEFAULT_CURRENCY] : 0;
 	return Math.floor(base * props.rates[currency]);
 });
 </script>

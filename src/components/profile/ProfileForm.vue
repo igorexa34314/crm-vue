@@ -71,6 +71,7 @@ import { VForm } from 'vuetify/components';
 import { CurrencyRates } from '@/services/currency';
 import { currencyKey } from '@/injection-keys';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CURRENCY } from '@/globals'
 
 const emit = defineEmits<{
 	(e: 'updateInfo', info: Partial<UserInfo>): void;
@@ -84,7 +85,7 @@ const infoStore = useInfoStore();
 const { currency } = inject(currencyKey)!;
 
 const currencies = computed(() => {
-	const currencyNames = (currency.value?.rates ? Object.keys(currency.value.rates) : [import.meta.env.VITE_APP_DEFAULT_CURRENCY || 'USD']) as CurrencyRates[];
+	const currencyNames = (currency.value?.rates ? Object.keys(currency.value.rates) : [DEFAULT_CURRENCY]) as CurrencyRates[];
 	return currencyNames.map(c => ({ title: t(`currencies.${c}`) + ` (${c})`, value: c }));
 });
 

@@ -11,7 +11,7 @@
 			<router-link to="/categories">{{ t('create_category') }}</router-link>
 		</div>
 
-		<NewRecord v-else v-bind="{ categories, defaultAmount: 5 }" @create-record="create" />
+		<NewRecord v-else v-bind="{ categories, defaultAmount }" @create-record="create" />
 	</div>
 </template>
 
@@ -26,6 +26,7 @@ import { UserService } from '@/services/user';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { CategoryService } from '@/services/category';
 import { RecordService, RecordForm } from '@/services/record';
+import { DEFAULT_RECORD_AMOUNT as defaultAmount } from '@/globals';
 
 useMeta({ title: 'pageTitles.newRecord' });
 
@@ -55,7 +56,7 @@ const create = async (formData: RecordForm) => {
 		if (typeof e === 'string') {
 			showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
 		}
-		else { 
+		else {
 			showMessage(t('error_create_record'), 'red-darken-3');
 		}
 	}

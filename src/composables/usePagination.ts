@@ -20,6 +20,7 @@ export const usePagination = <T>(initialItems: MaybeRef<T[] | undefined>, perPag
 		push({ query: { ...route.query, page } });
 		items.value = allItems.value?.[page - 1] || allItems.value?.[0];
 	};
+
 	watchEffect(() => {
 		if (unref(initialItems)?.length) {
 			initPagination();

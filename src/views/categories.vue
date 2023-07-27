@@ -11,9 +11,8 @@
 						:class="{ 'pr-6': !smAndDown, 'px-3': smAndDown && !xs }" />
 				</v-col>
 				<v-col cols="6" md="6" sm="12" xs="12" class="edit-category v-col-xs-12">
-					<EditCategory v-if="categories?.length" v-bind="{ categories, defaultLimit: 100 }"
-						@updated="updateCategories" :class="{ 'pl-6': !smAndDown, 'px-3': smAndDown && !xs }"
-						class="mt-5 mt-sm-7 mt-md-0" />
+					<EditCategory v-if="categories?.length" v-bind="{ categories, defaultLimit }" @updated="updateCategories"
+						:class="{ 'pl-6': !smAndDown, 'px-3': smAndDown && !xs }" class="mt-5 mt-sm-7 mt-md-0" />
 					<div class="text-h5 px-5 no-categories" v-else>Категорий пока нет</div>
 				</v-col>
 			</v-row>
@@ -29,6 +28,7 @@ import { useAsyncState } from '@vueuse/core';
 import { CategoryService, Category } from '@/services/category';
 import { useI18n } from 'vue-i18n';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CATEGORY_LIMIT as defaultLimit } from '@/globals';
 
 // Page title: Categories
 useMeta({ title: 'pageTitles.categories' });
