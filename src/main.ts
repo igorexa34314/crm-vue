@@ -4,21 +4,26 @@ import App from '@/App.vue';
 import router from '@/router';
 import { createMetaManager } from 'vue-meta';
 import vuetify from '@/plugins/vuetify';
-import i18n, { setI18nLanguage } from '@/plugins/i18n';
+import { initI18n, setI18nLanguage } from '@/plugins/i18n';
 import pinia from '@/plugins/pinia';
 import { useInfoStore } from '@/stores/info';
 import { firebaseApp } from '@/firebase';
 import AppLoader from '@/components/app/AppLoader.vue';
 
-const app = createApp(App);
+initI18n().then(i18n => {
+	const app = createApp(App);
 
-app.use(VueFire, {
-	firebaseApp,
-	modules: [VueFireAuth()]
+	app.use(VueFire, {
+		firebaseApp,
+		modules: [VueFireAuth()]
+	});
+
+	app.use(router).use(pinia).use(i18n);
+
+	const infoStore = useInfoStore();
+	infoStore.$subscribeLocale(locale => setI18nLanguage(i18n, locale));
+
+	app.use(createMetaManager()).use(vuetify(i18n)).component('app-loader', AppLoader);
+
+	app.mount('#app');
 });
-
-app.use(router).use(i18n).use(pinia).use(createMetaManager()).use(vuetify);
-app.component('app-loader', AppLoader);
-app.mount('#app');
-
-useInfoStore().$subscribeLocale(setI18nLanguage);

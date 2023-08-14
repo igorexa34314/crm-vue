@@ -5,7 +5,6 @@
 				<v-card-title class="mx-3 mt-3 text-h6 text-sm-h5">{{ t('exchange_rate') }}</v-card-title>
 			</v-card-item>
 			<v-card-text>
-
 				<v-table class="bg-transparent" :density="xs ? 'comfortable' : 'default'">
 					<thead>
 						<tr>
@@ -14,6 +13,7 @@
 							<th class="text-title text-subtitle-1 font-weight-bold">{{ t('date') }}</th>
 						</tr>
 					</thead>
+
 					<tbody>
 						<tr v-for="cur in currencies" :key="cur" class="text-primary text-subtitle-1">
 							<td>{{ cur }}</td>

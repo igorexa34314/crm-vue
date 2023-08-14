@@ -1,7 +1,7 @@
 <template>
 	<v-form @submit.prevent="submitLogin" ref="form">
-		<LocalizedInput v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email"
-			class="mt-4" required />
+		<PassField v-model.trim="formState.email" :rules="validations.email" variant="underlined" label="Email" class="mt-4"
+			required />
 
 		<LocalizedInput v-model.trim="formState.password" :rules="validations.password" variant="underlined" label="Пароль"
 			class="mt-6" required />
@@ -12,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+import PassField from '@/components/UI/PassField.vue';
 import LocalizedInput from '@/components/UI/LocalizedInput.vue';
 import { ref } from 'vue';
 import { mdiSend } from '@mdi/js';

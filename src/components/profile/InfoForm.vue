@@ -1,5 +1,5 @@
 <template>
-	<v-form ref="form" @submit.prevent="submitHandler" class="profile-form mt-6 mt-sm-8 px-2 px-sm-4">
+	<v-form v-if="info" ref="form" @submit.prevent="submitHandler" class="profile-form mt-6 mt-sm-8 px-2 px-sm-4">
 		<LocalizedInput v-model="formState.username" :rules="validations.username" variant="underlined"
 			:label="t('user.username')" class="mb-5" required />
 
@@ -20,6 +20,7 @@
 						color="radio" />
 				</v-radio-group>
 			</div>
+
 			<div :style="{ 'max-width': smAndDown ? 'none' : '40%', width: '100%' }"
 				class="d-flex flex-column pl-4 mt-md-0 my-4">
 				<v-card variant="flat" :max-width="smAndDown ? 200 : 250" class="mb-5" elevation="4">
@@ -30,6 +31,7 @@
 						</template>
 					</v-img>
 				</v-card>
+
 				<div class="mb-3 text-subtitle">{{ t('upload_avatar') }}</div>
 				<LocalizedFileInput v-model="formState.avatar" :label="t('user.avatar')" :rules="validations.file"
 					variant="solo" :placeholder="t('upload_avatar')" accept="image/* " :density="xs ? 'compact' : 'comfortable'"
@@ -54,6 +56,8 @@
 			<v-icon :icon="mdiSend" class="ml-3" />
 		</v-btn>
 	</v-form>
+
+	<app-loader v-else class="mt-5" page />
 </template>
 
 <script setup lang="ts">

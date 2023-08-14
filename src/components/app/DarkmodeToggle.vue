@@ -13,7 +13,7 @@ const darkModeStore = useDarkModeStore();
 
 const darkMode = computed({
 	get: () => darkModeStore.darkMode,
-	set: (val: boolean) => darkModeStore.setDarkMode(val)
+	set: val => darkModeStore.setDarkMode(val)
 });
 const switchToggleStyle = computed(() => darkModeStore.darkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)');
 </script>

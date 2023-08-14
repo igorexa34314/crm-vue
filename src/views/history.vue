@@ -5,7 +5,7 @@
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
-		<div class="history-chart" v-if="!isLoading && pagedRecords">
+		<div class="history-chart mx-auto my-0" v-if="!isLoading && pagedRecords">
 			<Pie :options="chartOptions" :data="<ChartData<'pie'>>(chartData)" />
 		</div>
 
@@ -96,7 +96,6 @@ const { chartData, chartOptions } = useChart(catsTitle, catsAmount);
 
 <style lang="scss" scoped>
 .history-chart {
-	margin: 0 auto;
 	max-width: 550px;
 }
 </style>

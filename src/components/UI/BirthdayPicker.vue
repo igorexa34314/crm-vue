@@ -35,6 +35,10 @@ const props = withDefaults(defineProps<{
 	maxWidth: 700,
 });
 
+defineSlots<{
+	label: any;
+}>();
+
 const emit = defineEmits<{
 	'update:modelValue': [date: Date]
 }>();
@@ -46,16 +50,19 @@ const datePickerDateItems = computed(() => ([
 ]));
 
 const datePickerState = ref({
-	month: props.modelValue.getMonth(),
+	month: props.modelValue.getMonth() + 1,
 	day: props.modelValue.getDate(),
 	year: props.modelValue.getFullYear(),
 });
-watch(datePickerState, (newVal) => emit('update:modelValue', new Date(Object.values(newVal).join('-'))), { deep: true });
+
+watch(datePickerState, (newVal) => {
+	emit('update:modelValue', new Date(Object.values(newVal).join('-')))
+}, { deep: true });
 
 const monthsForLocales = (monthFormat: DateTimeOptions['month'] = 'long') => {
 	const { d } = useI18n({ inheritLocale: true, useScope: 'global' });
 	return [...Array(12).keys()].map(m =>
-		d(new Date(Date.UTC(2022, (++m) % 12)), { month: monthFormat })
+		d(new Date(Date.UTC(2022, m % 12)), { month: monthFormat })
 	);
 };
 </script>

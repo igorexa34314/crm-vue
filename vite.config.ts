@@ -31,13 +31,13 @@ export default ({ mode }) => {
 			Pages({
 				dirs: 'src/views',
 				extendRoute(route) {
-					if (route.path === '/login' || route.path === '/register') {
-						return route;
+					if (route.name !== 'login' && route.name !== 'register') {
+						route.meta = { auth: true, requiresAuth: true };
 					}
-					return {
-						...route,
-						meta: { auth: true }
-					};
+					if (route.name === 'index') {
+						route.alias = '/home';
+					}
+					return route;
 				}
 			}),
 			Layouts({

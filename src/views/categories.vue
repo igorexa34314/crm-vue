@@ -49,5 +49,3 @@ const updateCategories = ({ id, title, limit }: Category) => {
 	categories.value = categories.value?.map(cat => cat.id === id ? { id, title, limit } : cat);
 };
 </script>
-
-<style scoped></style>

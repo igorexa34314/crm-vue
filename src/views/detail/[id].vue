@@ -2,7 +2,7 @@
 	<div>
 		<app-loader v-if="isLoading" page />
 		<div v-else-if="recordWithCategory">
-			<v-breadcrumbs :items="breadcrumbs" v-slot:divider>
+			<v-breadcrumbs :items="breadcrumbs" #divider>
 				<v-icon :icon="mdiChevronRight" />
 			</v-breadcrumbs>
 

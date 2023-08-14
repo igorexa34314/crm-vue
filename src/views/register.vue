@@ -36,12 +36,12 @@ const onRegisterSuccess = async () => {
 }
 const onRegisterError = async (e: unknown) => {
 	if (typeof e === 'string') {
-		showMessage(t(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
+		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
 	}
 	else {
 		showMessage(t('error_register'), 'red-darken-3');
 	}
-	
+
 }
 </script>
 

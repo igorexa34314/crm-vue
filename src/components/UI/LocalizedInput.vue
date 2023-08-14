@@ -3,6 +3,7 @@
 		<template #message="{ message }">
 			{{ t(message) }}
 		</template>
+		
 		<template #append-inner>
 			<slot name="append-inner" />
 		</template>
@@ -19,6 +20,10 @@ const props = withDefaults(defineProps<{
 }>(), {
 	variant: 'underlined',
 });
+
+defineSlots<{
+	'append-inner': any
+}>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();

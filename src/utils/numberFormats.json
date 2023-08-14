@@ -22,5 +22,13 @@
 			"useGrouping": true,
 			"currencyDisplay": "symbol"
 		}
+	},
+	"EUR": {
+		"currency": {
+			"style": "currency",
+			"currency": "EUR",
+			"useGrouping": true,
+			"currencyDisplay": "symbol"
+		}
 	}
 }

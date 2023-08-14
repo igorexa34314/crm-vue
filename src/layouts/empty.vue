@@ -1,40 +1,41 @@
 <template>
-	<v-layout class="app bg-grey-darken-2 d-flex justify-center align-center">
+	<v-layout class="app-layout overflow-hidden bg-grey-darken-2 d-flex justify-center align-center">
 		<router-view />
 	</v-layout>
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, onUnmounted, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useInfoStore } from '@/stores/info';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 
 const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const infoStore = useInfoStore();
-const { setLocale, $reset } = infoStore;
 const info = computed(() => infoStore.info);
 const { showMessage } = useSnackbarStore();
-const { query } = useRoute();
+const route = useRoute();
+const { replace } = useRouter();
 
 if (!info.value?.locale) {
-	setLocale();
+	infoStore.setLocale();
 }
-watch(() => query.message, () => {
-	if (te(`firebase.messages.${query.message}`)) {
-		showMessage(t(`firebase.messages.${query.message}`));
+watchEffect(() => {
+	if (te(`firebase.messages.${route.query.message}`)) {
+		showMessage(t(`firebase.messages.${route.query.message}`));
+		replace({ query: undefined });
 	}
-}, { deep: true, immediate: true });
+});
 
 onUnmounted(() => {
-	$reset();
+	infoStore.$reset();
 });
 </script>
 
 <style scoped>
-.app {
+.app-layout {
+	min-height: 100dvh;
 	min-height: 100vh;
-	overflow: hidden;
 }
 </style>
