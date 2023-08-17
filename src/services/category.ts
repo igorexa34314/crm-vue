@@ -31,10 +31,7 @@ export class CategoryService {
 			if (!isEmailVerified) {
 				throw new Error('verify_error');
 			}
-			const newCategoryRef = await addDoc(
-				col(doc(col(db, 'users'), uid), 'categories'),
-				categoryData
-			);
+			const newCategoryRef = await addDoc(col(doc(col(db, 'users'), uid), 'categories'), categoryData);
 			return { ...categoryData, id: newCategoryRef.id as string };
 		} catch (e) {
 			errorHandler(e);

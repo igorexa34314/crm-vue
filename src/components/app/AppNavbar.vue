@@ -14,11 +14,22 @@
 
 		<v-menu v-if="infoStore.info">
 			<template #activator="{ props }">
-				<v-btn color="profile" variant="text" v-bind="props" class="py-1 d-flex px-sm-3 px-1 mr-md-7"
-					:append-icon="mdiTriangleSmallDown" flat>
+				<v-btn
+					color="profile"
+					variant="text"
+					v-bind="props"
+					class="py-1 d-flex px-sm-3 px-1 mr-md-7"
+					:append-icon="mdiTriangleSmallDown"
+					flat>
 					<div class="text-subtitle-1 font-weight-bold d-flex align-center">
-						<v-img :src="photoURL || avatarPlaceholder" :lazy-src="avatarPlaceholder" aspect-ratio="1"
-							:width="xs ? 32 : 36" alt="User avatar" class="mr-2 mr-md-3" cover />
+						<v-img
+							:src="photoURL || avatarPlaceholder"
+							:lazy-src="avatarPlaceholder"
+							aspect-ratio="1"
+							:width="xs ? 32 : 36"
+							alt="User avatar"
+							class="mr-2 mr-md-3"
+							cover />
 						<span>{{ username }}</span>
 					</div>
 				</v-btn>
@@ -55,8 +66,8 @@ import { useDisplay } from 'vuetify';
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 
 const emit = defineEmits<{
-	logout: [],
-	click: [],
+	logout: [];
+	click: [];
 }>();
 
 const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -64,9 +75,7 @@ const { xs, smAndDown } = useDisplay();
 const { push } = useRouter();
 const infoStore = useInfoStore();
 
-const username = computed(() => infoStore.info ?
-	`${infoStore.info?.username}`
-	: t('guest'));
+const username = computed(() => (infoStore.info ? `${infoStore.info?.username}` : t('guest')));
 const photoURL = computed(() => infoStore.info?.photoURL);
 
 const date = ref(new Date());
@@ -74,7 +83,7 @@ const date = ref(new Date());
 let dateInterval: NodeJS.Timeout;
 
 onMounted(() => {
-	dateInterval = setInterval(() => date.value = new Date(), 1000 * 20);
+	dateInterval = setInterval(() => (date.value = new Date()), 1000 * 20);
 });
 
 onUnmounted(() => clearInterval(dateInterval));

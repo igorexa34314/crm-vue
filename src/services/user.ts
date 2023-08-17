@@ -27,8 +27,8 @@ export class UserService {
 					lastName: displayName?.split(' ').at(1) || '',
 					gender: 'unknown',
 					locale: DEFAULT_LOCALE,
-					currency: DEFAULT_CURRENCY
-				} as UserInfo
+					currency: DEFAULT_CURRENCY,
+				} as UserInfo,
 			},
 			{ merge: true }
 		);
@@ -64,7 +64,7 @@ export class UserService {
 			Object.assign(
 				{},
 				...Object.keys(data).map(key => ({
-					[`info.${key}`]: data[key as keyof UserInfo]
+					[`info.${key}`]: data[key as keyof UserInfo],
 				}))
 			)
 		);
@@ -99,11 +99,11 @@ export class UserService {
 					`userdata/${uid}/avatar/${uuidv4()}.${avatar.name.split('.').at(-1)}`
 				);
 				await uploadBytes(avatarRef, avatar, {
-					contentType: avatar.type
+					contentType: avatar.type,
 				});
 				const avatarURL = await getDownloadURL(avatarRef);
 				await updateDoc(doc(col(db, 'users'), uid), {
-					'info.photoURL': avatarURL
+					'info.photoURL': avatarURL,
 				});
 			}
 		} catch (e) {

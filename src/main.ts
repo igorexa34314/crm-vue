@@ -15,7 +15,7 @@ initI18n().then(i18n => {
 
 	app.use(VueFire, {
 		firebaseApp,
-		modules: [VueFireAuth()]
+		modules: [VueFireAuth()],
 	});
 
 	app.use(router).use(pinia).use(i18n);

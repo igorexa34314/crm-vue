@@ -33,6 +33,6 @@ export const usePagination = <T>(initialItems: MaybeRef<T[] | undefined>, perPag
 		items,
 		page,
 		pageCount,
-		pageChangeHandler
+		pageChangeHandler,
 	};
 };

@@ -9,23 +9,20 @@ export interface Currency {
 
 const DEFAULT_CURRENCY_RESPONSE = {
 	rates: { [DEFAULT_CURRENCY]: 1 },
-	date: new Date()
+	date: new Date(),
 };
 
 export class CurrencyService {
 	static async fetchCurrency() {
 		try {
 			const res = await fetch(
-				import.meta.env.VITE_EXCHANGER_API_URL +
-					`?base=${
-						DEFAULT_CURRENCY
-					}&symbols=EUR%2CUAH%2CUSD%2CRUB`,
+				import.meta.env.VITE_EXCHANGER_API_URL + `?base=${DEFAULT_CURRENCY}&symbols=EUR%2CUAH%2CUSD%2CRUB`,
 				{
 					method: 'GET',
 					redirect: 'follow',
 					headers: new Headers({
-						'Content-Type': 'application/json'
-					})
+						'Content-Type': 'application/json',
+					}),
 				}
 			);
 			const { rates, date } = (await res.json()) as Awaited<Currency>;

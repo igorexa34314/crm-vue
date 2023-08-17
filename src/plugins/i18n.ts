@@ -9,37 +9,45 @@ import { availableLocales, LOCALE_KEY, DEFAULT_LOCALE } from '@/globals';
 export type Locales = (typeof availableLocales)[number];
 
 export const initI18n = async () => {
-	let locale: string = JSON.parse(localStorage.getItem(LOCALE_KEY) || 'null') || DEFAULT_LOCALE;
-	const messages = fallbackMessages;
+	const locale: Locales = JSON.parse(localStorage.getItem(LOCALE_KEY) || 'null') || DEFAULT_LOCALE;
 	try {
-		messages[locale] = await LocaleService.fetchLocale(locale as Locales);
+		const messages = { [locale]: await LocaleService.fetchLocale(locale) };
+		return createI18nInstance(locale, messages);
 	} catch (err) {
-		locale = DEFAULT_LOCALE;
-		console.error(err);
-	} finally {
-		return createI18n({
-			legacy: false, // Vuetify does not support the legacy mode of vue-i18n
-			locale,
-			fallbackLocale: DEFAULT_LOCALE,
-			messages,
-			// Using same number formats for each locale
-			numberFormats: Object.assign(
-				{},
-				numberFormats,
-				...availableLocales.map(locale => ({
-					[numberFormats[locale]['currency']['currency']]: numberFormats[locale]
-				}))
-			) as I18nOptions['numberFormats'],
-
-			// Using same datetime formats for each locale
-			datetimeFormats: Object.assign(
-				{},
-				...availableLocales.map(locale => ({
-					[locale]: datetimeFormats['en-US']
-				}))
-			)
-		});
+		try {
+			console.error('Unable to load translations with this locale. Loading fallback locale from server...');
+			const messages = { [DEFAULT_LOCALE]: await LocaleService.fetchLocale(DEFAULT_LOCALE) };
+			return createI18nInstance(DEFAULT_LOCALE, messages);
+		} catch (error) {
+			console.error('Unable to load translations from server', err);
+			return createI18nInstance(DEFAULT_LOCALE, fallbackMessages);
+		}
 	}
+};
+
+const createI18nInstance = (locale: Locales, messages: any) => {
+	return createI18n({
+		legacy: false, // Vuetify does not support the legacy mode of vue-i18n
+		locale: locale || DEFAULT_LOCALE,
+		fallbackLocale: DEFAULT_LOCALE,
+		messages: messages,
+		// Using same number formats for each locale
+		numberFormats: Object.assign(
+			{},
+			numberFormats,
+			...availableLocales.map(locale => ({
+				[numberFormats[locale]['currency']['currency']]: numberFormats[locale],
+			}))
+		) as I18nOptions['numberFormats'],
+
+		// Using same datetime formats for each locale
+		datetimeFormats: Object.assign(
+			{},
+			...availableLocales.map(locale => ({
+				[locale]: datetimeFormats['en-US'],
+			}))
+		),
+	});
 };
 
 export const setI18nLanguage = async (i18n: I18n, locale: Locales = DEFAULT_LOCALE) => {

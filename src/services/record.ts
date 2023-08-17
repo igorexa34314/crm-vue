@@ -39,7 +39,7 @@ export class RecordService {
 			}
 			const recordDoc = await addDoc(col(doc(col(db, 'users'), uid), 'records'), {
 				...record,
-				date: Timestamp.now()
+				date: Timestamp.now(),
 			});
 			if (details?.length) {
 				await this.uploadRecordDetails(uid, recordDoc.id, details);
@@ -60,7 +60,7 @@ export class RecordService {
 					records.push({
 						...record,
 						date: TimestampToDate(date),
-						id: doc.id
+						id: doc.id,
 					} as Record);
 				});
 				return records;
@@ -82,18 +82,14 @@ export class RecordService {
 			return {
 				...record,
 				date: TimestampToDate(date),
-				id
+				id,
 			} as Record;
 		} catch (e) {
 			errorHandler(e);
 		}
 	}
 
-	private static async uploadRecordDetails(
-		uid: string | undefined,
-		recordId: string,
-		files: File[]
-	) {
+	private static async uploadRecordDetails(uid: string | undefined, recordId: string, files: File[]) {
 		uid = uid ?? (await AuthService.getUserId());
 		const uploadPromises: Promise<RecordDetail>[] = [];
 		for (const file of files) {
@@ -102,12 +98,10 @@ export class RecordService {
 					(async () => {
 						const fileRef = storageRef(
 							storage,
-							`userdata/${uid}/records/${recordId}/${uuidv4()}.${file.name
-								.split('.')
-								.at(-1)}`
+							`userdata/${uid}/records/${recordId}/${uuidv4()}.${file.name.split('.').at(-1)}`
 						);
 						await uploadBytes(fileRef, file, {
-							contentType: file.type
+							contentType: file.type,
 						});
 						const downloadURL = await getDownloadURL(fileRef);
 						return {
@@ -115,8 +109,8 @@ export class RecordService {
 							bucket: fileRef.bucket,
 							fullname: file.name,
 							size: file.size,
-							downloadURL
-						};
+							downloadURL,
+						} as RecordDetail;
 					})()
 				);
 			}

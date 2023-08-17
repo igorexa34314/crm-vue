@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { CurrencyRates } from '@/services/currency';
 import { Locales } from '@/plugins/i18n';
-import { useLocalStorage } from '@vueuse/core';
 import { DEFAULT_LOCALE, DEFAULT_CURRENCY, LOCALE_KEY } from '@/globals';
 
 export interface UserInfo {
@@ -33,7 +32,7 @@ export const useInfoStore = defineStore('info', () => {
 	const setLocale = () => {
 		(info.value as Partial<UserInfo>) = {
 			...info.value,
-			locale: JSON.parse(localStorage.getItem(LOCALE_KEY) || 'null') || DEFAULT_LOCALE
+			locale: JSON.parse(localStorage.getItem(LOCALE_KEY) || 'null') || DEFAULT_LOCALE,
 		};
 	};
 
@@ -55,6 +54,6 @@ export const useInfoStore = defineStore('info', () => {
 		setInfo,
 		$reset,
 		$subscribeLocale,
-		setLocale
+		setLocale,
 	};
 });

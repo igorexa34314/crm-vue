@@ -9,23 +9,15 @@ export const useSort = <T extends { [key: string]: any }, K extends keyof T>(
 	const { push } = useRouter();
 	const route = useRoute();
 
-	const isRightPropInQuery = Object.keys(unref(initialItems)?.at(0) || {}).includes(
-		route.query.sort as string
-	);
+	const isRightPropInQuery = Object.keys(unref(initialItems)?.at(0) || {}).includes(route.query.sort as string);
 
-	const sortProp = ref<keyof T>(
-		isRightPropInQuery ? (route.query.sort as string) : initialProp
-	) as Ref<keyof T>;
+	const sortProp = ref<keyof T>(isRightPropInQuery ? (route.query.sort as string) : initialProp) as Ref<keyof T>;
 
 	const sortType = ref<'asc' | 'desc'>(
-		['asc', 'desc'].includes(route.query.by as string)
-			? (route.query.by as 'asc' | 'desc')
-			: 'desc'
+		['asc', 'desc'].includes(route.query.by as string) ? (route.query.by as 'asc' | 'desc') : 'desc'
 	);
 
-	const sortedRecords = computed(() =>
-		orderBy(unref(initialItems), [sortProp.value], sortType.value)
-	);
+	const sortedRecords = computed(() => orderBy(unref(initialItems), [sortProp.value], sortType.value));
 
 	watchEffect(() => {
 		push({ query: { ...route.query, sort: sortProp.value as string, by: sortType.value } });

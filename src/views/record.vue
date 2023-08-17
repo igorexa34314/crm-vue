@@ -37,9 +37,9 @@ const infoStore = useInfoStore();
 const info = computed(() => infoStore.info);
 
 const { state: categories, isLoading: categoriesLoading } = useAsyncState(CategoryService.fetchCategories, [], {
-	onError: (e) => {
-		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : t('error_load_categories'))
-	}
+	onError: e => {
+		showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : t('error_load_categories'));
+	},
 });
 
 const createLoading = ref(false);
@@ -50,21 +50,18 @@ const create = async (formData: RecordForm) => {
 		await RecordService.createRecord(formData);
 
 		const { type, amount } = formData;
-		const newBill = type === 'income' ?
-			info.value!.bill + amount : info.value!.bill - amount;
+		const newBill = type === 'income' ? info.value!.bill + amount : info.value!.bill - amount;
 
 		await UserService.updateInfo({ bill: +newBill.toFixed(2) });
 		showMessage(t('createRecord_success'));
 	} catch (e) {
 		if (typeof e === 'string') {
 			showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : e, 'red-darken-3');
-		}
-		else {
+		} else {
 			showMessage(t('error_create_record'), 'red-darken-3');
 		}
-	}
-	finally {
+	} finally {
 		createLoading.value = false;
 	}
-}
+};
 </script>

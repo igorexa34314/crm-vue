@@ -16,7 +16,7 @@ import {
 	updateEmail,
 	updatePassword,
 	updateProfile,
-	sendEmailVerification
+	sendEmailVerification,
 } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { getCurrentUser } from 'vuefire';
@@ -118,7 +118,7 @@ export class AuthService {
 				email: email || '',
 				photoURL: photoURL || '',
 				displayName: displayName || '',
-				username: email?.split('@').at(0) || `user-${uid}`
+				username: email?.split('@').at(0) || `user-${uid}`,
 			});
 		}
 		return user;
@@ -148,10 +148,7 @@ export class AuthService {
 	}
 
 	private static async handleAccountExistsError(err: unknown) {
-		if (
-			err instanceof FirebaseError &&
-			err.code === 'auth/account-exists-with-different-credential'
-		) {
+		if (err instanceof FirebaseError && err.code === 'auth/account-exists-with-different-credential') {
 			const email = err.customData?.email;
 			if (email && typeof email === 'string') {
 				const credential = GithubAuthProvider.credentialFromError(err);
@@ -174,13 +171,13 @@ export class AuthService {
 					const password = prompt('Please provide the password for ' + email);
 					user = await this.login({
 						email: email,
-						password: password || ''
+						password: password || '',
 					});
 				} else {
 					const provider = getProvider(firstPopupProviderMethod);
 					// Sign in user to Google with same account.
 					provider.setCustomParameters({
-						'login_hint': email
+						login_hint: email,
 					});
 					user = await this.signInWithPopup(provider);
 				}
@@ -216,12 +213,10 @@ const supportedPopupSignInMethods = {
 	email: EmailAuthProvider.PROVIDER_ID,
 	google: GoogleAuthProvider.PROVIDER_ID,
 	fb: FacebookAuthProvider.PROVIDER_ID,
-	gh: GithubAuthProvider.PROVIDER_ID
+	gh: GithubAuthProvider.PROVIDER_ID,
 } as const;
 
-function getProvider(
-	providerId: (typeof supportedPopupSignInMethods)[keyof typeof supportedPopupSignInMethods]
-) {
+function getProvider(providerId: (typeof supportedPopupSignInMethods)[keyof typeof supportedPopupSignInMethods]) {
 	switch (providerId) {
 		case supportedPopupSignInMethods.google:
 			return new GoogleAuthProvider();

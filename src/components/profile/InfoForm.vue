@@ -1,14 +1,27 @@
 <template>
 	<v-form v-if="info" ref="form" @submit.prevent="submitHandler" class="profile-form mt-6 mt-sm-8 px-2 px-sm-4">
-		<LocalizedInput v-model="formState.username" :rules="validations.username" variant="underlined"
-			:label="t('user.username')" class="mb-5" required />
+		<LocalizedInput
+			v-model="formState.username"
+			:rules="validations.username"
+			variant="underlined"
+			:label="t('user.username')"
+			class="mb-5"
+			required />
 
 		<div class="d-flex flex-column items-center mb-4 flex-sm-row">
-			<LocalizedInput v-model="formState.firstName" :rules="validations.firstName" variant="underlined"
-				:label="t('user.firstName')" class="mr-sm-3" />
+			<LocalizedInput
+				v-model="formState.firstName"
+				:rules="validations.firstName"
+				variant="underlined"
+				:label="t('user.firstName')"
+				class="mr-sm-3" />
 
-			<LocalizedInput v-model="formState.lastName" :rules="validations.lastName" variant="underlined"
-				:label="t('user.lastName')" class="ml-sm-3" />
+			<LocalizedInput
+				v-model="formState.lastName"
+				:rules="validations.lastName"
+				variant="underlined"
+				:label="t('user.lastName')"
+				class="ml-sm-3" />
 		</div>
 
 		<div class="d-flex flex-column flex-md-row">
@@ -16,15 +29,24 @@
 				<BirthdayPicker v-model="formState.birthdayDate" :label="t('user.birthday')" class="flex-fill" />
 
 				<v-radio-group v-model="formState.gender" :label="t('user.gender.label')" class="text-input">
-					<v-radio v-for="gender in genderItems" :key="gender.value" :label="gender.title" :value="gender.value"
+					<v-radio
+						v-for="gender in genderItems"
+						:key="gender.value"
+						:label="gender.title"
+						:value="gender.value"
 						color="radio" />
 				</v-radio-group>
 			</div>
 
-			<div :style="{ 'max-width': smAndDown ? 'none' : '40%', width: '100%' }"
+			<div
+				:style="{ 'max-width': smAndDown ? 'none' : '40%', width: '100%' }"
 				class="d-flex flex-column pl-4 mt-md-0 my-4">
 				<v-card variant="flat" :max-width="smAndDown ? 200 : 250" class="mb-5" elevation="4">
-					<v-img :lazy-src="avatarPlaceholder" :src="formState.photoURL || avatarPlaceholder" alt="Ваш аватар" cover
+					<v-img
+						:lazy-src="avatarPlaceholder"
+						:src="formState.photoURL || avatarPlaceholder"
+						alt="Ваш аватар"
+						cover
 						eager>
 						<template #placeholder>
 							<ImageLoader />
@@ -33,24 +55,51 @@
 				</v-card>
 
 				<div class="mb-3 text-subtitle">{{ t('upload_avatar') }}</div>
-				<LocalizedFileInput v-model="formState.avatar" :label="t('user.avatar')" :rules="validations.file"
-					variant="solo" :placeholder="t('upload_avatar')" accept="image/* " :density="xs ? 'compact' : 'comfortable'"
-					style="max-width: 550px;" />
+				<LocalizedFileInput
+					v-model="formState.avatar"
+					:label="t('user.avatar')"
+					:rules="validations.file"
+					variant="solo"
+					:placeholder="t('upload_avatar')"
+					accept="image/* "
+					:density="xs ? 'compact' : 'comfortable'"
+					style="max-width: 550px" />
 			</div>
 		</div>
 
-		<LocalizedTextarea v-model="formState.bio" rows="1" auto-grow :label="t('user.bio')" :rules="validations.bio"
+		<LocalizedTextarea
+			v-model="formState.bio"
+			rows="1"
+			auto-grow
+			:label="t('user.bio')"
+			:rules="validations.bio"
 			class="mb-4" />
 
 		<div class="d-flex flex-column items-center mt-4 flex-sm-row">
-			<v-select v-model="formState.locale" :items="locales" :label="t('lang')" item-title="title" item-value="value"
-				variant="underlined" class="mr-sm-4 text-input" />
+			<v-select
+				v-model="formState.locale"
+				:items="locales"
+				:label="t('lang')"
+				item-title="title"
+				item-value="value"
+				variant="underlined"
+				class="mr-sm-4 text-input" />
 
-			<v-select v-model="formState.currency" :items="currencies" :label="t('currency')" item-title="title"
-				item-value="value" variant="underlined" class="ml-sm-4 text-input" />
+			<v-select
+				v-model="formState.currency"
+				:items="currencies"
+				:label="t('currency')"
+				item-title="title"
+				item-value="value"
+				variant="underlined"
+				class="ml-sm-4 text-input" />
 		</div>
 
-		<v-btn type="submit" color="success" :class="xs ? 'mt-3' : 'mt-5'" :loading="loading"
+		<v-btn
+			type="submit"
+			color="success"
+			:class="xs ? 'mt-3' : 'mt-5'"
+			:loading="loading"
 			:disabled="isInfoEqualsToStore && !formState.avatar.length">
 			{{ t('update') }}
 			<v-icon :icon="mdiSend" class="ml-3" />
@@ -79,14 +128,17 @@ import { useDisplay } from 'vuetify';
 import { DEFAULT_CURRENCY } from '@/globals';
 import { isEqual } from 'lodash';
 
-const props = withDefaults(defineProps<{
-	loading?: boolean;
-}>(), {
-	loading: false
-});
+const props = withDefaults(
+	defineProps<{
+		loading?: boolean;
+	}>(),
+	{
+		loading: false,
+	}
+);
 
 const emit = defineEmits<{
-	updateInfo: [info: Omit<UserInfo, 'bill' | 'email'> & { avatar: File[] }],
+	updateInfo: [info: Omit<UserInfo, 'bill' | 'email'> & { avatar: File[] }];
 }>();
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -96,7 +148,9 @@ const infoStore = useInfoStore();
 const { currency } = inject(currencyKey)!;
 
 const currencies = computed(() => {
-	const currencyNames = (currency.value?.rates ? Object.keys(currency.value.rates) : [DEFAULT_CURRENCY]) as CurrencyRates[];
+	const currencyNames = (
+		currency.value?.rates ? Object.keys(currency.value.rates) : [DEFAULT_CURRENCY]
+	) as CurrencyRates[];
 	return currencyNames.map(c => ({ title: t(`currencies.${c}`) + ` (${c})`, value: c }));
 });
 
@@ -113,14 +167,14 @@ const formState = ref<Omit<UserInfo, 'bill' | 'email'> & { avatar: File[] }>({
 	gender: 'unknown',
 	locale: 'en-US',
 	currency: 'USD',
-	avatar: []
+	avatar: [],
 });
 
-const genderItems = computed<{ title: string, value: UserInfo['gender'] }[]>(() => ([
+const genderItems = computed<{ title: string; value: UserInfo['gender'] }[]>(() => [
 	{ title: t('user.gender.male'), value: 'male' },
 	{ title: t('user.gender.female'), value: 'female' },
-	{ title: t('user.gender.unknown'), value: 'unknown' }
-]));
+	{ title: t('user.gender.unknown'), value: 'unknown' },
+]);
 
 const locales = [
 	{ title: 'Русский', value: 'ru-RU' },
@@ -134,7 +188,7 @@ watchEffect(() => {
 		const { bill, ...userdata } = info.value;
 		formState.value = { ...formState.value, ...userdata };
 	}
-})
+});
 
 const isInfoEqualsToStore = computed(() => {
 	const { avatar, ...formInfo } = formState.value;
@@ -142,7 +196,7 @@ const isInfoEqualsToStore = computed(() => {
 		return false;
 	}
 	const { bill, ...userdata } = info.value;
-	return isEqual(userdata, formInfo)
+	return isEqual(userdata, formInfo);
 });
 
 const submitHandler = async () => {
@@ -151,5 +205,5 @@ const submitHandler = async () => {
 		emit('updateInfo', formState.value);
 		formState.value.avatar = [];
 	}
-}
+};
 </script>

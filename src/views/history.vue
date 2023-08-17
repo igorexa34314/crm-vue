@@ -6,7 +6,7 @@
 		<v-divider color="black" thickness="1.5" class="bg-white mt-3 mb-6" />
 
 		<div class="history-chart mx-auto my-0" v-if="!isLoading && pagedRecords">
-			<Pie :options="chartOptions" :data="<ChartData<'pie'>>(chartData)" />
+			<Pie :options="chartOptions" :data="chartData" />
 		</div>
 
 		<app-loader v-if="isLoading" class="mt-7" page />
@@ -17,11 +17,20 @@
 		</div>
 
 		<section v-else class="mt-lg-6">
-			<RecordsTable :records="pagedRecords" v-bind="{ sortProp, sortType, startIndex: (page - 1) * perPage }"
+			<RecordsTable
+				:records="pagedRecords"
+				v-bind="{ sortProp, sortType, startIndex: (page - 1) * perPage }"
 				@sort="sort" />
 
-			<v-pagination v-if="pageCount > 1" v-model="page" @update:modelValue="pageChangeHandler" :length="pageCount"
-				:total-visible="xs ? 3 : 4" class="mt-4" density="comfortable" :size="xs ? 'small' : 'default'"
+			<v-pagination
+				v-if="pageCount > 1"
+				v-model="page"
+				@update:modelValue="pageChangeHandler"
+				:length="pageCount"
+				:total-visible="xs ? 3 : 4"
+				class="mt-4"
+				density="comfortable"
+				:size="xs ? 'small' : 'default'"
 				color="primary" />
 		</section>
 	</div>
@@ -31,7 +40,6 @@
 import RecordsTable from '@/components/history/RecordsTable.vue';
 import { ref, computed } from 'vue';
 import { useMeta } from 'vue-meta';
-import { ChartData } from 'chart.js';
 import { Pie } from 'vue-chartjs';
 import { Category, CategoryService } from '@/services/category';
 import { Record, RecordService } from '@/services/record';
@@ -61,15 +69,17 @@ try {
 } catch (e) {
 	const { showMessage } = useSnackbarStore();
 	showMessage('error_loading_records_or_categories');
-}
-finally {
+} finally {
 	isLoading.value = false;
 }
 
-const recordsWithCategory = computed(() => records.value?.map<RecordWithCategory>(({ categoryId, ...r }) => ({
-	...r,
-	category: categories.value?.find(cat => cat.id === categoryId)?.title || '',
-})));
+const recordsWithCategory = computed(
+	() =>
+		records.value?.map<RecordWithCategory>(({ categoryId, ...r }) => ({
+			...r,
+			category: categories.value?.find(cat => cat.id === categoryId)?.title || '',
+		}))
+);
 
 // Sort records
 const { sortedRecords, sortProp, sortType, sort } = useSort(recordsWithCategory, 'date');
@@ -91,7 +101,7 @@ const catsAmount = computed(() => {
 	});
 });
 
-const { chartData, chartOptions } = useChart(catsTitle, catsAmount);
+const { chartData, chartOptions } = useChart<'pie'>(catsTitle, catsAmount);
 </script>
 
 <style lang="scss" scoped>

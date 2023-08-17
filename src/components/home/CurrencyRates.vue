@@ -33,12 +33,15 @@ import { computed } from 'vue';
 import { Currency, CurrencyRates } from '@/services/currency';
 import { useDisplay } from 'vuetify';
 
-const props = withDefaults(defineProps<{
-	rates: Currency['rates'],
-	date?: Currency['date'],
-}>(), {
-	date: () => (new Date()),
-});
+const props = withDefaults(
+	defineProps<{
+		rates: Currency['rates'];
+		date?: Currency['date'];
+	}>(),
+	{
+		date: () => new Date(),
+	}
+);
 
 const { xs } = useDisplay();
 const { t, d } = useI18n({ inheritLocale: true, useScope: 'global' });

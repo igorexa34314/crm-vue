@@ -6,7 +6,7 @@
 				<v-icon :icon="mdiRefresh" />
 			</v-btn>
 		</div>
-		
+
 		<v-divider color="black" thickness="1.5" class="bg-white mt-1 mb-5 mb-sm-8" />
 
 		<app-loader v-if="isLoading" :color="theme.global.current.value.dark ? '#FFFFFF' : '#1A237E'" class="mt-2" page />
