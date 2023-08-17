@@ -67,9 +67,8 @@ const updateInfo = async ({ avatar, ...userdata }: Omit<UserInfo, 'bill' | 'emai
 
 const updateCreds = async ({
 	oldPass,
-	newPass,
-} // email,
-: Partial<{ oldPass: string; newPass: string; email: string }>) => {
+	newPass, // email,
+}: Partial<{ oldPass: string; newPass: string; email: string }>) => {
 	try {
 		loading.value = true;
 		if (oldPass && newPass) {

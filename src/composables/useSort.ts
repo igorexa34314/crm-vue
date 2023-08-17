@@ -1,6 +1,6 @@
 import { MaybeRef, Ref, ref, unref, computed, watchEffect, onUnmounted } from 'vue';
 import { orderBy } from 'lodash';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router/auto';
 
 export const useSort = <T extends { [key: string]: any }, K extends keyof T>(
 	initialItems: MaybeRef<T[] | undefined>,

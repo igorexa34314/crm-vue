@@ -1,4 +1,3 @@
-import { useInfoStore } from '@/stores/info';
 import { errorHandler } from '@/utils/errorHandler';
 import {
 	createUserWithEmailAndPassword,
@@ -203,9 +202,7 @@ export class AuthService {
 	}
 
 	static async logout() {
-		const { $reset } = useInfoStore();
 		await signOut(auth);
-		$reset();
 	}
 }
 

@@ -1,11 +1,7 @@
 import { getCurrentUser } from 'vuefire';
-import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+import { NavigationGuardWithThis } from 'vue-router/auto';
 
-export const checkAuth = async (
-	to: RouteLocationNormalized,
-	from: RouteLocationNormalized,
-	next: NavigationGuardNext
-) => {
+export const checkAuth: NavigationGuardWithThis<undefined> = async (to, from, next) => {
 	const currentUser = await getCurrentUser();
 	const requireAuth = to.matched.some(record => record.meta.auth || record.meta.requiresAuth);
 	if (requireAuth && !currentUser) {

@@ -1,6 +1,6 @@
 import { MaybeRef, ref, watchEffect, unref, onUnmounted } from 'vue';
 import { chunk, size } from 'lodash';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router/auto';
 
 export const usePagination = <T>(initialItems: MaybeRef<T[] | undefined>, perPage = 5) => {
 	const { push } = useRouter();

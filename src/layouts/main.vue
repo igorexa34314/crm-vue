@@ -41,7 +41,7 @@ import { useSnackbarStore } from '@/stores/snackbar';
 import { useAsyncState } from '@vueuse/core';
 import { currencyKey } from '@/injection-keys';
 import { Unsubscribe } from 'firebase/firestore';
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router/auto';
 import { AuthService } from '@/services/auth';
 import { useDisplay } from 'vuetify';
 

@@ -28,12 +28,14 @@ import LocalLogin from '@/components/auth/LocalLogin.vue';
 import GithubProvider from '@/components/auth/providers/GithubProvider.vue';
 import FacebookProvider from '@/components/auth/providers/FacebookProvider.vue';
 import GoogleProvider from '@/components/auth/providers/GoogleProvider.vue';
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router/auto';
 import { useMeta } from 'vue-meta';
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useI18n } from 'vue-i18n';
 import { useDisplay } from 'vuetify';
+import { definePage } from 'vue-router/auto';
 
+definePage({ meta: { layout: 'empty' } });
 useMeta({ title: 'login' });
 
 const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -49,8 +51,3 @@ const onLoginError = (e: unknown) => {
 	showMessage(te(`firebase.messages.${e}`) ? t(`firebase.messages.${e}`) : t('login_error'));
 };
 </script>
-
-<route lang="yaml">
-meta:
-   layout: empty
-</route>

@@ -18,7 +18,7 @@ export interface RecordDetail {
 }
 
 export interface Record {
-	readonly id?: string;
+	readonly id: string;
 	categoryId: string | undefined;
 	description?: string;
 	details?: RecordDetail[];
@@ -27,7 +27,7 @@ export interface Record {
 	date: Date;
 }
 
-export type RecordForm = Omit<Record, 'date'> & { details: File[] };
+export type RecordForm = Omit<Record, 'date' | 'id'> & { details: File[] };
 
 export class RecordService {
 	static async createRecord({ details, ...record }: RecordForm) {

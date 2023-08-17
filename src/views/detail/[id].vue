@@ -52,7 +52,7 @@
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { computedAsync } from '@vueuse/core';
-import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router/auto';
 import { useMeta } from 'vue-meta';
 import { mdiChevronRight } from '@mdi/js';
 import { CategoryService } from '@/services/category';
@@ -72,7 +72,7 @@ interface RecordWithCategoryName extends Record {
 	category: string;
 }
 
-const route = useRoute();
+const route = useRoute('/detail/[id]');
 const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { cf } = useCurrencyFilter();
 useMeta({ title: 'pageTitles.details' });

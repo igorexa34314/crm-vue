@@ -61,7 +61,7 @@ import { mdiTriangleSmallDown, mdiAccountCircleOutline, mdiLogout } from '@mdi/j
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router/auto';
 import { useDisplay } from 'vuetify';
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 

@@ -1,6 +1,6 @@
 <template>
 	<v-form @submit.prevent="submitLogin" ref="form">
-		<PassField
+		<LocalizedInput
 			v-model.trim="formState.email"
 			:rules="validations.email"
 			variant="underlined"
@@ -8,7 +8,7 @@
 			class="mt-4"
 			required />
 
-		<LocalizedInput
+		<PassField
 			v-model.trim="formState.password"
 			:rules="validations.password"
 			variant="underlined"
