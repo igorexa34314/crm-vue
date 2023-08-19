@@ -8,12 +8,12 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { VTextField } from 'vuetify/components';
+import { VTextarea } from 'vuetify/components';
 import { useDisplay } from 'vuetify';
 
 const props = withDefaults(
 	defineProps<{
-		variant?: VTextField['variant'];
+		variant?: VTextarea['variant'];
 	}>(),
 	{
 		variant: 'underlined',

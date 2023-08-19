@@ -40,6 +40,7 @@
 import RecordsTable from '@/components/history/RecordsTable.vue';
 import { ref, computed } from 'vue';
 import { useMeta } from 'vue-meta';
+import { VPagination } from 'vuetify/components';
 import { Pie } from 'vue-chartjs';
 import { Category, CategoryService } from '@/services/category';
 import { Record, RecordService } from '@/services/record';

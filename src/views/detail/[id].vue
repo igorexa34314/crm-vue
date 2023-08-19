@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import { VBreadcrumbs } from 'vuetify/components';
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { computedAsync } from '@vueuse/core';

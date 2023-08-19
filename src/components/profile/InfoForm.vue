@@ -121,12 +121,12 @@ import { mdiSend } from '@mdi/js';
 import { UserInfo, useInfoStore } from '@/stores/info';
 import { useI18n } from 'vue-i18n';
 import { user as validations } from '@/utils/validations';
-import { VForm } from 'vuetify/components';
+import { VForm, VSelect, VRadioGroup, VRadio } from 'vuetify/components';
 import { CurrencyRates } from '@/services/currency';
 import { currencyKey } from '@/injection-keys';
 import { useDisplay } from 'vuetify';
 import { DEFAULT_CURRENCY } from '@/globals';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 const props = withDefaults(
 	defineProps<{

@@ -77,6 +77,7 @@
 	"currency": "Currency",
 	"lang": "Language",
 	"$vuetify": {
+		"open": "Open",
 		"calendar": { "moreEvents": "{0} more" },
 		"dataIterator": {
 			"loadingText": "Loading items...",

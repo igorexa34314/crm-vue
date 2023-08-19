@@ -18,7 +18,6 @@ import {
 	sendEmailVerification,
 } from 'firebase/auth';
 import { auth } from '@/firebase';
-import { getCurrentUser } from 'vuefire';
 import { UserService } from '@/services/user';
 import { FirebaseError } from 'firebase/app';
 
@@ -52,7 +51,7 @@ export class AuthService {
 	}
 
 	static async getUserId() {
-		const user = await getCurrentUser();
+		const user = auth.currentUser;
 		if (!user || !user.uid) {
 			throw new Error('User unauthenticated');
 		}
@@ -61,7 +60,7 @@ export class AuthService {
 
 	static async changeUserEmail(newEmail: string) {
 		try {
-			const user = await getCurrentUser();
+			const user = auth.currentUser;
 			if (user) {
 				await sendEmailVerification(user);
 				await updateEmail(user, newEmail);
@@ -73,7 +72,7 @@ export class AuthService {
 
 	static async changeUserPassword(oldPass: string, newPass: string) {
 		try {
-			const user = await getCurrentUser();
+			const user = auth.currentUser;
 			if (!user) {
 				throw new Error('User unauthenticated');
 			}
@@ -89,7 +88,7 @@ export class AuthService {
 
 	static async updateUserProfile(userdata: { displayName?: string; photoURL?: string }) {
 		try {
-			const user = await getCurrentUser();
+			const user = auth.currentUser;
 			if (user) {
 				updateProfile(user, userdata);
 			}
@@ -99,7 +98,7 @@ export class AuthService {
 	}
 
 	static async isEmailVerified() {
-		const user = await getCurrentUser();
+		const user = auth.currentUser;
 		if (!user || !user.uid) {
 			throw new Error('User unauthenticated');
 		}

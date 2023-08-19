@@ -1,5 +1,5 @@
 import { computed, unref, MaybeRef } from 'vue';
-import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { ChartData, ChartOptions, ChartType } from 'chart.js/dist/types';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 import { useI18n } from 'vue-i18n';
 import { useTheme } from 'vuetify';

@@ -57,6 +57,7 @@
 <script setup lang="ts">
 import avatarPlaceholder from '@/assets/img/avatar-placeholder.jpg';
 import DarkmodeToggle from '@/components/app/DarkmodeToggle.vue';
+import { VAppBar, VAppBarNavIcon, VAppBarTitle, VMenu } from 'vuetify/components';
 import { mdiTriangleSmallDown, mdiAccountCircleOutline, mdiLogout } from '@mdi/js';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useInfoStore } from '@/stores/info';

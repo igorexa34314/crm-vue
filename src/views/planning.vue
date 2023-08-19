@@ -58,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+import { VProgressLinear, VTooltip } from 'vuetify/components';
 import { useI18n } from 'vue-i18n';
 import { CategoryService, Category } from '@/services/category';
 import { RecordService } from '@/services/record';

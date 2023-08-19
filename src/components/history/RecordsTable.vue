@@ -77,6 +77,7 @@ import { useInfoStore } from '@/stores/info';
 import { RecordWithCategory } from '@/views/history.vue';
 import { useCurrencyFilter } from '@/composables/useCurrencyFilter';
 import { useDisplay } from 'vuetify';
+import { VTable, VTooltip, VHover } from 'vuetify/components';
 
 const props = withDefaults(
 	defineProps<{

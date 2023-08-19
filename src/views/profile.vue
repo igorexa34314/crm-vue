@@ -24,6 +24,7 @@
 <script setup lang="ts">
 import InfoForm from '@/components/profile/InfoForm.vue';
 import SecurityForm from '@/components/profile/SecurityForm.vue';
+import { VTabs, VTab, VWindow, VWindowItem } from 'vuetify/components';
 import { AuthService } from '@/services/auth';
 import { ref } from 'vue';
 import { useMeta } from 'vue-meta';

@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import AppNavbar from '@/components/app/AppNavbar.vue';
 import AppSidebar from '@/components/app/AppSidebar.vue';
+import { VLayout, VMain, VTooltip } from 'vuetify/components';
 import { ref, onMounted, provide, onUnmounted } from 'vue';
 import { CurrencyService } from '@/services/currency';
 import { useInfoStore } from '@/stores/info';
