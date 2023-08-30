@@ -56,7 +56,7 @@ export class RecordService {
 			const recordDocs = await getDocs(col(doc(col(db, 'users'), uid), 'records'));
 			if (!recordDocs.empty) {
 				recordDocs.forEach(doc => {
-					const { date, details, ...record } = doc.data();
+					const { details, date, ...record } = doc.data();
 					records.push({
 						...record,
 						date: TimestampToDate(date),

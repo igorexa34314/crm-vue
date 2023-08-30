@@ -6,11 +6,11 @@
 			<LocalLogin @success="onLoginSuccess" @error="onLoginError" />
 
 			<div class="providers d-flex align-center mt-6 justify-center">
-				<GoogleProvider @success="onLoginSuccess" @error="onLoginError" />
+				<GoogleProvider @error="onLoginError" />
 
-				<FacebookProvider @success="onLoginSuccess" @error="onLoginError" />
+				<FacebookProvider @error="onLoginError" />
 
-				<GithubProvider @success="onLoginSuccess" @error="onLoginError" />
+				<GithubProvider @error="onLoginError" />
 			</div>
 		</v-card-text>
 

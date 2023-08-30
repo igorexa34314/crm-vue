@@ -4,7 +4,8 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	GoogleAuthProvider,
-	signInWithPopup as callAuthPopup,
+	signInWithRedirect,
+	getRedirectResult,
 	FacebookAuthProvider,
 	GithubAuthProvider,
 	fetchSignInMethodsForEmail,
@@ -105,12 +106,17 @@ export class AuthService {
 		return user.emailVerified;
 	}
 
-	private static async signInWithPopup(provider: any) {
-		const { user } = await callAuthPopup(auth, provider);
-		const { uid, email, displayName, photoURL } = user;
+	private static async signInWithProvider(provider: any) {
+		await signInWithRedirect(auth, provider);
+		// After the page redirects back
+		const creds = await getRedirectResult(auth);
+		if (!creds) {
+			throw new Error('User unauthenticated');
+		}
+		const { uid, email, displayName, photoURL } = creds.user;
 		const isUserExists = (await UserService.getUserById(uid)).exists();
 		if (!isUserExists) {
-			await sendEmailVerification(user);
+			await sendEmailVerification(creds.user);
 			await UserService.createUser({
 				uid: uid,
 				email: email || '',
@@ -119,13 +125,13 @@ export class AuthService {
 				username: email?.split('@').at(0) || `user-${uid}`,
 			});
 		}
-		return user;
+		return creds.user;
 	}
 
 	static async signInWithGoogle() {
 		try {
 			const provider = new GoogleAuthProvider();
-			await this.signInWithPopup(provider);
+			await this.signInWithProvider(provider);
 		} catch (err) {
 			this.handleAccountExistsError(err);
 			errorHandler(err);
@@ -138,7 +144,7 @@ export class AuthService {
 			provider.addScope('user_birthday');
 			provider.addScope('user_gender');
 
-			await this.signInWithPopup(provider);
+			await this.signInWithProvider(provider);
 		} catch (err) {
 			this.handleAccountExistsError(err);
 			errorHandler(err);
@@ -177,7 +183,7 @@ export class AuthService {
 					provider.setCustomParameters({
 						login_hint: email,
 					});
-					user = await this.signInWithPopup(provider);
+					user = await this.signInWithProvider(provider);
 				}
 
 				if (user) {
@@ -193,7 +199,7 @@ export class AuthService {
 			provider.addScope('user_birthday');
 			provider.addScope('user_gender');
 
-			await this.signInWithPopup(provider);
+			await this.signInWithProvider(provider);
 		} catch (err) {
 			this.handleAccountExistsError(err);
 			errorHandler(err);

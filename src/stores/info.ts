@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { CurrencyRates } from '@/services/currency';
 import { Locales } from '@/plugins/i18n';
+import { useSnackbarStore } from '@/stores/snackbar';
 import { DEFAULT_LOCALE, DEFAULT_CURRENCY, LOCALE_KEY } from '@/globals';
 
 export interface UserInfo {
@@ -21,6 +22,8 @@ export interface UserInfo {
 export const useInfoStore = defineStore('info', () => {
 	const info = ref<UserInfo | null>(null);
 
+	const isLocaleLoading = ref(false);
+
 	const setInfo = (data: UserInfo) => {
 		info.value = data;
 	};
@@ -36,15 +39,23 @@ export const useInfoStore = defineStore('info', () => {
 		};
 	};
 
-	const $subscribeLocale = (cb: (locale: Locales) => void) => {
+	const $subscribeLocale = (cb: (locale: Locales) => Promise<void> | void) => {
 		return watch(
 			() => info.value?.locale,
-			newVal => {
+			async newVal => {
 				if (newVal) {
-					cb(newVal);
+					try {
+						isLocaleLoading.value = true;
+						await cb(newVal);
+					} catch (err) {
+						const { showMessage } = useSnackbarStore();
+						showMessage('error_loading_locale', 'red-darken-3');
+					} finally {
+						isLocaleLoading.value = false;
+					}
 				}
 			},
-			{ deep: true, immediate: true }
+			{ deep: true }
 		);
 	};
 
