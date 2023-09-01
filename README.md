@@ -19,19 +19,12 @@ Or:\
 [Github Pages](https://igorexa34314.github.io/crm-vue "CRM Vue")
 
 
-Copy repo code and setup it with yarn package manager (Yarn PnP recommended):
+Copy repo code and setup it with package manager (pnpm recommended):
 ```
 git clone https://github.com/igorexa34314/crm-vue.git
 cd ./crm-vue
 ```
 ```
-yarn
-yarn dev
-```  
-
-if you are not using PnP mode
+pnpm i
+pnpm dev
 ```
-yarn set version berry
-yarn
-yarn dev
-```  
