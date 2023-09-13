@@ -2,7 +2,7 @@
 	<div>
 		<div class="title mt-2 mt-sm-4 d-flex flex-column flex-sm-row align-sm-center mb-3 text-title">
 			<h3 class="text-h5 text-sm-h4 ml-2 flex-grow-1 mb-3 mb-sm-0">{{ t('pageTitles.plan') }}</h3>
-			<h4 class="text-h5 text-sm-h4 text-end">{{ n(cf(bill!), 'currency', userCurrency) }}</h4>
+			<h4 class="text-h5 text-sm-h4 text-end">{{ n(cf(bill!), 'currency', getUserCurrency) }}</h4>
 		</div>
 		<v-divider color="black" thickness="1.5" class="bg-white mb-8" />
 		<app-loader v-if="isLoading" class="mt-10" page />
@@ -21,7 +21,7 @@
 							n(
 								cf(cat.spend),
 								{ key: 'currency', currencyDisplay: xs ? 'narrowSymbol' : 'symbol' },
-								userCurrency
+								getUserCurrency
 							) +
 							' ' +
 							(xs ? '/' : t('out_of')) +
@@ -29,7 +29,7 @@
 							n(
 								cf(cat.limit),
 								{ key: 'currency', currencyDisplay: xs ? 'narrowSymbol' : 'symbol' },
-								userCurrency
+								getUserCurrency
 							)
 						}}
 					</span>
@@ -49,7 +49,7 @@
 					{{
 						(cat.limit - cat.spend < 0 ? t('exceeding') : t('left')) +
 						' ' +
-						n(Math.abs(cf(cat.limit) - cf(cat.spend)), 'currency', userCurrency)
+						n(Math.abs(cf(cat.limit) - cf(cat.spend)), 'currency', getUserCurrency)
 					}}
 				</v-tooltip>
 			</div>
@@ -76,7 +76,7 @@ const { t, n, te } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { xs } = useDisplay();
 const infoStore = useInfoStore();
 
-const { userCurrency } = storeToRefs(infoStore);
+const { getUserCurrency } = storeToRefs(infoStore);
 const { cf } = useCurrencyFilter();
 
 const bill = computed(() => infoStore.info?.bill || 1000);

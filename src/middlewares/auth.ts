@@ -1,8 +1,9 @@
-import { auth } from '@/firebase';
+import { AuthService } from '@/services/auth';
 import { NavigationGuardWithThis } from 'vue-router/auto';
 
 export const checkAuth: NavigationGuardWithThis<undefined> = async (to, from, next) => {
-	const currentUser = auth.currentUser;
+	const currentUser = await AuthService.getCurrentUser();
+
 	const requireAuth = to.matched.some(record => record.meta.auth || record.meta.requiresAuth);
 	if (requireAuth && !currentUser) {
 		return next({ path: '/login', query: { message: 'login' } });

@@ -11,7 +11,9 @@ import {
 	fetchSignInMethodsForEmail,
 	linkWithCredential,
 	EmailAuthProvider,
+	onAuthStateChanged,
 	User,
+	ErrorFn,
 	reauthenticateWithCredential,
 	updateEmail,
 	updatePassword,
@@ -28,7 +30,42 @@ export interface UserCredentials {
 	username?: string;
 }
 
+let currentUser: User | null = null;
+
 export class AuthService {
+	static getCurrentUser() {
+		return new Promise((resolve: (user: User | null) => void, reject: ErrorFn) => {
+			if (currentUser) {
+				resolve(currentUser);
+			} else {
+				const unsubscribe = onAuthStateChanged(
+					auth,
+					user => {
+						unsubscribe();
+						currentUser = user;
+						resolve(user);
+					},
+					reject
+				);
+			}
+		});
+	}
+
+	static async getUserId() {
+		const user = await AuthService.getCurrentUser();
+		if (!user) {
+			throw new Error('User unauthenticated');
+		}
+		return user.uid;
+	}
+
+	static async handleRedirectResult() {
+		const result = await getRedirectResult(auth);
+		if (result?.user) {
+			currentUser = result.user;
+		}
+	}
+
 	static async login({ email, password }: UserCredentials) {
 		try {
 			const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -49,14 +86,6 @@ export class AuthService {
 		} catch (e) {
 			errorHandler(e);
 		}
-	}
-
-	static async getUserId() {
-		const user = auth.currentUser;
-		if (!user || !user.uid) {
-			throw new Error('User unauthenticated');
-		}
-		return user.uid;
 	}
 
 	static async changeUserEmail(newEmail: string) {

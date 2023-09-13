@@ -11,6 +11,11 @@ export const useCurrencyFilter = () => {
 	const currencyFilter = computed(
 		() =>
 			(amount: number, currencyType?: CurrencyRates, type: 'direct' | 'reverse' = 'direct') => {
+				// If no currencies or default currency response
+				if (!currency.value || Object.keys(currency.value.rates).length <= 1) {
+					return amount;
+				}
+
 				if (!currencyType) {
 					currencyType = infoStore.info?.currency || 'USD';
 				}

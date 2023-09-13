@@ -17,7 +17,7 @@
 				:rules="validations.limit"
 				variant="underlined"
 				type="number"
-				:label="t('limit') + ` (${userCurrency})`"
+				:label="t('limit') + ` (${getUserCurrency})`"
 				class="mt-6"
 				required />
 
@@ -61,7 +61,7 @@ const { cf } = useCurrencyFilter();
 const { showMessage } = useSnackbarStore();
 const { xs } = useDisplay();
 
-const { userCurrency } = storeToRefs(useInfoStore());
+const { getUserCurrency } = storeToRefs(useInfoStore());
 const form = ref<VForm>();
 const loading = ref(false);
 const formState = ref<Category>({

@@ -24,7 +24,7 @@
 						v-bind="props"
 						:class="isHovering ? 'bg-hover' : ''">
 						<td>{{ startIndex + (index + 1) }}</td>
-						<td>{{ n(cf(rec.amount), 'currency', userCurrency) }}</td>
+						<td>{{ n(cf(rec.amount), 'currency', getUserCurrency) }}</td>
 						<td>{{ d(rec.date, smAndDown ? 'shortdate' : 'short') }}</td>
 						<td class="record-category text-truncate">{{ rec.category }}</td>
 						<td>
@@ -99,7 +99,7 @@ const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { push } = useRouter();
 const { smAndDown, xs } = useDisplay();
 const { cf } = useCurrencyFilter();
-const { userCurrency } = storeToRefs(useInfoStore());
+const { getUserCurrency } = storeToRefs(useInfoStore());
 
 const triggerSort = (prop: keyof RecordWithCategory) => {
 	if (Object.keys(props.records[0]).includes(prop)) {

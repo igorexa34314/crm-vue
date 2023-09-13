@@ -16,7 +16,7 @@
 						<v-card-text class="text-subtitle-1 text-primary">
 							<p>{{ t('description') + ': ' + recordWithCategory.description }}</p>
 							<p class="mt-3">
-								{{ t('amount') + ': ' + n(cf(recordWithCategory.amount), 'currency', userCurrency) }}
+								{{ t('amount') + ': ' + n(cf(recordWithCategory.amount), 'currency', getUserCurrency) }}
 							</p>
 
 							<p class="mt-3 mb-5">{{ t('category') + ': ' + recordWithCategory.category }}</p>
@@ -78,7 +78,7 @@ const { t, d, n } = useI18n({ inheritLocale: true, useScope: 'global' });
 const { cf } = useCurrencyFilter();
 useMeta({ title: 'pageTitles.details' });
 
-const { userCurrency } = storeToRefs(useInfoStore());
+const { getUserCurrency } = storeToRefs(useInfoStore());
 const isLoading = ref(false);
 const breadcrumbs = computed<Breadcrumbs[]>(() =>
 	[

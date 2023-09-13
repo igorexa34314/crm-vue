@@ -30,13 +30,17 @@ export const useInfoStore = defineStore('info', () => {
 	const $reset = () => {
 		info.value = null;
 	};
-	const userCurrency = computed(() => info.value?.currency || DEFAULT_CURRENCY);
+	const getUserCurrency = computed(() => info.value?.currency || DEFAULT_CURRENCY);
 
 	const setLocale = () => {
 		(info.value as Partial<UserInfo>) = {
 			...info.value,
 			locale: JSON.parse(localStorage.getItem(LOCALE_KEY) || 'null') || DEFAULT_LOCALE,
 		};
+	};
+
+	const fallbackUserCurrency = () => {
+		setInfo({ ...(info.value as UserInfo), currency: DEFAULT_CURRENCY });
 	};
 
 	const $subscribeLocale = (cb: (locale: Locales) => Promise<void> | void) => {
@@ -54,14 +58,14 @@ export const useInfoStore = defineStore('info', () => {
 						isLocaleLoading.value = false;
 					}
 				}
-			},
-			{ deep: true }
+			}
 		);
 	};
 
 	return {
 		info,
-		userCurrency,
+		getUserCurrency,
+		fallbackUserCurrency,
 		setInfo,
 		$reset,
 		$subscribeLocale,

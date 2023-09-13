@@ -24,14 +24,14 @@ export default ({ mode }) => {
 			},
 		},
 		plugins: [
+			VueRouter({
+				routesFolder: 'src/views',
+				dts: './src/typed-router.d.ts',
+			}),
 			vue({ template: { transformAssetUrls } }),
 			VueI18nPlugin({
 				globalSFCScope: true,
 				include: [resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**')],
-			}),
-			VueRouter({
-				routesFolder: 'src/views',
-				dts: './src/typed-router.d.ts',
 			}),
 			Layouts({
 				layoutsDirs: 'src/layouts',

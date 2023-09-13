@@ -45,10 +45,9 @@ import { Unsubscribe } from 'firebase/firestore';
 import { useRouter } from 'vue-router/auto';
 import { AuthService } from '@/services/auth';
 import { useDisplay } from 'vuetify';
+import { DEFAULT_CURRENCY_RESPONSE } from '@/services/currency';
 
 let unsub: Unsubscribe | undefined;
-const { state: currency, isLoading, isReady, execute: refresh } = useAsyncState(CurrencyService.fetchCurrency, null);
-provide(currencyKey, { currency, isLoading, isReady, refresh });
 
 const { push } = useRouter();
 const { t, te } = useI18n({ inheritLocale: true, useScope: 'global' });
@@ -57,6 +56,20 @@ const infoStore = useInfoStore();
 const drawer = ref(true);
 const loading = ref(false);
 const { xs, mdAndDown } = useDisplay();
+
+const {
+	state: currency,
+	isLoading,
+	isReady,
+	execute: refresh,
+} = useAsyncState(CurrencyService.fetchCurrency, DEFAULT_CURRENCY_RESPONSE, {
+	onError: () => {
+		showMessage('Failed to fecth currency');
+		infoStore.fallbackUserCurrency();
+	},
+});
+
+provide(currencyKey, { currency, isLoading, isReady, refresh });
 
 onMounted(async () => {
 	try {
